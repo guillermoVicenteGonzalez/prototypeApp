@@ -8,7 +8,7 @@
 const mongoose = require("mongoose");
 const usuarioSchema = new mongoose.Schema(
     {
-        nombre: {type:String, unique:true},
+        login: {type:String, unique:true},
         password:{type:String}
     }
 )

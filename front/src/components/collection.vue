@@ -33,7 +33,8 @@
     }
 
     async function searchTVShow(){
-        if( message.value == ""){
+        if( message.value == undefined){
+            console.log("vacio");
             getAllTVShows();
         }else{
             let promesa = axios.get("http://localhost:3000/api/tvshows/titulo/" + message.value)

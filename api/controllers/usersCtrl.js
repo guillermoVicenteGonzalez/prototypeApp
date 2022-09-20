@@ -33,11 +33,11 @@ exports.userLogin = async function(req, res){
             res.status(201).json({success: true, token})
         }else{
             //la contraseña es distinta
-            res.status(401).send({success:false, error:"wrong password"});
+            res.status(401).json({success:false, error:"wrong password"});
         }
     }else{
         //el usuario no existe
-        res.status(404).send("user does not exist");
+        res.status(404).json({success:false, error:"username does not exist"});
     }
 }
 
@@ -56,7 +56,7 @@ exports.userRegister = async function(req, res){
     let userExists = await User.findOne({login:req.body.login});
     if(userExists){
         console.log("user is alredy registered");
-        res.status(403).send("user alredy registered");
+        res.status(403).json({success:false, error:"user alredy registered"});
     }else{
         let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
         let nUser = new User({
@@ -69,7 +69,7 @@ exports.userRegister = async function(req, res){
             console.log("exito" + result);
         }else{
             console.log("error " + result);
-            res.status(409).send({success:false, result});
+            res.status(409).json({success:false, result});
         }
         console.log(nUser);
     }
@@ -95,11 +95,11 @@ exports.getUserData = async function(req, res){
         if(decoded){
             res.status(200).json({succes:true, user}); 
         }else{
-            res.status(400).send("invalid token");
+            res.status(400).json({successs:false,error:"invalid token"});
         }
 
     }else{
         console.log("error");
-        res.status(400).send("either user id or jwt format is invalid");
+        res.status(400).json({success:false,error:"either user id or jwt format is invalid"});
     }
 }

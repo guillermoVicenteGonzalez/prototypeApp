@@ -8,9 +8,9 @@ exports.findAllTVShows = async function(req, res){
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   let tvshows = await TVShow.find().catch(err => {return undefined});
   if(tvshows){
-    res.status(200).json(tvshows);
+    res.status(200).json({success:true, tvshows});
   }else{
-    res.status(204).send();
+    res.status(404).json({success:false, error:"internal error"});
   }
 };
 
@@ -19,9 +19,9 @@ exports.findById = async function(req, res){
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   let tvshow = await TVShow.findById(req.params.id).catch(err => {return undefined});
   if(tvshow){
-    res.status(200).json(tvshow);
+    res.status(200).json({success:true,tvshow});
   }else{
-    res.status(204).send();
+    res.status(404).json({success:true,error:"could not find tvshow with id: "+req.params.id});
   }
 };
 
@@ -30,9 +30,9 @@ exports.findByName = async function(req, res){
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   let tvshow = await TVShow.findOne({title:req.params.title});
   if(tvshow){
-    res.status(200).json(tvshow);
+    res.status(200).json({success:true, tvshow});
   }else{
-    res.status(404).send();
+    res.status(404).send({success:false, error:"could not find requested tvshow with title: " + req.params.title});
   }
   console.log(req.params.title);
 }
@@ -53,11 +53,11 @@ exports.addTVShow = async function(req, res){
     summary: req.body.summary,
   });
 
-  let resultado = await tvshow.save().catch(err => {return undefined});
-  if(resultado){
-    res.status(201).json(resultado);
+  let result = await tvshow.save().catch(err => {return undefined});
+  if(result){
+    res.status(201).json({success:true,result});
   }else{
-    res.status(204).send();
+    res.status(400).json({success:false, error:"error registering in database"});
   }
 };
 
@@ -77,12 +77,12 @@ exports.updateTVShow = async function(req, res){
     //let result = await TVShow.updateOne(req.params, tvshow).catch(err => {console.error(err);return undefined});
     let result = await tvshow.save().catch(err => {return undefined});
     if(result){
-      res.status(200).jsonp(tvshow);
+      res.status(200).json({success:true,tvshow});
     }else{
-      res.status(204).send();
+      res.status(400).json({success:false,error:"error updating show"});
     }
   }else{
-    res.status(204).send();
+    res.status(404).json({success:false, error:"could not find requested show"});
   }
 }
 
@@ -94,12 +94,12 @@ exports.deleteTVShow = async function(req, res){
   if(tvshow){
     let result = await tvshow.remove().catch(err => {return undefined});
     if(result){
-      res.status(200).json(tvshow);
+      res.status(200).json({success:true, tvshow});
     }else{
-      res.status(204).send();
+      res.status(400).json({success:false, error:"error deleting tvshow " + tvshow.title});
     }
   }else{
-    res.status(204).send();
+    res.status(404).json({success:false, error:"could not find requested tvshow " + req.params.id});
   }
 };
 

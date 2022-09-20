@@ -5,6 +5,8 @@ import { loadFonts } from './plugins/webfontloader'
 //import VueRouter from 'vue-router';
 //import { createRouter, createWebHashHistory } from 'vue-router'
 
+
+
 loadFonts()
 
 createApp(App)

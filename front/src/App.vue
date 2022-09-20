@@ -1,7 +1,8 @@
 <template>
   <v-app theme="dark">
     <v-app-bar app >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+      ></v-app-bar-nav-icon>
       <v-app-bar-title>Mi aplicacion</v-app-bar-title>
       <v-btn
       @click="switchComponent('login')"
@@ -28,9 +29,11 @@
       <Collection class="ma-10"
       v-if="activeComponent == 'collection'"></Collection>
       <Landing v-if="activeComponent == 'landing'"></Landing>
+      <!--
       <collection></collection>
+      -->
 
-
+      <addTVShow></addTVShow>
     </v-main>
     <v-footer app>
       Buenas tardes
@@ -45,7 +48,8 @@
   import Collection from "./components/collection.vue";
   import Landing from "./components/landing.vue";
   import { defineProps } from "vue";
-import SignUp from "./components/SignUp.vue";
+  import SignUp from "./components/SignUp.vue";
+  import addTVShow from "./components/addTVShow.vue";
 
   var activeComponent = ref("landing");
   var userLogged = false;

@@ -38,7 +38,7 @@ let options = {
     //basedir: __dirname, //app absolute path
     basedir: "./",
     //files: ['./controllers/usuariosCtrl.js'] //Path to the API handle folder
-    files: ['./models/usuario.js', './controllers/usuariosCtrl.js']
+    files: ['./models/user.js', './controllers/usersCtrl.js']
 };
 expressSwagger(options)
 
@@ -48,8 +48,8 @@ const TVShowModel = require("./models/tvshow");
 const TVShowCtrl = require('./controllers/tvshows');
 
 //modelo y controlador de usuarios
-const usuarioModel = require("./models/usuario");
-const usuarioCtrl = require("./controllers/usuariosCtrl");
+const usuarioModel = require("./models/user");
+const usuarioCtrl = require("./controllers/usersCtrl");
 
 const router = require("./routes/index");
 

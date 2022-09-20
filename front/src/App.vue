@@ -26,14 +26,13 @@
 
       <login v-if="activeComponent === 'login'"></login>
       <SignUp v-if="activeComponent == 'signup'"></SignUp>
-      <Collection class="ma-10"
-      v-if="activeComponent == 'collection'"></Collection>
       <Landing v-if="activeComponent == 'landing'"></Landing>
-      <!--
-      <collection></collection>
-      -->
+      <Collection></Collection>
+      
 
+      <!--
       <addTVShow></addTVShow>
+      -->
     </v-main>
     <v-footer app>
       Buenas tardes

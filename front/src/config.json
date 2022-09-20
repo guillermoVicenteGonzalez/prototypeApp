@@ -1,0 +1,9 @@
+{
+    "host":"http://localhost:3000",
+    "api":"/api",
+    "registerUser":"/users",
+    "loginUser":"/users/login",
+    "registerTVShow":"/tvshows",
+    "getAllTVShows":"/tvshows",
+    "findTVShow":"/tvshows/title"
+}

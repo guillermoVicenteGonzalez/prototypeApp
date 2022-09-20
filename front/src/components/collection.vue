@@ -21,12 +21,12 @@
 <script setup>
     import axios from "axios";
     import {ref} from "vue";
+    import config from "../config.json";
 
     const array = ref([]);
     const message = ref();
-
     async function getAllTVShows(){
-        let promise = axios.get("http://localhost:3000/api/tvshows")
+        let promise = axios.get(config.host + config.api + config.getAllTVShows)
         .then(function(result){
             array.value = result.data;
         })
@@ -37,7 +37,8 @@
             console.log("vacio");
             getAllTVShows();
         }else{
-            let promesa = axios.get("http://localhost:3000/api/tvshows/titulo/" + message.value)
+            let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
+            //let promesa = axios.get("http://localhost:3000/api/tvshows/titulo/" + message.value)
             .then(function (response){
                 array.value = [];
                 array.value.push(response.data);

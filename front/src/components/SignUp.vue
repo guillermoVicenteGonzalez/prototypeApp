@@ -33,14 +33,16 @@
    import axios from "axios";
    import {ref} from "vue";
    import AppVue from "../App.vue";
+   import config from "../config.json"
 
    var userLogin = ref();
    var userPasswd = ref();
    var userLogged = ref();
 
    async function signUp(){
-       let result = await axios.post("http://localhost:3000/api/usuarios",{
-           nombre:userLogin.value,
+       let result = await axios.post(config.host + config.api + config.registerUser,{
+        //let result = await axios.post("http://localhost:3000/api/usuarios",{
+           login:userLogin.value,
            password:userPasswd.value
        })
        .then( function(response){

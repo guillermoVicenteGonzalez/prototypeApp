@@ -33,6 +33,7 @@
     import axios from "axios";
     import {ref} from "vue";
     import AppVue from "../App.vue";
+    import config from "../config.json";
 
     var token ="";
     var userLogin = ref();
@@ -40,8 +41,9 @@
     var userLogged = ref();
 
     async function iniciarSesion(){
-        let result = await axios.post("http://localhost:3000/api/usuarios/login",{
-            nombre:userLogin.value,
+        let result = await axios.post(config.host + config.api + config.loginUser,{
+        //let result = await axios.post("http://localhost:3000/api/users/login",{
+            login:userLogin.value,
             password:userPasswd.value
         })
         .then( function(response){

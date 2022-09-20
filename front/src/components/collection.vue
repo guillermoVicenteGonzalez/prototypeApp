@@ -28,12 +28,12 @@
     async function getAllTVShows(){
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
         .then(function(result){
-            array.value = result.data;
+            array.value = result.data.tvshows;
         })
     }
 
     async function searchTVShow(){
-        if( message.value == undefined){
+        if( message.value == ""){
             console.log("vacio");
             getAllTVShows();
         }else{
@@ -41,7 +41,7 @@
             //let promesa = axios.get("http://localhost:3000/api/tvshows/titulo/" + message.value)
             .then(function (response){
                 array.value = [];
-                array.value.push(response.data);
+                array.value.push(response.data.tvshow);
             })
         }
     }

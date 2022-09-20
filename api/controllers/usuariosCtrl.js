@@ -13,13 +13,13 @@ const saltRounds = 10
  * This function allow the user to login in the system by providing his username and password and returns a jwt
  * @route POST /api/usuarios/login
  * @group Usuario - User operations
- * @param {string} nombre.query.required - username  - eg: user@domain
+ * @param {string} login.query.required - username  - eg: user@domain
  * @param {string} password.query.required - user's password.
  * @returns {json} 201 - returns a jwt for furhter  authentication
  * @returns {Error} 404 - Not Found
  */
 exports.userLogin = async function(req, res){
-    let myUser = await Usuario.findOne({login:req.body.nombre});
+    let myUser = await Usuario.findOne({login:req.body.login});
     if(myUser){
         //el usuario existe, compruebo su contraseña
         let comparePasswd = await bcrypt.compare(req.body.password, myUser.password).catch(err => {return undefined});
@@ -64,11 +64,10 @@ exports.userRegister = async function(req, res){
             password: encriptedPasswd
         });
         let result = await nUser.save().catch(err => {return undefined});
-        
         if(result){
-            res.status(201).json({succes:true, result});
+            res.status(201).json({success:true, result});
         }else{
-            res.status(409).send("error registering user in db");
+            res.status(409).send({success:false, result});
         }
         console.log(nUser);
     }

@@ -19,6 +19,11 @@ const saltRounds = 10
  * @returns {Error} 404 - Not Found
  */
 exports.userLogin = async function(req, res){
+
+    if(req.body.login == undefined || req.body.password == undefined){
+        res.status(400).json({success:false, message:"some of the request's fields where empty"})
+    }
+    
     let myUser = await User.findOne({login:req.body.login});
     if(myUser){
         //el usuario existe, compruebo su contraseña
@@ -53,6 +58,11 @@ exports.userLogin = async function(req, res){
  */
 exports.userRegister = async function(req, res){
     console.log(req.body);
+
+    if(req.body.login == undefined || req.body.password == undefined){
+        res.status(400).json({success:false, message:"some of the request's fields where empty"})
+    }
+
     let userExists = await User.findOne({login:req.body.login});
     if(userExists){
         console.log("user is alredy registered");

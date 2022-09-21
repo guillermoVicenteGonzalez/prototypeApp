@@ -6,25 +6,42 @@
                 <v-text-field 
                 class="mx-10"
                 variant="outlined"
-                label="usuario"
+                label="username"
                 v-model="userLogin"
                 ></v-text-field>
 
                 <v-text-field 
                 class="mx-10"
                 variant="outlined"
-                label="contraseña"
+                label="password"
                 v-model="userPasswd"
                 type="password"
-                @click:append="iniciarSesion"
                 ></v-text-field>
 
                 <v-btn class="ma-2"
-                    @click="iniciarSesion"
-                >Iniciar sesion</v-btn>
+                    @click="login"
+                >sign in</v-btn>
+
+
 
             </v-form>  
-        </v-card>       
+        </v-card>      
+
+        <v-dialog v-model="dialog" width="500">
+            <v-card
+            :title="message.title"
+            :subtitle="message.subtitle"
+            :text="message.text">
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-btn
+                    class="text-center"
+                    @click="dialog=false">
+                    Aceptar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog> 
     </v-container>
 
 </template>
@@ -39,14 +56,24 @@
     var userLogin = ref();
     var userPasswd = ref();
     var userLogged = ref();
+    //"booleano" que controla si aparece o no el dialogo
+    var dialog = ref(false);
+    //objeto mensaje que aparecerá en el model
+    var message = ref({
+        title:undefined,
+        subtitle:undefined,
+        text:undefined
+    });
 
-    async function iniciarSesion(){
+
+    async function login(){
         let result = await axios.post(config.host + config.api + config.loginUser,{
         //let result = await axios.post("http://localhost:3000/api/users/login",{
             login:userLogin.value,
             password:userPasswd.value
         })
         .then( function(response){
+            createModel("Exito","login exitoso", "te has logueado con exito")
             console.log(response.data);
             if(response.data.success == true){
                 userLogged.value = true;
@@ -55,17 +82,28 @@
         })
         .catch(function(error){
             if(error.response){
-                console.log(error.response.data);
+                if(error.response.data){
+                    createModel("Error","",error.response.data.message);
+                }else{
+                    createModel("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
+                    console.log(error.response);
+                }
             }else if(error.request){
+                createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later")
                 console.log(error.request);
-            }else if(error != undefined){
-                console.log("error desconocido");
+            }else{
+                createModel("Error","error desconocido", "unknown error. Try agai later");
+                console.log("unknown error");
             }
         });
     }
 
-    function prueba(){
-        console.log(userLogged.value);
+
+    function createModel(nTitle, nSubtitle, nText){
+        dialog.value = true;
+        message.value.title = nTitle;
+        message.value.subtitle = nSubtitle;
+        message.value.text = nText;
     }
 
 </script>

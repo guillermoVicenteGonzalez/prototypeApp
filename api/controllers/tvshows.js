@@ -10,7 +10,7 @@ exports.findAllTVShows = async function(req, res){
   if(tvshows){
     res.status(200).json({success:true, tvshows});
   }else{
-    res.status(404).json({success:false, error:"internal error"});
+    res.status(404).json({success:false, message:"internal error"});
   }
 };
 
@@ -21,7 +21,7 @@ exports.findById = async function(req, res){
   if(tvshow){
     res.status(200).json({success:true,tvshow});
   }else{
-    res.status(404).json({success:true,error:"could not find tvshow with id: "+req.params.id});
+    res.status(404).json({success:true, message:"could not find tvshow with id: "+req.params.id});
   }
 };
 
@@ -32,7 +32,7 @@ exports.findByName = async function(req, res){
   if(tvshow){
     res.status(200).json({success:true, tvshow});
   }else{
-    res.status(404).send({success:false, error:"could not find requested tvshow with title: " + req.params.title});
+    res.status(404).send({success:false, message:"could not find requested tvshow with title: " + req.params.title});
   }
   console.log(req.params.title);
 }
@@ -57,7 +57,7 @@ exports.addTVShow = async function(req, res){
   if(result){
     res.status(201).json({success:true,result});
   }else{
-    res.status(400).json({success:false, error:"error registering in database"});
+    res.status(400).json({success:false, message:"error registering in database"});
   }
 };
 
@@ -79,10 +79,10 @@ exports.updateTVShow = async function(req, res){
     if(result){
       res.status(200).json({success:true,tvshow});
     }else{
-      res.status(400).json({success:false,error:"error updating show"});
+      res.status(400).json({success:false, message:"error updating show"});
     }
   }else{
-    res.status(404).json({success:false, error:"could not find requested show"});
+    res.status(404).json({success:false, message:"could not find requested show"});
   }
 }
 
@@ -96,10 +96,10 @@ exports.deleteTVShow = async function(req, res){
     if(result){
       res.status(200).json({success:true, tvshow});
     }else{
-      res.status(400).json({success:false, error:"error deleting tvshow " + tvshow.title});
+      res.status(400).json({success:false, message:"error deleting tvshow " + tvshow.title});
     }
   }else{
-    res.status(404).json({success:false, error:"could not find requested tvshow " + req.params.id});
+    res.status(404).json({success:false, message:"could not find requested tvshow " + req.params.id});
   }
 };
 

@@ -3,16 +3,16 @@
     <v-app-bar app >
       <v-app-bar-nav-icon
       ></v-app-bar-nav-icon>
-      <v-app-bar-title>Mi aplicacion</v-app-bar-title>
+      <v-app-bar-title>App Title</v-app-bar-title>
       <v-btn
       @click="switchComponent('login')"
       variant="outlined"
       v-if="!userLogged"
-    >Iniciar sesion</v-btn>
+    >sign in</v-btn>
     <v-btn
       variant="outlined"
       v-if="userLogged"
-    >CerrarSesion</v-btn>
+    >sign out</v-btn>
 
     <v-btn
     @click="switchComponent('signup')"
@@ -28,10 +28,12 @@
       <SignUp v-if="activeComponent == 'signup'"></SignUp>
       <Landing v-if="activeComponent == 'landing'"></Landing>
       <Collection></Collection>
+      <Model></Model>
       
       <!--
       <addTVShow></addTVShow>
       -->
+  
     </v-main>
     <v-footer app>
       Buenas tardes
@@ -48,6 +50,7 @@
   import { defineProps } from "vue";
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
+  import Model from "./components/model.vue";
 
   var activeComponent = ref("landing");
   var userLogged = false;

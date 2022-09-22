@@ -17,6 +17,7 @@
     :text="item.summary">
     </v-card>
 
+    <!--
     <v-dialog
     v-model="collectionDialog">
         <v-card
@@ -31,6 +32,8 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+    -->
+    <modal></modal>
 </template>
 
 <script setup>
@@ -39,6 +42,8 @@
     import config from "../config.json";
     import {inject} from "vue";
     import {newCreateModel} from "../main.js"
+    import modal from "../components/modal.vue";
+
 
     const array = ref([]);
     const message = ref();
@@ -87,12 +92,12 @@
         }
     }
 
+    /*
     function createModel(nTitle, nSubtitle, nText){
         collectionDialog.value = true;
         collectionDialogMessage.value.title = nTitle;
         collectionDialogMessage.value.subtitle = nSubtitle;
         collectionDialogMessage.value.text = nText;
-    }
-
+    }*/
     getAllTVShows();
 </script>

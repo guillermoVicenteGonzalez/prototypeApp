@@ -6,30 +6,74 @@
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
-                label="titulo"></v-text-field>
+                label="title"
+                v-model="tvTitle"></v-text-field>
 
+                <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="year"
+                v-model="tvYear"></v-text-field>
+
+                <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="seasons"
+                v-model="tvSeasons"></v-text-field>
+
+                <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="country"
+                v-model="tvCountry"></v-text-field>
+
+                <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="summary"
+                v-model="tvSummary"></v-text-field>
+                <v-btn
+                @click="registerTVShow">register</v-btn>
             </v-form>
 
         </v-card>
+        hola
     </v-container>
 </template>
 
-<script>
+<script setup>
     import {ref} from "vue";
-/*
-    var tvshow = ref({
-        title:"pelicula",
-        year:undefined,
-        country:undefined,
-        seasons:undefined,
-        genre:undefined
-    });*/
+    import axios from "axios";
+    import config from "../config.json";
+
+    var tvTitle = ref();
+    var tvYear = ref();
+    var tvCountry = ref();
+    var tvSeasons = ref();
+    var tvgenre = ref();
+    var tvSummary = ref();
 
     async function registerTVShow(){
+        let promise = await axios.post(config.host + config.api + config.registerTVShow,{
+        //let promise = await axios.post("http://localhost:3000/api/tvshows",{
+            title:tvTitle.value,
+            year:tvYear.value,
+            seasons:tvSeasons.value,
+            genre:tvgenre.value,
+            summary:tvSummary.value
 
+        })
+        .then(function (response){
+            console.log("exito");
+            console.log(response.data.message);
+        })
+        .catch(function(error){
+            console.log("error");
+            console.log(error.data.message);
+        })
     }
 
     function showTVShow(){
-        console.log(tvshow.value.title);
+
     }
 </script>

@@ -74,7 +74,7 @@
         .then( function(response){
             console.log(response.data);
             if(response.data.success == true){
-                createModel("Success","Successfull login","");
+                createModel("Success","Successful login","");
                 userLogged.value = true;
                 token=response.data.token;
             }

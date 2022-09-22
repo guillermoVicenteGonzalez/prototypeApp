@@ -39,7 +39,7 @@ exports.findByName = async function(req, res){
 //POST
 exports.addTVShow = async function(req, res){
   //primero compruebo que la request tenga al menos estos campos
-  if(req.body.title && req.body.summay){
+  if(req.body.summary != undefined && req.body.title != undefined){
     let tvshow = new TVShow({
       title: req.body.title,
       year: req.body.year,
@@ -53,10 +53,15 @@ exports.addTVShow = async function(req, res){
     let result = await tvshow.save().catch(err => {return undefined});
     if(result){
       res.status(201).json({success:true,result});
+      console.log("succes registering tvshow")
     }else{
+      console.log("eror registering tvshow in database")
       res.status(400).json({success:false, message:"error registering in database"});
     }
   }else{
+    console.log("unable to register tvshow due to empty request fields");
+    //console.log(req.body);
+    console.log(req.body.title, req.body.summary);
     res.status(400).json({success:false, message:"the request lacked vital fields"});
   }
 };

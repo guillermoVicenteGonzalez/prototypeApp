@@ -28,11 +28,10 @@
       <SignUp v-if="activeComponent == 'signup'"></SignUp>
       <Landing v-if="activeComponent == 'landing'"></Landing>
       <Collection></Collection>
-      <Model></Model>
       
-      <!--
+      <!---->
       <addTVShow></addTVShow>
-      -->
+      
   
     </v-main>
     <v-footer app>
@@ -48,8 +47,6 @@
   import Landing from "./components/landing.vue";
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
-  import Model from "./components/model.vue";
-
 
   var activeComponent = ref("landing");
   var userLogged = false;

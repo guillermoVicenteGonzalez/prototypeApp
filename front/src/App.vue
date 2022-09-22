@@ -36,7 +36,6 @@
   
     </v-main>
     <v-footer app>
-      Buenas tardes
     </v-footer>
   </v-app>
 </template>

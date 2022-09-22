@@ -68,14 +68,13 @@
 
     async function login(){
         let result = await axios.post(config.host + config.api + config.loginUser,{
-        //let result = await axios.post("http://localhost:3000/api/users/login",{
             login:userLogin.value,
             password:userPasswd.value
         })
         .then( function(response){
-            createModel("Exito","login exitoso", "te has logueado con exito")
             console.log(response.data);
             if(response.data.success == true){
+                createModel("Success","Successfull login","");
                 userLogged.value = true;
                 token=response.data.token;
             }
@@ -89,7 +88,7 @@
                     console.log(error.response);
                 }
             }else if(error.request){
-                createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later")
+                createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later");
                 console.log(error.request);
             }else{
                 createModel("Error","error desconocido", "unknown error. Try agai later");

@@ -4,7 +4,7 @@
         <v-text-field
         variant="outlined"
         class="ma-10"
-        label="buscar tvshow"
+        label="search tvshow"
         v-model="message"></v-text-field> 
     </v-form>
 
@@ -38,7 +38,6 @@
             getAllTVShows();
         }else{
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
-            //let promesa = axios.get("http://localhost:3000/api/tvshows/titulo/" + message.value)
             .then(function (response){
                 array.value = [];
                 array.value.push(response.data.tvshow);

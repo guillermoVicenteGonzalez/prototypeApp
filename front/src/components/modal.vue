@@ -19,13 +19,18 @@
 <script setup>
     import {ref} from "vue";
 
+    const props = defineProps({
+        isModalActive:Boolean
+    });
+
+
     var collectionDialog;
     const dialogMessage = ref({
         title:undefined,
         subtitle:undefined,
         text:undefined
     });
-   //const props = defineProps(collectionDialog);
+   
 
     function createModel(nTitle, nSubtitle, nText){
         collectionDialog.value = true;
@@ -34,4 +39,10 @@
         dialogMessage.value.text = nText;
     }
 
+    const emit = defineEmits(['create']);
+    emit('create',createModel);
+
+    function prueba(mensaje){
+        console.log(mensaje);
+    }
 </script>

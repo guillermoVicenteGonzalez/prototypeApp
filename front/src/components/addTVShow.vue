@@ -46,11 +46,12 @@
     import axios from "axios";
     import config from "../config.json";
 
+    //no me deja hacerlo con un objeto
     var tvTitle = ref();
     var tvYear = ref();
     var tvCountry = ref();
     var tvSeasons = ref();
-    var tvgenre = ref();
+    var tvGenre = ref();
     var tvSummary = ref();
 
     async function registerTVShow(){
@@ -59,21 +60,17 @@
             title:tvTitle.value,
             year:tvYear.value,
             seasons:tvSeasons.value,
-            genre:tvgenre.value,
-            summary:tvSummary.value
-
+            summary:tvSummary.value,
+            country: tvCountry.value
         })
         .then(function (response){
             console.log("exito");
             console.log(response.data.message);
+            tvTitle.value = tvYear.value = tvCountry.value = tvSeasons.value = tvSummary.value = undefined;
         })
         .catch(function(error){
             console.log("error");
             console.log(error.data.message);
         })
-    }
-
-    function showTVShow(){
-
     }
 </script>

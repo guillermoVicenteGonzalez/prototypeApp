@@ -52,7 +52,6 @@
     async function getAllTVShows(){
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
         .then(function(result){
-            console.log(result.data.tvshows)
             array.value = [];
             array.value = result.data.tvshows;
         })

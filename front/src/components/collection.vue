@@ -69,6 +69,7 @@
         }else{
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
             .then(function (response){
+                console.log(response.data);
                 array.value = [];
                 array.value.push(response.data.tvshow);
             })

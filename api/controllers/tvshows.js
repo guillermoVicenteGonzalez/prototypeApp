@@ -9,6 +9,7 @@ exports.findAllTVShows = async function(req, res){
   let tvshows = await TVShow.find().catch(err => {return undefined});
   if(tvshows){
     res.status(200).json({success:true, tvshows});
+    console.log("request to get all tvshows successfull");
   }else{
     res.status(404).json({success:false, message:"internal error"});
   }
@@ -31,10 +32,11 @@ exports.findByName = async function(req, res){
   let tvshow = await TVShow.findOne({title:req.params.title});
   if(tvshow){
     res.status(200).json({success:true, tvshow});
+    console.log(req.params.title);
   }else{
     res.status(404).send({success:false, message:"could not find requested tvshow with title: " + req.params.title});
+    console.log(req.params.title);
   }
-  console.log(req.params.title);
 }
 
 //POST

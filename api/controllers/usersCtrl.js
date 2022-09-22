@@ -19,25 +19,30 @@ const saltRounds = 10
  * @returns {Error} 404 - Not Found
  */
 exports.userLogin = async function(req, res){
-    let myUser = await User.findOne({login:req.body.login});
-    if(myUser){
-        //el usuario existe, compruebo su contraseña
-        let comparePasswd = await bcrypt.compare(req.body.password, myUser.password).catch(err => {return undefined});
-        if(comparePasswd){
-            //la contraseña es correcta. Genero el token y lo devuelvo
-            let token = await jwt.sign({
-                data: myUser.login,
-                exp: Math.floor(Date.now()/1000) + (60 * 60)
-            },"secret");
-            console.log("correct password. Succesfull login");
-            res.status(201).json({success: true, token})
-        }else{
-            //la contraseña es distinta
-            res.status(401).json({success:false, message:"wrong password"});
-        }
+    //primero verifico que la request esta bien hecha.
+    if(req.body.login == " " || req.body.password == " "){
+        res.status(400).json({success:false, message:"some of the request's fields where empty"})
     }else{
-        //el usuario no existe
-        res.status(404).json({success:false, message:"username does not exist"});
+        let myUser = await User.findOne({login:req.body.login});
+        if(myUser){
+            //el usuario existe, compruebo su contraseña
+            let comparePasswd = await bcrypt.compare(req.body.password, myUser.password).catch(err => {return undefined});
+            if(comparePasswd){
+                //la contraseña es correcta. Genero el token y lo devuelvo
+                let token = await jwt.sign({
+                    data: myUser.login,
+                    exp: Math.floor(Date.now()/1000) + (60 * 60)
+                },"secret");
+                console.log("correct password. Succesfull login");
+                res.status(201).json({success: true, token})
+            }else{
+                //la contraseña es distinta
+                res.status(401).json({success:false, message:"wrong password"});
+            }
+        }else{
+            //el usuario no existe
+            res.status(404).json({success:false, message:"username does not exist"});
+        }
     }
 }
 
@@ -53,6 +58,11 @@ exports.userLogin = async function(req, res){
  */
 exports.userRegister = async function(req, res){
     console.log(req.body);
+
+    if(req.body.login == undefined || req.body.password == undefined){
+        res.status(400).json({success:false, message:"some of the request's fields where empty"})
+    }
+
     let userExists = await User.findOne({login:req.body.login});
     if(userExists){
         console.log("user is alredy registered");

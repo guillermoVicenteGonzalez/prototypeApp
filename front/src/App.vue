@@ -36,7 +36,6 @@
   
     </v-main>
     <v-footer app>
-      Buenas tardes
     </v-footer>
   </v-app>
 </template>
@@ -47,10 +46,10 @@
   import {ref} from "vue"
   import Collection from "./components/collection.vue";
   import Landing from "./components/landing.vue";
-  import { defineProps } from "vue";
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
   import Model from "./components/model.vue";
+
 
   var activeComponent = ref("landing");
   var userLogged = false;
@@ -63,6 +62,13 @@
       console.log(activeComponent);
     }
 
+  }
+
+  const newCreateModel = function(dialogSwitch, messageObject, nTitle, nSubtitle, nText){
+    dialogSwitch.value = true;
+    messageObject.value.title = nTitle;
+    messageObject.value.subtitle = nSubtitle,
+    messageObject.value.text = nText;
   }
 
   

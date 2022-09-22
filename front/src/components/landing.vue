@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-center">landing page (en proceso)</h1>
+    <h1 class="text-center">landing page (in the making)</h1>
 </template>
 
 <script setup>

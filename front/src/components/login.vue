@@ -37,7 +37,7 @@
                     <v-btn
                     class="text-center"
                     @click="dialog=false">
-                    Aceptar
+                    Close
                     </v-btn>
                 </v-card-actions>
             </v-card>

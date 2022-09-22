@@ -9,6 +9,7 @@ exports.findAllTVShows = async function(req, res){
   let tvshows = await TVShow.find().catch(err => {return undefined});
   if(tvshows){
     res.status(200).json({success:true, tvshows});
+    console.log("request to get all tvshows successfull");
   }else{
     res.status(404).json({success:false, message:"internal error"});
   }

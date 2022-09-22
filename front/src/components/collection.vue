@@ -16,24 +16,54 @@
     :subtitle="item.year + ' , ' + item.country"
     :text="item.summary">
     </v-card>
+
+    <v-dialog
+    v-model="collectionDialog">
+        <v-card
+        :title="collectionDialogMessage.title"
+        :subtitle="collectionDialogMessage.subtitle"
+        :text="collectionDialogMessage.text">
+        <v-divider></v-divider>
+            <v-card-actions>
+                <v-btn
+                @click="collectionDialog = false">
+                Close</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script setup>
     import axios from "axios";
     import {ref} from "vue";
     import config from "../config.json";
+    import {inject} from "vue";
+    import {newCreateModel} from "../main.js"
 
     const array = ref([]);
     const message = ref();
+    var collectionDialog = ref(false);
+    var collectionDialogMessage = ref({
+        title:undefined,
+        subtitle:undefined,
+        text:undefined
+    });
+
     async function getAllTVShows(){
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
         .then(function(result){
+            console.log(result.data.tvshows)
+            array.value = [];
             array.value = result.data.tvshows;
         })
+        .catch(function (error){
+            if(error.response);
+            createModel()
+        });
     }
 
     async function searchTVShow(){
-        if( message.value == ""){
+        if( message.value == "" || message.value == undefined){
             console.log("vacio");
             getAllTVShows();
         }else{
@@ -42,9 +72,27 @@
                 array.value = [];
                 array.value.push(response.data.tvshow);
             })
+            .catch(function(error){
+                if(error.response){
+                    console.log(error.response.data);
+                    createModel("Error","",error.response.data.message);
+                }else if(error.request){
+                    createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                    console.log(error.request);
+                }else if(error != undefined){
+                    createModel("Error","", "unknown error. Try again later");
+                    console.log("unknown error");
+                }
+            });
         }
     }
 
-    
+    function createModel(nTitle, nSubtitle, nText){
+        collectionDialog.value = true;
+        collectionDialogMessage.value.title = nTitle;
+        collectionDialogMessage.value.subtitle = nSubtitle;
+        collectionDialogMessage.value.text = nText;
+    }
+
     getAllTVShows();
 </script>

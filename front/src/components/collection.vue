@@ -33,7 +33,11 @@
         </v-card>
     </v-dialog>
     -->
-    <modal></modal>
+    <modal
+    @create="(atr) => crearModal = atr"></modal>
+    <v-btn
+    @click="funcionaPlz"
+    >haz click</v-btn>
 </template>
 
 <script setup>
@@ -47,12 +51,20 @@
 
     const array = ref([]);
     const message = ref();
+    var crearModal = ref();
     var collectionDialog = ref(false);
     var collectionDialogMessage = ref({
         title:undefined,
         subtitle:undefined,
         text:undefined
     });
+
+    function funcionaPlz(){
+        //crearModal.value("ahora si?","","");
+        //crearModal.value("buenas tardes");
+        //console.log(crearModal.value);
+        crearModal.value();
+    }
 
     async function getAllTVShows(){
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
@@ -73,7 +85,9 @@
         }else{
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
             .then(function (response){
-                console.log(response.data);
+                console.log("estoy aqui");
+                crearModal.value("por fin funciona","","");
+                //console.log(response.data);
                 array.value = [];
                 array.value.push(response.data.tvshow);
             })
@@ -85,7 +99,7 @@
                     createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.request);
                 }else if(error != undefined){
-                    createModel("Error","", "unknown error. Try again later");
+                    //createModel("Error","", "unknown error. Try again later");
                     console.log("unknown error");
                 }
             });

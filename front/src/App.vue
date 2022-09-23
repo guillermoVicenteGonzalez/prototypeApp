@@ -31,12 +31,15 @@
       
       <!---->
       <addTVShow></addTVShow>
-      
+  
+    <!--
       <Prueba
       :is-modal-active="true"
       @prueba="(atr) => funcionHeredada = atr"></Prueba>
       <v-btn
       @click="cositas">click</v-btn>
+
+    -->
     </v-main>
     <v-footer app>
     </v-footer>

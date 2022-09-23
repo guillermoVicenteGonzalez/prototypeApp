@@ -2,9 +2,9 @@
     <v-dialog
     v-model="collectionDialog">
         <v-card
-        :title="collectionDialogMessage.title"
-        :subtitle="collectionDialogMessage.subtitle"
-        :text="collectionDialogMessage.text">
+        :title="dialogMessage.title"
+        :subtitle="dialogMessage.subtitle"
+        :text="dialogMessage.text">
         <v-divider></v-divider>
             <v-card-actions>
                 <v-btn
@@ -23,8 +23,7 @@
         isModalActive:Boolean
     });
 
-
-    var collectionDialog;
+    var collectionDialog = ref();
     const dialogMessage = ref({
         title:undefined,
         subtitle:undefined,
@@ -33,15 +32,22 @@
    
 
     function createModel(nTitle, nSubtitle, nText){
+        alert("funciona?");
+        
         collectionDialog.value = true;
+        /*
         dialogMessage.value.title = nTitle;
         dialogMessage.value.subtitle = nSubtitle;
         dialogMessage.value.text = nText;
+        */
     }
 
     const emit = defineEmits(['create']);
     emit('create',createModel);
 
+    function holamundo(mensaje){
+        alert(mensaje);
+    }
     function prueba(mensaje){
         console.log(mensaje);
     }

@@ -42,6 +42,7 @@
     import config from "../config.json";
     import modal from "../components/modal.vue";
 
+
     const emit = defineEmits(['userLogs']);
     var token ="";
     var userLogin = ref();
@@ -73,7 +74,7 @@
             }
         })
         .catch(function(error){
-            emit('userLogs',false);
+            //emit('userLogs',false);
             if(error.response){
                 if(error.response.data){
                     createModalLogin.value("Error","",error.response.data.message,false);                    

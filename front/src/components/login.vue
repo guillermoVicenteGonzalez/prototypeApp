@@ -27,21 +27,7 @@
             </v-form>  
         </v-card>      
 
-        <v-dialog v-model="dialog" width="500">
-            <v-card
-            :title="message.title"
-            :subtitle="message.subtitle"
-            :text="message.text">
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-btn
-                    class="text-center"
-                    @click="dialog=false">
-                    Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog> 
+        <modal @create="(atr) => createModalLogin = atr"></modal>
     </v-container>
 
 </template>
@@ -51,11 +37,13 @@
     import {ref} from "vue";
     import AppVue from "../App.vue";
     import config from "../config.json";
+    import modal from "../components/modal.vue";
 
     var token ="";
     var userLogin = ref();
     var userPasswd = ref();
     var userLogged = ref();
+    var createModalLogin = ref();
     //"booleano" que controla si aparece o no el dialogo
     var dialog = ref(false);
     //objeto mensaje que aparecerá en el model
@@ -74,7 +62,7 @@
         .then( function(response){
             console.log(response.data);
             if(response.data.success == true){
-                createModel("Success","Successful login","");
+                createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
             }
@@ -82,27 +70,18 @@
         .catch(function(error){
             if(error.response){
                 if(error.response.data){
-                    createModel("Error","",error.response.data.message);
+                    createModalLogin.value("Error","",error.response.data.message,false);
                 }else{
-                    createModel("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
+                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
                     console.log(error.response);
                 }
             }else if(error.request){
-                createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later");
+                createModallogin.value("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later");
                 console.log(error.request);
             }else{
-                createModel("Error","error desconocido", "unknown error. Try agai later");
+                createModalLogin.value("Error","error desconocido", "unknown error. Try again later");
                 console.log("unknown error");
             }
         });
     }
-
-
-    function createModel(nTitle, nSubtitle, nText){
-        dialog.value = true;
-        message.value.title = nTitle;
-        message.value.subtitle = nSubtitle;
-        message.value.text = nText;
-    }
-
 </script>

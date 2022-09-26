@@ -55,7 +55,6 @@
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
   import modal from "./components/modal.vue"
-  import Prueba from "./components/prueba.vue"
 
   var activeComponent = ref("landing");
   var userLogged = false;

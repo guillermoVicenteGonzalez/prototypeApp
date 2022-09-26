@@ -26,21 +26,7 @@
            </v-form>  
         </v-card>    
 
-        <v-dialog v-model="signupDialog" width="500">
-            <v-card
-            :title="signupDialogMessage.title"
-            :subtitle="signupDialogMessage.subtitle"
-            :text="signupDialogMessage.text">
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-btn
-                    class="text-center"
-                    @click="signupDialog=false">
-                    Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>    
+        <modal @create="(atr) => createModalSignup = atr"></modal>
    </v-container>
 
 </template>
@@ -50,7 +36,9 @@
     import {ref} from "vue";
     import AppVue from "../App.vue";
     import config from "../config.json"
+    import modal from "../components/modal.vue";
 
+    var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
     var signupDialog = ref(false);
@@ -68,29 +56,22 @@
         .then( function(response){
             console.log(response.data);
             if(response.data.success == true){
-                createModel("Succes","Signup was successfull");
+                createModalSignup.value("Succes","Signup was successfull");
                 userLogged.value = true;
             }
         })
         .catch(function(error){
             if(error.response){
                 console.log(error.response.data);
-                createModel("Error","",error.response.data.message);
+                createModalSignup.value("Error","",error.response.data.message);
             }else if(error.request){
-                createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                createModalSignup.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                 console.log(error.request);
             }else if(error != undefined){
-                createModel("Error","", "unknown error. Try again later");
+                createModalSignup.value("Error","", "unknown error. Try again later");
                 console.log("unknown error");
             }
         });
-    }
-
-    function createModel(nTitle, nSubtitle, nText){
-        signupDialog.value = true;
-        signupDialogMessage.value.title = nTitle;
-        signupDialogMessage.value.subtitle = nSubtitle;
-        signupDialogMessage.value.text = nText;
     }
 
 </script>

@@ -1,14 +1,20 @@
 <template>
     <v-dialog
+    class="text-center"
+    width="500"
     v-model="collectionDialog">
         <v-card
         :title="dialogMessage.title"
         :subtitle="dialogMessage.subtitle"
         :text="dialogMessage.text">
+        <v-card-title
+        append-icon="mdi-map-marker"></v-card-title>
         <v-divider></v-divider>
-            <v-card-actions>
+            <v-card-actions class="justify-center">
                 <v-btn
-                @click="collectionDialog = false">
+                @click="collectionDialog = false"
+                :color="btnColor"
+                :append-icon="dialogIcon">
                 Close</v-btn>
             </v-card-actions>
         </v-card>
@@ -23,6 +29,9 @@
         isModalActive:Boolean
     });
 
+    var dialogIcon = ref();
+    var cardColor = ref();
+    var btnColor = ref();
     var collectionDialog = ref();
     const dialogMessage = ref({
         title:undefined,
@@ -31,24 +40,21 @@
     });
    
 
-    function createModel(nTitle, nSubtitle, nText){
-        alert("funciona?");
-        
+    function createModel(nTitle, nSubtitle, nText,isSuccessful){        
         collectionDialog.value = true;
-        /*
         dialogMessage.value.title = nTitle;
         dialogMessage.value.subtitle = nSubtitle;
         dialogMessage.value.text = nText;
-        */
+        if(isSuccessful){
+            btnColor.value="success";
+            dialogIcon.value = "mdi-check-circle";
+        }else{
+            btnColor.value="error";
+            dialogIcon.value="mdi-close-circle";
+        }
     }
 
     const emit = defineEmits(['create']);
     emit('create',createModel);
 
-    function holamundo(mensaje){
-        alert(mensaje);
-    }
-    function prueba(mensaje){
-        console.log(mensaje);
-    }
 </script>

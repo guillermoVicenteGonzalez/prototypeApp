@@ -1,7 +1,7 @@
 <template>
     <v-container class="text-center">
         <v-card>
-            <h1 class="text-center">Registrar pelicula</h1>
+            <h1 class="text-center">Add tvshow</h1>
             <v-form>
                 <v-text-field
                 variant="outlined"

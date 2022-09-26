@@ -1,6 +1,8 @@
 <template>
      <v-container class="text-center mx-20 px-16">
-        <v-card class="py-5">    
+        <v-card 
+        class="py-5"
+        width="500">    
             <v-form>
                 <h1>Login</h1>
                 <v-text-field 
@@ -19,7 +21,8 @@
                 ></v-text-field>
 
                 <v-btn class="ma-2"
-                    @click="login"
+                @click="login"
+                color="success"
                 >sign in</v-btn>
 
 

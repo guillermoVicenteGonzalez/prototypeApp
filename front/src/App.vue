@@ -1,48 +1,47 @@
 <template>
   <v-app theme="dark">
     <v-app-bar app >
-    <!--
-      <v-app-bar-nav-icon
-      ></v-app-bar-nav-icon>-->
+
       <v-app-bar-title>App Title</v-app-bar-title>
       <v-btn
       @click="switchComponent('login')"
       variant="outlined"
       v-if="!userLogged"
     >sign in</v-btn>
-    <v-btn
-      variant="outlined"
-      v-if="userLogged"
-    >sign out</v-btn>
 
     <v-btn
+    v-if="!userLogged"
     @click="switchComponent('signup')"
     variant="outlined"
     class="mx-2"
     >sign up</v-btn>
 
+    <v-avatar
+    v-if="userLogged"
+    size="56"
+    color="primary"
+    class="mx-2">
+      
+    </v-avatar>
+    <v-btn
+      variant="outlined"
+      v-if="userLogged"
+    >sign out</v-btn>
+
     </v-app-bar>
 
     <v-main app>
 
-      <login v-if="activeComponent === 'login'"></login>
+      <login v-if="activeComponent === 'login'" @userLogs="(atr) => userLogged = atr"></login>
       <SignUp v-if="activeComponent == 'signup'"></SignUp>
       <Landing v-if="activeComponent == 'landing'"></Landing>
       <Collection></Collection>
       
       <!---->
       <addTVShow></addTVShow>
-  
-    <!--
-      <Prueba
-      :is-modal-active="true"
-      @prueba="(atr) => funcionHeredada = atr"></Prueba>
-      <v-btn
-      @click="cositas">click</v-btn>
-
-    -->
     </v-main>
     <v-footer app>
+    <v-btn @click="showUserLogged">click</v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -58,9 +57,7 @@
   import modal from "./components/modal.vue"
 
   var activeComponent = ref("landing");
-  var userLogged = false;
-  var boolean = ref(true);
-  var funcionHeredada = ref();
+  var userLogged = ref(false);
 
   function switchComponent(component){
     if(activeComponent.value == component){
@@ -71,22 +68,12 @@
     }
   }
 
-  function cositas(){
-    let booleano = false;
-    if(booleano){
-      alert("ok");
-    }else{
-      if(funcionHeredada != undefined) funcionHeredada.value();
-    }
+  function showUserLogged(){
+    console.log(userLogged.value);
   }
 
 
-  const newCreateModel = function(dialogSwitch, messageObject, nTitle, nSubtitle, nText){
-    dialogSwitch.value = true;
-    messageObject.value.title = nTitle;
-    messageObject.value.subtitle = nSubtitle,
-    messageObject.value.text = nText;
-  }
+
 
   
 </script>

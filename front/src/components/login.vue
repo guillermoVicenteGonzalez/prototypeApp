@@ -39,6 +39,7 @@
     import config from "../config.json";
     import modal from "../components/modal.vue";
 
+    const emit = defineEmits(['userLogs']);
     var token ="";
     var userLogin = ref();
     var userPasswd = ref();
@@ -63,14 +64,16 @@
             console.log(response.data);
             if(response.data.success == true){
                 createModalLogin.value("Success","Successful login","",true);
+                emit('userLogs',true);
                 userLogged.value = true;
                 token=response.data.token;
             }
         })
         .catch(function(error){
+            emit('userLogs',false);
             if(error.response){
                 if(error.response.data){
-                    createModalLogin.value("Error","",error.response.data.message,false);
+                    createModalLogin.value("Error","",error.response.data.message,false);                    
                 }else{
                     createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
                     console.log(error.response);

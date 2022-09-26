@@ -64,13 +64,15 @@
             login:userLogin.value,
             password:userPasswd.value
         })
-        .then( function(response){
+        .then( async function(response){
             console.log(response.data);
             if(response.data.success == true){
-                createModalLogin.value("Success","Successful login","",true);
-                emit('userLogs',true);
+                await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
+                //que el dialogo emita user logs y lo escuche este componente que a su vez emite user logs.
+                //De ese modo el que emite es el dialogo, y llega al main porque login no puede usar router
+                //emit('userLogs',true);
             }
         })
         .catch(function(error){
@@ -79,7 +81,7 @@
                 if(error.response.data){
                     createModalLogin.value("Error","",error.response.data.message,false);                    
                 }else{
-                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
+                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.response);
                 }
             }else if(error.request){

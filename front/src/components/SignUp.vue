@@ -56,8 +56,8 @@
         .then( function(response){
             console.log(response.data);
             if(response.data.success == true){
-                createModalSignup.value("Succes","Signup was successfull");
-                userLogged.value = true;
+                createModalSignup.value("Succes","Signup was successfull","",true);
+                //userLogged.value = true;
             }
         })
         .catch(function(error){
@@ -67,7 +67,7 @@
             }else if(error.request){
                 createModalSignup.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                 console.log(error.request);
-            }else if(error != undefined){
+            }else{
                 createModalSignup.value("Error","", "unknown error. Try again later");
                 console.log("unknown error");
             }

@@ -1,8 +1,9 @@
 <template>
   <v-app theme="dark">
     <v-app-bar app >
+    <!--
       <v-app-bar-nav-icon
-      ></v-app-bar-nav-icon>
+      ></v-app-bar-nav-icon>-->
       <v-app-bar-title>App Title</v-app-bar-title>
       <v-btn
       @click="switchComponent('login')"
@@ -58,7 +59,7 @@
 
   var activeComponent = ref("landing");
   var userLogged = false;
-  var booleano = ref(true);
+  var boolean = ref(true);
   var funcionHeredada = ref();
 
   function switchComponent(component){

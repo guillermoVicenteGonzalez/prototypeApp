@@ -11,7 +11,7 @@
 
     <v-btn
     v-if="!userLogged"
-    @click="this.$router.push('/signup')"
+    @click="pruebaRouter"
     variant="outlined"
     class="mx-2"
     >sign up</v-btn>
@@ -32,7 +32,12 @@
     </v-app-bar>
     <v-main app class="text-center">
       <router-view
-      @userLogs="(atr) => userLogged = atr"></router-view>
+      @userLogs="(atr) => {
+        userLogged = atr;
+        this.$router.push('/');
+      }"></router-view>
+      <modal
+      @create="(atr) => appCreateDialog = atr"></modal>
     </v-main>
     <v-footer app>
       footer
@@ -50,7 +55,9 @@
   import addTVShow from "./components/addTVShow.vue";
   import modal from "./components/modal.vue"
   import Login from "./components/login.vue"
+  import router from "../src/router/index.js"
 
+  var appCreateDialog = ref();
   var activeComponent = ref("landing");
   var userLogged = ref(false);
 
@@ -66,4 +73,9 @@
   function signOut(){
     userLogged.value = false;
   }  
+
+
+  function pruebaRouter(){
+    router.push('/signup');
+  }
 </script>

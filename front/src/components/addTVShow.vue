@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="text-center">
         <v-card>
             <h1 class="text-center">Registrar pelicula</h1>
             <v-form>
@@ -33,11 +33,13 @@
                 label="summary"
                 v-model="tvSummary"></v-text-field>
                 <v-btn
+                class="mb-5"
                 @click="registerTVShow">register</v-btn>
             </v-form>
 
         </v-card>
-        hola
+
+        <modal @create="(atr) => createModalAS = atr"></modal>
     </v-container>
 </template>
 
@@ -45,8 +47,10 @@
     import {ref} from "vue";
     import axios from "axios";
     import config from "../config.json";
+    import Modal from "./modal.vue";
 
     //no me deja hacerlo con un objeto
+    var createModalAS = ref();
     var tvTitle = ref();
     var tvYear = ref();
     var tvCountry = ref();
@@ -66,11 +70,17 @@
         .then(function (response){
             console.log("exito");
             console.log(response.data.message);
+            createModalAS.value("Success","succesfully added tvshow: " + tvTitle.value,"",true);
             tvTitle.value = tvYear.value = tvCountry.value = tvSeasons.value = tvSummary.value = undefined;
         })
         .catch(function(error){
-            console.log("error");
-            console.log(error.data.message);
+            if(error.response){
+                createModalAS.value("Error","",error.response.data.message,false);
+            }else if(error.request){
+                createModalAS.value("Error","Request error","An error ocurred while trying to connect to the database",false);
+            }else{
+                createModalAS.value("Error","unknown error","",false);
+            }
         })
     }
 </script>

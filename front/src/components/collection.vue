@@ -17,6 +17,7 @@
     :text="item.summary">
     </v-card>
 
+    <!--
     <v-dialog
     v-model="collectionDialog">
         <v-card
@@ -31,6 +32,9 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+    -->
+    <modal @create="(atr) => createModal = atr"></modal>
+
 </template>
 
 <script setup>
@@ -39,15 +43,19 @@
     import config from "../config.json";
     import {inject} from "vue";
     import {newCreateModel} from "../main.js"
+    import modal from "../components/modal.vue";
+
 
     const array = ref([]);
     const message = ref();
+    var createModal = ref();
     var collectionDialog = ref(false);
     var collectionDialogMessage = ref({
         title:undefined,
         subtitle:undefined,
         text:undefined
     });
+
 
     async function getAllTVShows(){
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
@@ -68,30 +76,22 @@
         }else{
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
             .then(function (response){
-                console.log(response.data);
                 array.value = [];
                 array.value.push(response.data.tvshow);
             })
             .catch(function(error){
                 if(error.response){
                     console.log(error.response.data);
-                    createModel("Error","",error.response.data.message);
+                    createModal.value("Error","",error.response.data.message);
                 }else if(error.request){
-                    createModel("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                    createModal.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.request);
                 }else if(error != undefined){
-                    createModel("Error","", "unknown error. Try again later");
+                    createModalAS.value("Error","unknown error","",false);
                     console.log("unknown error");
                 }
             });
         }
-    }
-
-    function createModel(nTitle, nSubtitle, nText){
-        collectionDialog.value = true;
-        collectionDialogMessage.value.title = nTitle;
-        collectionDialogMessage.value.subtitle = nSubtitle;
-        collectionDialogMessage.value.text = nText;
     }
 
     getAllTVShows();

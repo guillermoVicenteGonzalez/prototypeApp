@@ -31,8 +31,15 @@
       
       <!---->
       <addTVShow></addTVShow>
-      
   
+    <!--
+      <Prueba
+      :is-modal-active="true"
+      @prueba="(atr) => funcionHeredada = atr"></Prueba>
+      <v-btn
+      @click="cositas">click</v-btn>
+
+    -->
     </v-main>
     <v-footer app>
     </v-footer>
@@ -47,9 +54,12 @@
   import Landing from "./components/landing.vue";
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
+  import modal from "./components/modal.vue"
 
   var activeComponent = ref("landing");
   var userLogged = false;
+  var booleano = ref(true);
+  var funcionHeredada = ref();
 
   function switchComponent(component){
     if(activeComponent.value == component){
@@ -58,8 +68,17 @@
       activeComponent.value = component;
       console.log(activeComponent);
     }
-
   }
+
+  function cositas(){
+    let booleano = false;
+    if(booleano){
+      alert("ok");
+    }else{
+      if(funcionHeredada != undefined) funcionHeredada.value();
+    }
+  }
+
 
   const newCreateModel = function(dialogSwitch, messageObject, nTitle, nSubtitle, nText){
     dialogSwitch.value = true;

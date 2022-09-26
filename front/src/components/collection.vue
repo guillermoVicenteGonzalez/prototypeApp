@@ -17,22 +17,6 @@
     :text="item.summary">
     </v-card>
 
-    <!--
-    <v-dialog
-    v-model="collectionDialog">
-        <v-card
-        :title="collectionDialogMessage.title"
-        :subtitle="collectionDialogMessage.subtitle"
-        :text="collectionDialogMessage.text">
-        <v-divider></v-divider>
-            <v-card-actions>
-                <v-btn
-                @click="collectionDialog = false">
-                Close</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-    -->
     <modal @create="(atr) => createModal = atr"></modal>
 
 </template>
@@ -42,7 +26,6 @@
     import {ref} from "vue";
     import config from "../config.json";
     import {inject} from "vue";
-    import {newCreateModel} from "../main.js"
     import modal from "../components/modal.vue";
 
 

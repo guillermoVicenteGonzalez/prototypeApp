@@ -1,48 +1,41 @@
 <template>
   <v-app theme="dark">
     <v-app-bar app >
-    <!--
-      <v-app-bar-nav-icon
-      ></v-app-bar-nav-icon>-->
+
       <v-app-bar-title>App Title</v-app-bar-title>
       <v-btn
-      @click="switchComponent('login')"
+      @click="this.$router.push('/login')"
       variant="outlined"
       v-if="!userLogged"
     >sign in</v-btn>
-    <v-btn
-      variant="outlined"
-      v-if="userLogged"
-    >sign out</v-btn>
 
     <v-btn
-    @click="switchComponent('signup')"
+    v-if="!userLogged"
+    @click="this.$router.push('/signup')"
     variant="outlined"
     class="mx-2"
     >sign up</v-btn>
 
-    </v-app-bar>
-
-    <v-main app>
-
-      <login v-if="activeComponent === 'login'"></login>
-      <SignUp v-if="activeComponent == 'signup'"></SignUp>
-      <Landing v-if="activeComponent == 'landing'"></Landing>
-      <Collection></Collection>
+    <v-avatar
+    v-if="userLogged"
+    size="56"
+    color="primary"
+    class="mx-2">
       
-      <!---->
-      <addTVShow></addTVShow>
-  
-    <!--
-      <Prueba
-      :is-modal-active="true"
-      @prueba="(atr) => funcionHeredada = atr"></Prueba>
-      <v-btn
-      @click="cositas">click</v-btn>
+    </v-avatar>
+    <v-btn
+      variant="outlined"
+      v-if="userLogged"
+      @click="signOut"
+    >sign out</v-btn>
 
-    -->
+    </v-app-bar>
+    <v-main app class="text-center">
+      <router-view
+      @userLogs="(atr) => userLogged = atr"></router-view>
     </v-main>
     <v-footer app>
+      footer
     </v-footer>
   </v-app>
 </template>
@@ -56,11 +49,10 @@
   import SignUp from "./components/SignUp.vue";
   import addTVShow from "./components/addTVShow.vue";
   import modal from "./components/modal.vue"
+  import Login from "./components/login.vue"
 
   var activeComponent = ref("landing");
-  var userLogged = false;
-  var boolean = ref(true);
-  var funcionHeredada = ref();
+  var userLogged = ref(false);
 
   function switchComponent(component){
     if(activeComponent.value == component){
@@ -71,22 +63,7 @@
     }
   }
 
-  function cositas(){
-    let booleano = false;
-    if(booleano){
-      alert("ok");
-    }else{
-      if(funcionHeredada != undefined) funcionHeredada.value();
-    }
-  }
-
-
-  const newCreateModel = function(dialogSwitch, messageObject, nTitle, nSubtitle, nText){
-    dialogSwitch.value = true;
-    messageObject.value.title = nTitle;
-    messageObject.value.subtitle = nSubtitle,
-    messageObject.value.text = nText;
-  }
-
-  
+  function signOut(){
+    userLogged.value = false;
+  }  
 </script>

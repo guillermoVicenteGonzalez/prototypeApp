@@ -28,7 +28,8 @@
     const props = defineProps({
         isModalActive:Boolean
     });
-
+    const emit = defineEmits(['create']);
+    emit('create',createModel);
     var dialogIcon = ref();
     var cardColor = ref();
     var btnColor = ref();
@@ -53,8 +54,5 @@
             dialogIcon.value="mdi-close-circle";
         }
     }
-
-    const emit = defineEmits(['create']);
-    emit('create',createModel);
 
 </script>

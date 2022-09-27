@@ -18,7 +18,7 @@ const expressSwagger = require('express-swagger-generator')(app);
 let options = {
     swaggerDefinition: {
         info: {
-            description: 'This is a sample server',
+            description: 'This is an api\'s documentation ',
             title: 'Swagger',
             version: '1.0.0',
         },

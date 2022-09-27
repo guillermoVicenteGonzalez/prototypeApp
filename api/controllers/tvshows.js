@@ -25,11 +25,10 @@ exports.findAllTVShows = async function(req, res){
 
 //GET:id
 /**
- * Returns the tvshow whose id was used in the request
+ * Returns the tvshow whose id was used in the request parameters (not in the body)
  * @route GET /api/tvshows/:id
  * @group tvshows - tvshows operations
- * @param {tvshow.model} body.body.required - the requested tvshow's data 
- * @returns {tvshow} 200 - returns a jwt for furhter  authentication
+ * @returns {tvshow} 200 -returns a json with format {success:true,tvshow} where tvshow is the selected tvshow
  * @returns {json} 4xx -{success:false, message: a message detailing the error}
  */
 exports.findById = async function(req, res){
@@ -42,6 +41,13 @@ exports.findById = async function(req, res){
 };
 
 //GET:title
+/**
+ * Returns the tvshow whose title was used in the request parameters (not in the body)
+ * @route GET /api/tvshows:title
+ * @group tvshows - tvshows operations
+ * @returns {tvshow} 200 - returns a jwt for furhter  authentication
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.findByName = async function(req, res){
   let tvshow = await TVShow.findOne({title:req.params.title});
   if(tvshow){
@@ -55,11 +61,11 @@ exports.findByName = async function(req, res){
 
 //POST
 /**
- * This endpoint returns all registered tvshows
+ * This endpoint creates and registers a new tvshow
  * @route POST /api/tvshows/
  * @group tvshows - tvshows operations
- * @param {tvshow.model} body.body.required - the user's to be logged on data 
- * @returns {Array.<tvshow>} 200 - returns a jwt for furhter  authentication
+ * @param {tvshow.model} body.body.required - the tvshow we want to add to the database
+ * @returns {tvshow} 200 - returns a json with format {success:true, result} where result is the registered tvshow
  * @returns {json} 4xx -{success:false, message: a message detailing the error}
  */
 exports.addTVShow = async function(req, res){
@@ -92,6 +98,14 @@ exports.addTVShow = async function(req, res){
 };
 
 //PUT:id
+/**
+ * This endpoint updates an existing tvshow
+ * @route PUT /api/tvshows/:id
+ * @group tvshows - tvshows operations
+ * @param {tvshow.model} body.body.required - the updated tvshow. 
+ * @returns {tvshow} 200 - returns a json with format {success:true, result} where result is the updated tvshow
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.updateTVShow = async function(req, res){
   if(req.body.title && req.body.summary ){
     let tvshow = await TVShow.findById(req.params.id).catch(err => {return undefined});
@@ -120,6 +134,13 @@ exports.updateTVShow = async function(req, res){
 
 
 //DELTE:id
+/**
+ * This endpoint deletes de requested tvshow
+ * @route DELETE /api/tvshows/:id
+ * @group tvshows - tvshows operations
+ * @returns {tvshow} 200 - returns a json with format {success:true, result} where result is the recently deleted tvshow
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.deleteTVShow = async function(req, res){
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   let tvshow = await TVShow.findById(req.params.id).catch(err => {return undefined});

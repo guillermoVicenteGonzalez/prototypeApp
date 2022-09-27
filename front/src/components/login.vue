@@ -31,6 +31,8 @@
         </v-card>      
 
         <modal @create="(atr) => createModalLogin = atr"></modal>
+        <loading
+        v-model="triggerLoading"></loading>
     </v-container>
 
 </template>
@@ -41,6 +43,8 @@
     import AppVue from "../App.vue";
     import config from "../config.json";
     import modal from "../components/modal.vue";
+    import loading from "../components/loading.vue";
+    import Loading from "./loading.vue";
 
 
     const emit = defineEmits(['userLogs']);
@@ -49,6 +53,7 @@
     var userPasswd = ref();
     var userLogged = ref();
     var createModalLogin = ref();
+    var triggerLoading = ref();
     //"booleano" que controla si aparece o no el dialogo
     var dialog = ref(false);
     //objeto mensaje que aparecerá en el model
@@ -60,22 +65,23 @@
 
 
     async function login(){
+        triggerLoading.value=true;
         let result = await axios.post(config.host + config.api + config.loginUser,{
             login:userLogin.value,
             password:userPasswd.value
         })
         .then( async function(response){
+            triggerLoading.value=false;
             console.log(response.data);
             if(response.data.success == true){
                 await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
-                //que el dialogo emita user logs y lo escuche este componente que a su vez emite user logs.
-                //De ese modo el que emite es el dialogo, y llega al main porque login no puede usar router
-                //emit('userLogs',true);
+                emit('userLogs',true);
             }
         })
         .catch(function(error){
+            triggerLoading.value=false;
             //emit('userLogs',false);
             if(error.response){
                 if(error.response.data){

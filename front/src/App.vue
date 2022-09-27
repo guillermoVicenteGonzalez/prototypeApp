@@ -11,7 +11,7 @@
 
     <v-btn
     v-if="!userLogged"
-    @click="pruebaRouter"
+    @click="this.$router.push('/signup')"
     variant="outlined"
     class="mx-2"
     >sign up</v-btn>
@@ -37,7 +37,7 @@
         this.$router.push('/');
       }"></router-view>
       <modal
-      @create="(atr) => appCreateDialog = atr"></modal>
+      @create="(atr) => createModalApp = atr"></modal>
     </v-main>
     <v-footer app>
       footer
@@ -57,10 +57,11 @@
   import Login from "./components/login.vue"
   import router from "../src/router/index.js"
 
-  var appCreateDialog = ref();
+  var createModalApp = ref();
   var activeComponent = ref("landing");
   var userLogged = ref(false);
 
+  /*
   function switchComponent(component){
     if(activeComponent.value == component){
       activeComponent.value = 'landing';
@@ -68,14 +69,11 @@
       activeComponent.value = component;
       console.log(activeComponent);
     }
-  }
+  }*/
 
   function signOut(){
     userLogged.value = false;
+    router.push('/');
   }  
 
-
-  function pruebaRouter(){
-    router.push('/signup');
-  }
 </script>

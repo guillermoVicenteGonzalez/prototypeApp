@@ -4,6 +4,15 @@ const TVShow = require("../models/tvshow");
 
 
 //GET
+
+/**
+ * This endpoint returns all registered tvshows
+ * @route GET /api/tvshows/
+ * @group tvshows - tvshows operations
+ * @param {tvshow.model} body.body.required - the user's to be logged on data 
+ * @returns {Array.<tvshow>} 200 - returns a jwt for furhter  authentication
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.findAllTVShows = async function(req, res){
   let tvshows = await TVShow.find().catch(err => {return undefined});
   if(tvshows){
@@ -15,6 +24,14 @@ exports.findAllTVShows = async function(req, res){
 };
 
 //GET:id
+/**
+ * Returns the tvshow whose id was used in the request
+ * @route GET /api/tvshows/:id
+ * @group tvshows - tvshows operations
+ * @param {tvshow.model} body.body.required - the requested tvshow's data 
+ * @returns {tvshow} 200 - returns a jwt for furhter  authentication
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.findById = async function(req, res){
   let tvshow = await TVShow.findById(req.params.id).catch(err => {return undefined});
   if(tvshow){
@@ -37,6 +54,14 @@ exports.findByName = async function(req, res){
 }
 
 //POST
+/**
+ * This endpoint returns all registered tvshows
+ * @route POST /api/tvshows/
+ * @group tvshows - tvshows operations
+ * @param {tvshow.model} body.body.required - the user's to be logged on data 
+ * @returns {Array.<tvshow>} 200 - returns a jwt for furhter  authentication
+ * @returns {json} 4xx -{success:false, message: a message detailing the error}
+ */
 exports.addTVShow = async function(req, res){
   //primero compruebo que la request tenga al menos estos campos
   if(req.body.summary != undefined && req.body.title != undefined){

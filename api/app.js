@@ -1,3 +1,6 @@
+
+
+
 const express         = require("express"),
     app             = express(),
     bodyParser      = require("body-parser"),
@@ -38,7 +41,7 @@ let options = {
     //basedir: __dirname, //app absolute path
     basedir: "./",
     //files: ['./controllers/usuariosCtrl.js'] //Path to the API handle folder
-    files: ['./models/user.js', './controllers/usersCtrl.js']
+    files: ['./models/user.js', './controllers/usersCtrl.js', './models/tvshow.js', './controllers/tvshows.js']
 };
 expressSwagger(options)
 

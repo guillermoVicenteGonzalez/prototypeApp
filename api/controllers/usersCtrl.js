@@ -13,10 +13,9 @@ const saltRounds = 10
  * This function allow the user to login in the system by providing his username and password and returns a jwt
  * @route POST /api/usuarios/login
  * @group Usuario - User operations
- * @param {string} login.query.required - username  - eg: user@domain
- * @param {string} password.query.required - user's password.
+ * @param {User.model} body.body.required - the user's to be logged on data 
  * @returns {json} 201 - returns a jwt for furhter  authentication
- * @returns {Error} 404 - Not Found
+ * @returns {json} 4xx -success:false, message: a message detailing the error
  */
 exports.userLogin = async function(req, res){
     //primero verifico que la request esta bien hecha.
@@ -51,10 +50,9 @@ exports.userLogin = async function(req, res){
  * This function allows a user to register in the system by providing a username and a password
  * @route POST /api/usuarios
  * @group Usuario - User operations
- * @param {string} login.query.required - username  - eg: user@domain
- * @param {string} password.query.required - user's password.
- * @returns {json} 201 - returns registered user's data in json format
- * @returns {Error} 400 - The user alredy exists
+ * @param {User.model} body.body.required -the user's to be registered data
+ * @returns {User.model} 201 - returns registered user's data in json format
+ * @returns {Error} 4xx -success:false, message:"a message detailing the error"
  */
 exports.userRegister = async function(req, res){
     console.log(req.body);
@@ -91,7 +89,7 @@ exports.userRegister = async function(req, res){
  * The Jwt can be aquired through login: GET /api/tvshows
  * @route GET /api/usuarios/:id
  * @group Usuario - User operations
- * @param {header} token - jwt token 
+ * @security JWT
  * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
  * @returns {Error} 400 - either the id or the jwt are not valid
  */

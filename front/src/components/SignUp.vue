@@ -40,6 +40,8 @@
     import modal from "../components/modal.vue";
     import Loading from "./loading.vue";
 
+
+    const emits = defineEmits(['userRegister']);
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
@@ -63,6 +65,7 @@
             if(response.data.success == true){
                 createModalSignup.value("Succes","Signup was successfull","",true);
                 //userLogged.value = true;
+                emit('userRegister');
             }
         })
         .catch(function(error){

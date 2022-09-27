@@ -1,7 +1,10 @@
 <template>
   <v-app theme="dark">
     <v-app-bar app >
-
+      <v-app-bar-nav-icon
+      @click.stop="drawer = !drawer">
+      
+      </v-app-bar-nav-icon>
       <v-app-bar-title>App Title</v-app-bar-title>
       <v-btn
       @click="this.$router.push('/login')"
@@ -29,15 +32,54 @@
       @click="signOut"
     >sign out</v-btn>
 
+  
     </v-app-bar>
     <v-main app class="text-center">
       <router-view
       @userLogs="(atr) => {
         userLogged = atr;
         this.$router.push('/');
+      }"
+      @userRegister="()=>{
+        userLogged = true;
+        this.$router.push('/');
       }"></router-view>
       <modal
       @create="(atr) => createModalApp = atr"></modal>
+
+      <v-navigation-drawer
+      absolute
+      bottom
+      temporary
+      v-model="drawer">
+        <v-list>
+            <v-list-item>
+              <v-btn
+              block
+              depressed>Home</v-btn>
+            </v-list-item>
+
+            <v-list-item>
+              <v-btn
+              block
+              depressed>Add tvshow</v-btn>
+            </v-list-item>
+
+            <v-list-item>
+              <v-btn
+              block
+              depressed>search</v-btn>
+            </v-list-item>
+
+            <v-list-item>
+              <v-btn
+              block
+              depressed>delete show</v-btn>
+            </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+
+
     </v-main>
     <v-footer app>
       footer
@@ -56,10 +98,15 @@
   import modal from "./components/modal.vue"
   import Login from "./components/login.vue"
   import router from "../src/router/index.js"
+  import cardMenu from "../src/components/cardMenu.vue"
+
+
 
   var createModalApp = ref();
   var activeComponent = ref("landing");
   var userLogged = ref(false);
+  var drawer = ref(false);
+  var group = ref()
 
   /*
   function switchComponent(component){

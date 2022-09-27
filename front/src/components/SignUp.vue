@@ -27,6 +27,7 @@
         </v-card>    
 
         <modal @create="(atr) => createModalSignup = atr"></modal>
+        <loading v-model="triggerLoading_signup"></loading>
    </v-container>
 
 </template>
@@ -37,10 +38,14 @@
     import AppVue from "../App.vue";
     import config from "../config.json"
     import modal from "../components/modal.vue";
+    import Loading from "./loading.vue";
 
+
+    const emits = defineEmits(['userRegister']);
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
+    var triggerLoading_signup = ref();
     var signupDialog = ref(false);
     var signupDialogMessage = ref({
         title:undefined,
@@ -49,25 +54,34 @@
     })
 
     async function signUp(){
+        triggerLoading_signup.value=true;
         let result = await axios.post(config.host + config.api + config.registerUser,{
             login: signupUsername.value,
             password: signupPasswd.value
         })
         .then( function(response){
+            triggerLoading_signup.value=false;
             console.log(response.data);
             if(response.data.success == true){
-                createModalSignup.value("Succes","Signup was successfull");
-                userLogged.value = true;
+                createModalSignup.value("Succes","Signup was successfull","",true);
+                //userLogged.value = true;
+                emit('userRegister');
             }
         })
         .catch(function(error){
+            triggerLoading_signup.value=false;
             if(error.response){
-                console.log(error.response.data);
-                createModalSignup.value("Error","",error.response.data.message);
+                console.log(error.response.data)
+                if(error.response.data){
+                    createModalSignup.value("Error","",error.response.data.message,false);                    
+                }else{
+                    createModalSignup.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
+                    console.log(error.response);
+                }
             }else if(error.request){
                 createModalSignup.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                 console.log(error.request);
-            }else if(error != undefined){
+            }else{
                 createModalSignup.value("Error","", "unknown error. Try again later");
                 console.log("unknown error");
             }

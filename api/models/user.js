@@ -1,6 +1,6 @@
 /**
  * @typedef User
- * @property {String} login.required - user login name
+ * @property {string} login.required - user login name
  * @property {string} password.required - user password
  */
 

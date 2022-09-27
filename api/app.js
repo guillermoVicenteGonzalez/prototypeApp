@@ -1,3 +1,6 @@
+
+
+
 const express         = require("express"),
     app             = express(),
     bodyParser      = require("body-parser"),
@@ -15,7 +18,7 @@ const expressSwagger = require('express-swagger-generator')(app);
 let options = {
     swaggerDefinition: {
         info: {
-            description: 'This is a sample server',
+            description: 'This is an api\'s documentation ',
             title: 'Swagger',
             version: '1.0.0',
         },
@@ -38,7 +41,7 @@ let options = {
     //basedir: __dirname, //app absolute path
     basedir: "./",
     //files: ['./controllers/usuariosCtrl.js'] //Path to the API handle folder
-    files: ['./models/user.js', './controllers/usersCtrl.js']
+    files: ['./models/user.js', './controllers/usersCtrl.js', './models/tvshow.js', './controllers/tvshows.js']
 };
 expressSwagger(options)
 

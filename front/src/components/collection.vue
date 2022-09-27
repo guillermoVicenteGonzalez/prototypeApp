@@ -18,6 +18,7 @@
     </v-card>
 
     <modal @create="(atr) => createModal = atr"></modal>
+    <loading v-model="triggerLoadgin_Col"></loading>
 
 </template>
 
@@ -27,12 +28,14 @@
     import config from "../config.json";
     import {inject} from "vue";
     import modal from "../components/modal.vue";
+    import Loading from "./loading.vue";
 
 
     const array = ref([]);
     const message = ref();
     var createModal = ref();
     var collectionDialog = ref(false);
+    var triggerLoadgin_Col = ref();
     var collectionDialogMessage = ref({
         title:undefined,
         subtitle:undefined,
@@ -41,12 +44,15 @@
 
 
     async function getAllTVShows(){
+        triggerLoadgin_Col.value = true;
         let promise = axios.get(config.host + config.api + config.getAllTVShows)
         .then(function(result){
+            triggerLoadgin_Col.value = false;
             array.value = [];
             array.value = result.data.tvshows;
         })
         .catch(function (error){
+            triggerLoadgin_Col.value = false;
             if(error.response);
             createModel()
         });
@@ -57,12 +63,15 @@
             console.log("vacio");
             getAllTVShows();
         }else{
+            triggerLoadgin_Col.value = true;
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
             .then(function (response){
                 array.value = [];
                 array.value.push(response.data.tvshow);
+                triggerLoadgin_Col.value = false;
             })
             .catch(function(error){
+                triggerLoadgin_Col.value = false;
                 if(error.response){
                     console.log(error.response.data);
                     createModal.value("Error","",error.response.data.message);

@@ -31,6 +31,8 @@
         </v-card>      
 
         <modal @create="(atr) => createModalLogin = atr"></modal>
+        <loading
+        v-model="triggerLoading"></loading>
     </v-container>
 
 </template>
@@ -41,6 +43,8 @@
     import AppVue from "../App.vue";
     import config from "../config.json";
     import modal from "../components/modal.vue";
+    import loading from "../components/loading.vue";
+    import Loading from "./loading.vue";
 
 
     const emit = defineEmits(['userLogs']);
@@ -49,6 +53,7 @@
     var userPasswd = ref();
     var userLogged = ref();
     var createModalLogin = ref();
+    var triggerLoading = ref();
     //"booleano" que controla si aparece o no el dialogo
     var dialog = ref(false);
     //objeto mensaje que aparecerá en el model
@@ -60,26 +65,29 @@
 
 
     async function login(){
+        triggerLoading.value=true;
         let result = await axios.post(config.host + config.api + config.loginUser,{
             login:userLogin.value,
             password:userPasswd.value
         })
-        .then( function(response){
+        .then( async function(response){
+            triggerLoading.value=false;
             console.log(response.data);
             if(response.data.success == true){
-                createModalLogin.value("Success","Successful login","",true);
-                emit('userLogs',true);
+                await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
+                emit('userLogs',true);
             }
         })
         .catch(function(error){
+            triggerLoading.value=false;
             //emit('userLogs',false);
             if(error.response){
                 if(error.response.data){
                     createModalLogin.value("Error","",error.response.data.message,false);                    
                 }else{
-                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try agai later");
+                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.response);
                 }
             }else if(error.request){

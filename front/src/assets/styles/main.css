@@ -107,3 +107,15 @@ a,
     padding: 0 2rem;
   }
 }
+
+
+/*
+*patron css
+*/
+.backgroundPattern{
+  padding: 0;
+  margin: 0;
+  background-color: #4caf50;
+  opacity: 0.8;
+  background: linear-gradient(135deg, #34007555 25%, transparent 25%) -37px 0/ 74px 74px, linear-gradient(225deg, #340075 25%, transparent 25%) -37px 0/ 74px 74px, linear-gradient(315deg, #34007555 25%, transparent 25%) 0px 0/ 74px 74px, linear-gradient(45deg, #340075 25%, #4caf50 25%) 0px 0/ 74px 74px;
+}

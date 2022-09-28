@@ -41,7 +41,7 @@
     import Loading from "./loading.vue";
 
 
-    const emits = defineEmits(['userRegister']);
+    const emit = defineEmits(['userRegister']);
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
@@ -61,11 +61,11 @@
         })
         .then( function(response){
             triggerLoading_signup.value=false;
-            console.log(response.data);
+            console.log(response.data.success);
             if(response.data.success == true){
-                createModalSignup.value("Succes","Signup was successfull","",true);
-                //userLogged.value = true;
                 emit('userRegister');
+                createModalSignup.value("Succes","Signup was successfull","",true);
+                console.log("estoy aqui");
             }
         })
         .catch(function(error){

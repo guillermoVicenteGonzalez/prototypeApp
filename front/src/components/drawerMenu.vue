@@ -17,7 +17,8 @@
               block
               depressed
               @click="this.$router.push('/showCollection')"
-              prepend-icon="mdi-magnify">tvshows</v-btn>
+              prepend-icon="mdi-magnify"
+              color>tvshows</v-btn>
             </v-list-item>
 
             <v-list-item>

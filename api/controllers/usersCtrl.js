@@ -77,7 +77,7 @@ exports.userRegister = async function(req, res){
             console.log("exito" + result);
         }else{
             console.log("error " + result);
-            res.status(409).json({success:false, result});
+            res.status(400).json({success:false, result});
         }
         console.log(nUser);
     }

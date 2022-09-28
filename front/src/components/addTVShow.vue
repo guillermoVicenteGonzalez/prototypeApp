@@ -86,7 +86,7 @@
         })
         .catch(function(error){
             triggerLoading_AS.value=false;
-            if(error.response){
+            if(error.response.message){
                 createModalAS.value("Error","",error.response.data.message,false);
             }else if(error.request){
                 createModalAS.value("Error","Request error","An error ocurred while trying to connect to the database",false);

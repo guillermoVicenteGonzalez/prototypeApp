@@ -53,7 +53,8 @@
 
       <verify
       v-model="triggerVerify"
-      @cancelSignoutEvent="cancelSignout"></verify>
+      @cancelSignoutEvent="cancelSignOut"
+      @acceptSignOutEvent="signOut"></verify>
 
     </v-main>
     <v-footer app class="justify-center">
@@ -85,19 +86,13 @@
   var drawer = ref(false);
   var group = ref()
 
-  /*
-  function switchComponent(component){
-    if(activeComponent.value == component){
-      activeComponent.value = 'landing';
-    }else{
-      activeComponent.value = component;
-      console.log(activeComponent);
-    }
-  }*/
-
   function cancelSignOut(){
     triggerVerify.value = false;
-    //userLogged.value = false;
   }  
+
+  function signOut(){
+    triggerVerify.value = false;
+    userLogged.value = false;
+  }
 
 </script>

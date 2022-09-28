@@ -12,7 +12,8 @@
                 <v-card-actions
                 class="d-flex justify-center">
                     <v-btn
-                    color="success">confirm</v-btn>
+                    color="success"
+                    @click="emit('acceptSignOutEvent')">confirm</v-btn>
 
                     <v-btn
                     color="error"
@@ -28,11 +29,13 @@
 
     var triggerVerify = ref();
 
-    const emit = defineEmits(['cancelSignoutEvent']);
+    const emit = defineEmits(['cancelSignoutEvent','acceptSignOutEvent']);
     function closeVerify(){
         //alert("estoy aqui");
         //triggerVerify.value=false;
         emit('cancelSignoutEvent');
     }
+
+
 
 </script>

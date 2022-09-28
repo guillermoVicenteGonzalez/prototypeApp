@@ -4,7 +4,11 @@
 
 
 <template>
-   <div class="backgroundPattern"></div>
+    <v-parallax src="">
+        <div class="backgroundPattern">
+            <h1 class="purple">Title</h1>
+        </div>
+    </v-parallax>
 </template>
 
 <script setup>

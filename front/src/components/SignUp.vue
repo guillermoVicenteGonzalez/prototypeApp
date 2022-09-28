@@ -66,8 +66,6 @@
                 emit('userRegister');
                 createModalSignup.value("Succes","Signup was successfull","",true);
                 console.log("estoy aqui");
-                //userLogged.value = true;
-                //emit('userRegister');
             }
         })
         .catch(function(error){

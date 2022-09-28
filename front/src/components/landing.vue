@@ -1,5 +1,10 @@
+<style>
+    @import '../assets/styles/plain.css';
+</style>
+
+
 <template>
-    <h1 class="text-center">landing page (in the making)</h1>
+   <div class="backgroundPattern">hola</div>
 </template>
 
 <script setup>

@@ -10,6 +10,8 @@
                 variant="outlined"
                 label="username"
                 v-model="userLogin"
+                required
+                color="primary"
                 ></v-text-field>
 
                 <v-text-field 
@@ -18,6 +20,8 @@
                 label="password"
                 v-model="userPasswd"
                 type="password"
+                required
+                color="primary"
                 ></v-text-field>
 
                 <v-btn class="ma-2"

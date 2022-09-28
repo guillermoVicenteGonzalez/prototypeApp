@@ -7,31 +7,36 @@
                 variant="outlined"
                 class="mx-10 my-2"
                 label="title"
-                v-model="tvTitle"></v-text-field>
+                v-model="tvTitle"
+                color="primary"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="year"
-                v-model="tvYear"></v-text-field>
+                v-model="tvYear"
+                color="primary"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="seasons"
-                v-model="tvSeasons"></v-text-field>
+                v-model="tvSeasons"
+                color="primary"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="country"
-                v-model="tvCountry"></v-text-field>
+                v-model="tvCountry"
+                color="primary"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="summary"
-                v-model="tvSummary"></v-text-field>
+                v-model="tvSummary"
+                color="primary"></v-text-field>
                 <v-btn
                 class="mb-5"
                 @click="registerTVShow">register</v-btn>

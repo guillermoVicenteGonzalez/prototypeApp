@@ -43,10 +43,7 @@
         userLogged = atr;
         this.$router.push('/');
       }"
-      @userRegister="()=>{
-        userLogged = true;
-        this.$router.push('/');
-      }"></router-view>
+ ></router-view>
       <modal
       @create="(atr) => createModalApp = atr"></modal>
 

@@ -43,11 +43,16 @@
         userLogged = atr;
         this.$router.push('/');
       }"
- ></router-view>
+      ></router-view>
+      
+      
       <modal
       @create="(atr) => createModalApp = atr"></modal>
 
       <drawerMenu v-model="drawer"></drawerMenu>
+
+      <verify
+      v-model="triggerVerify"></verify>
 
     </v-main>
     <v-footer app>
@@ -68,10 +73,10 @@
   import Login from "./components/login.vue"
   import router from "../src/router/index.js"
   import drawerMenu from "./components/drawerMenu.vue"
+  import verify from "./components/verify.vue"
 
 
-
-
+  var triggerVerify = ref();
   var createModalApp = ref();
   var activeComponent = ref("landing");
   var userLogged = ref(false);
@@ -89,8 +94,10 @@
   }*/
 
   function signOut(){
-    userLogged.value = false;
-    router.push('/');
+    //alert("hola");
+    triggerVerify.value = true;
+    //userLogged.value = false;
+    //router.push('/');
   }  
 
 </script>

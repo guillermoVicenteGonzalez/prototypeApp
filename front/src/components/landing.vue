@@ -4,7 +4,7 @@
 
 
 <template>
-   <div class="backgroundPattern">hola</div>
+   <div class="backgroundPattern"></div>
 </template>
 
 <script setup>

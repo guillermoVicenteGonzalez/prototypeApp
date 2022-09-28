@@ -14,7 +14,6 @@
     import router from "../router/index.js"
 
     function goToGithub(){
-        alert("saliendo");
         window.open("https://github.com/guillermoVicenteGonzalez/prototypeApp");
     }
 </script>

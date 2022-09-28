@@ -2,7 +2,8 @@
   <v-app theme="dark">
     <v-app-bar app >
       <v-app-bar-nav-icon
-      @click.stop="drawer = !drawer">
+      @click.stop="drawer = !drawer"
+      color="primary">
       
       </v-app-bar-nav-icon>
       <v-app-bar-title>App Title</v-app-bar-title>
@@ -10,6 +11,7 @@
       @click="this.$router.push('/login')"
       variant="outlined"
       v-if="!userLogged"
+      color="success"
     >sign in</v-btn>
 
     <v-btn
@@ -17,6 +19,7 @@
     @click="this.$router.push('/signup')"
     variant="outlined"
     class="mx-2"
+    color="primary"
     >sign up</v-btn>
 
     <v-avatar

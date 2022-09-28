@@ -2,6 +2,7 @@
         <v-dialog
         class="text-center"
         width="500"
+        persistent
         v-model="triggerVerify">
             <v-card class="text-center">
                 <v-card-title>Verify</v-card-title>
@@ -26,11 +27,12 @@
     import {ref} from "vue"
 
     var triggerVerify = ref();
-    const emits = defineEmits(['closeVerify']);
+
+    const emit = defineEmits(['cancelSignoutEvent']);
     function closeVerify(){
         //alert("estoy aqui");
         //triggerVerify.value=false;
-        emit('closeVerify');
+        emit('cancelSignoutEvent');
     }
 
 </script>

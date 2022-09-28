@@ -32,7 +32,7 @@
     <v-btn
       variant="outlined"
       v-if="userLogged"
-      @click="signOut"
+      @click="triggerVerify = true"
     >sign out</v-btn>
 
   
@@ -52,11 +52,12 @@
       <drawerMenu v-model="drawer"></drawerMenu>
 
       <verify
-      v-model="triggerVerify"></verify>
+      v-model="triggerVerify"
+      @cancelSignoutEvent="cancelSignout"></verify>
 
     </v-main>
-    <v-footer app>
-      footer
+    <v-footer app class="justify-center">
+      <MyFooter></MyFooter>
     </v-footer>
   </v-app>
 </template>
@@ -74,6 +75,7 @@
   import router from "../src/router/index.js"
   import drawerMenu from "./components/drawerMenu.vue"
   import verify from "./components/verify.vue"
+  import MyFooter from "./components/myFooter.vue";
 
 
   var triggerVerify = ref();
@@ -93,11 +95,9 @@
     }
   }*/
 
-  function signOut(){
-    //alert("hola");
-    triggerVerify.value = true;
+  function cancelSignOut(){
+    triggerVerify.value = false;
     //userLogged.value = false;
-    //router.push('/');
   }  
 
 </script>

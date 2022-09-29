@@ -40,7 +40,7 @@
         text:undefined
     });
    
-
+    
     function createModel(nTitle, nSubtitle, nText,isSuccessful){        
         collectionDialog.value = true;
         dialogMessage.value.title = nTitle;
@@ -54,5 +54,10 @@
             dialogIcon.value="mdi-close-circle";
         }
     }
+
+    //para nota
+    defineExpose({
+        createModel
+    });
 
 </script>

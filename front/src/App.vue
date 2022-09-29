@@ -6,7 +6,8 @@
       color="primary">
       
       </v-app-bar-nav-icon>
-      <v-app-bar-title>App Title</v-app-bar-title>
+      <v-app-bar-title
+      class="text-primary">App Title</v-app-bar-title>
       <v-btn
       @click="this.$router.push('/login')"
       variant="outlined"
@@ -78,10 +79,8 @@
   import verify from "./components/verify.vue"
   import MyFooter from "./components/myFooter.vue";
 
-
   var triggerVerify = ref();
   var createModalApp = ref();
-  var activeComponent = ref("landing");
   var userLogged = ref(false);
   var drawer = ref(false);
   var group = ref()
@@ -94,5 +93,6 @@
     triggerVerify.value = false;
     userLogged.value = false;
   }
+
 
 </script>

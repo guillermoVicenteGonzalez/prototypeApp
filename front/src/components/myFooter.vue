@@ -4,7 +4,7 @@
     color="purple"
     @click="goToGithub">
         <v-icon
-        color="success">mdi-github</v-icon>
+        color="black">mdi-github</v-icon>
     </v-btn>
 
 

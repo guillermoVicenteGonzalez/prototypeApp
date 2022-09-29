@@ -1,7 +1,5 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const TVShow = require("../models/tvshow");
-//var TVShow = mongoose.model("TVShow");
-
 
 //GET
 
@@ -80,15 +78,23 @@ exports.addTVShow = async function(req, res){
       genre: req.body.genre,
       summary: req.body.summary,
     });
-    console.log("fields are filled");
-    let result = await tvshow.save().catch(err => {return undefined});
-    if(result){
-      res.status(201).json({success:true,result});
-      console.log("success registering tvshow")
+    //ahora compruebo que no esta repetido
+
+    let otherTvshow = TVShow.findOne({title:req.params.title})
+    if(otherTvshow){
+      console.log("show alredy registered");
+      res.status(400).json({success:false,message:"there's alredy a show with the same title"})
     }else{
-      console.log(result);
-      console.log("error registering tvshow in database")
-      res.status(400).json({success:false, message:"error registering in database"});
+      console.log("fields are filled");
+      let result = await tvshow.save().catch(err => {return undefined});
+      if(result){
+        res.status(201).json({success:true,result});
+        console.log("success registering tvshow")
+      }else{
+        console.log(result);
+        console.log("error registering tvshow in database")
+        res.status(400).json({success:false, message:"error registering in database"});
+      }
     }
   }else{
     console.log("unable to register tvshow due to empty request fields");

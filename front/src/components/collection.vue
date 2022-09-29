@@ -3,7 +3,7 @@
     @submit.prevent="searchTVShow">
         <v-text-field
         variant="outlined"
-        class="mx-20"
+        class="mx-10 my-10"
         label="search tvshow"
         v-model="message"
         append-icon="mdi-magnify"
@@ -20,12 +20,13 @@
         :text="item.summary"
         width="300"
         height="150"
-        @click="test">
+        @click="createShowCard">
         </v-card>
     </v-container>
 
-    <modal @create="(atr) => createModal = atr"></modal>
+    <modal ref="collectionModal"></modal>
     <loading v-model="triggerLoadgin_Col"></loading>
+    <tvshow-modal ref="tvshowModal"></tvshow-modal>
 
 </template>
 
@@ -33,15 +34,14 @@
     import axios from "axios";
     import {ref} from "vue";
     import config from "../config.json";
-    import {inject} from "vue";
     import modal from "../components/modal.vue";
     import Loading from "./loading.vue";
+    import TvshowModal from "./tvshowModal.vue";
 
-
+    var tvshowModal = ref();
     const array = ref([]);
     const message = ref();
-    var createModal = ref();
-    var collectionDialog = ref(false);
+    var collectionModal = ref();
     var triggerLoadgin_Col = ref();
     var collectionDialogMessage = ref({
         title:undefined,
@@ -61,7 +61,6 @@
         .catch(function (error){
             triggerLoadgin_Col.value = false;
             if(error.response);
-            createModel()
         });
     }
 
@@ -81,21 +80,20 @@
                 triggerLoadgin_Col.value = false;
                 if(error.response){
                     console.log(error.response.data);
-                    createModal.value("Error","",error.response.data.message);
+                    collectionModal.value.createDialog("Error","",error.response.data.message);
                 }else if(error.request){
-                    createModal.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                    collectionModal.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.request);
                 }else if(error != undefined){
-                    createModalAS.value("Error","unknown error","",false);
+                    collectionModal.value.createDialog("Error","unknown error","",false);
                     console.log("unknown error");
                 }
             });
         }
     }
 
-    function test(){
-        alert("hello");
+    function createShowCard(){
+        tvshowModal.value.create();
     }
-
     getAllTVShows();
 </script>

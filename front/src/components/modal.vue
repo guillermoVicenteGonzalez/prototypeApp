@@ -30,7 +30,8 @@
         isModalActive:Boolean
     });
     const emit = defineEmits(['create']);
-    emit('create',createModel);
+    //emit('create',createModel);
+    emit('create');
     var dialogClass = ref();
     var dialogIcon = ref();
     var cardColor = ref();
@@ -43,7 +44,7 @@
     });
    
     
-    function createModel(nTitle, nSubtitle, nText,isSuccessful){        
+    const createDialog = function (nTitle, nSubtitle, nText,isSuccessful){        
         collectionDialog.value = true;
         dialogMessage.value.title = nTitle;
         dialogMessage.value.subtitle = nSubtitle;
@@ -59,9 +60,8 @@
         }
     }
 
-    //para nota
     defineExpose({
-        createModel
+        createDialog
     });
 
 </script>

@@ -35,7 +35,8 @@
             </v-form>  
         </v-card>      
 
-        <modal @create="(atr) => createModalLogin = atr"></modal>
+        <modal
+        ref="errorModalVar"></modal>
         <loading
         v-model="triggerLoading"></loading>
     </v-container>
@@ -53,6 +54,7 @@
 
 
     const emit = defineEmits(['userLogs']);
+    var errorModalVar = ref();
     var token ="";
     var userLogin = ref();
     var userPasswd = ref();
@@ -79,7 +81,9 @@
             triggerLoading.value=false;
             console.log(response.data);
             if(response.data.success == true){
-                await createModalLogin.value("Success","Successful login","",true);
+                //console.log(errorModalVar.value.createModel);
+                errorModalVar.value.createDialog("Success","","",true);
+                //await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
                 emit('userLogs',true);
@@ -90,16 +94,17 @@
             //emit('userLogs',false);
             if(error.response){
                 if(error.response.data){
-                    createModalLogin.value("Error","",error.response.data.message,false);                    
+                    errorModalVar.value.createDialog("Error","",error.response.data.message,false);
+                    //createModalLogin.value("Error","",error.response.data.message,false);                    
                 }else{
-                    createModalLogin.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
+                    errorModalVar.value.createDialog("Error","request error","An error ocurred while trying to connect with the database. Please try again later",false);
                     console.log(error.response);
                 }
             }else if(error.request){
-                createModallogin.value("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later");
+                errorModalVar.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later",false);
                 console.log(error.request);
             }else{
-                createModalLogin.value("Error","unknown error", "unknown error. Try again later");
+                errorModalVar.value.createDialog("Error","unknown error", "unknown error. Try again later",false);
                 console.log("unknown error");
             }
         });

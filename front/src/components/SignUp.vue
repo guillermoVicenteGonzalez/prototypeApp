@@ -27,7 +27,7 @@
            </v-form>  
         </v-card>    
 
-        <modal @create="(atr) => createModalSignup = atr"></modal>
+        <modal ref="createModalSignup"></modal>
         <loading v-model="triggerLoading_signup"></loading>
    </v-container>
 
@@ -65,7 +65,7 @@
             console.log(response.data.success);
             if(response.data.success == true){
                 emit('userRegister');
-                createModalSignup.value("Succes","Signup was successfull","",true);
+                createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                 console.log("estoy aqui");
             }
         })
@@ -74,16 +74,16 @@
             if(error.response){
                 console.log(error.response.data)
                 if(error.response.data){
-                    createModalSignup.value("Error","",error.response.data.message,false);                    
+                    createModalSignup.value.createDialog("Error","",error.response.data.message,false);                    
                 }else{
-                    createModalSignup.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
+                    createModalSignup.value.createDialog("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.response);
                 }
             }else if(error.request){
-                createModalSignup.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                createModalSignup.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                 console.log(error.request);
             }else{
-                createModalSignup.value("Error","", "unknown error. Try again later");
+                createModalSignup.value.createDialog("Error","", "unknown error. Try again later");
                 console.log("unknown error");
             }
         });

@@ -48,7 +48,7 @@
 
         </v-card>
 
-        <modal @create="(atr) => createModalAS = atr"></modal>
+        <modal ref="createModalAS"></modal>
         <loading
         v-model="triggerLoading_AS"></loading>
     </v-container>
@@ -84,17 +84,17 @@
             console.log("exito");
             console.log(response.data.message);
             triggerLoading_AS.value=false;
-            createModalAS.value("Success","succesfully added tvshow: " + tvTitle.value,"",true);
+            createModalAS.value.createDialog("Success","succesfully added tvshow: " + tvTitle.value,"",true);
             tvTitle.value = tvYear.value = tvCountry.value = tvSeasons.value = tvSummary.value = undefined;
         })
         .catch(function(error){
             triggerLoading_AS.value=false;
             if(error.response.data){
-                createModalAS.value("Error","",error.response.data.message,false);
+                createModalAS.value.createDialog("Error","",error.response.data.message,false);
             }else if(error.request){
-                createModalAS.value("Error","Request error","An error ocurred while trying to connect to the database",false);
+                createModalAS.value.createDialog("Error","Request error","An error ocurred while trying to connect to the database",false);
             }else{
-                createModalAS.value("Error","unknown error","",false);
+                createModalAS.value.createDialog("Error","unknown error","",false);
             }
         })
     }

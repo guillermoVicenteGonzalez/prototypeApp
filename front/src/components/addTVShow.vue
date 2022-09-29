@@ -1,6 +1,8 @@
 <template>
-    <v-container class="text-center">
-        <v-card>
+    <v-container class="text-center d-flex justify-center">
+        <v-card
+            class=""
+            width="700">
             <h1 class="text-center">Add tvshow</h1>
             <v-form>
                 <v-text-field
@@ -15,14 +17,16 @@
                 class="mx-10 my-2"
                 label="year"
                 v-model="tvYear"
-                color="primary"></v-text-field>
+                color="primary"
+                type="number"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="seasons"
                 v-model="tvSeasons"
-                color="primary"></v-text-field>
+                color="primary"
+                type="number"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
@@ -44,9 +48,9 @@
 
         </v-card>
 
-        <modal @create="(atr) => createModalAS = atr"></modal>
+        <modal ref="createModalAS"></modal>
         <loading
-        v-model="riggerLoading_AS"></loading>
+        v-model="triggerLoading_AS"></loading>
     </v-container>
 </template>
 
@@ -70,7 +74,6 @@
     async function registerTVShow(){
         triggerLoading_AS.value=true;
         let promise = await axios.post(config.host + config.api + config.registerTVShow,{
-        //let promise = await axios.post("http://localhost:3000/api/tvshows",{
             title:tvTitle.value,
             year:tvYear.value,
             seasons:tvSeasons.value,
@@ -81,17 +84,17 @@
             console.log("exito");
             console.log(response.data.message);
             triggerLoading_AS.value=false;
-            createModalAS.value("Success","succesfully added tvshow: " + tvTitle.value,"",true);
+            createModalAS.value.createDialog("Success","succesfully added tvshow: " + tvTitle.value,"",true);
             tvTitle.value = tvYear.value = tvCountry.value = tvSeasons.value = tvSummary.value = undefined;
         })
         .catch(function(error){
             triggerLoading_AS.value=false;
-            if(error.response){
-                createModalAS.value("Error","",error.response.data.message,false);
+            if(error.response.data){
+                createModalAS.value.createDialog("Error","",error.response.data.message,false);
             }else if(error.request){
-                createModalAS.value("Error","Request error","An error ocurred while trying to connect to the database",false);
+                createModalAS.value.createDialog("Error","Request error","An error ocurred while trying to connect to the database",false);
             }else{
-                createModalAS.value("Error","unknown error","",false);
+                createModalAS.value.createDialog("Error","unknown error","",false);
             }
         })
     }

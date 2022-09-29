@@ -3,22 +3,30 @@
     @submit.prevent="searchTVShow">
         <v-text-field
         variant="outlined"
-        class="ma-10"
+        class="mx-10 my-10"
         label="search tvshow"
-        v-model="message"></v-text-field> 
+        v-model="message"
+        append-icon="mdi-magnify"
+        width="400">
+        </v-text-field> 
     </v-form>
 
+    <v-container class="d-flex flex-wrap mb-6 justify-center" fluid>
+        <v-card
+        class="mx-3 my-5"
+        v-for="item of array"
+        :title="item.title"
+        :subtitle="item.year + ' , ' + item.country"
+        :text="item.summary"
+        width="300"
+        height="150"
+        @click="createShowCard">
+        </v-card>
+    </v-container>
 
-    <v-card
-    class="mx-10 my-5"
-    v-for="item of array"
-    :title="item.title"
-    :subtitle="item.year + ' , ' + item.country"
-    :text="item.summary">
-    </v-card>
-
-    <modal @create="(atr) => createModal = atr"></modal>
+    <modal ref="collectionModal"></modal>
     <loading v-model="triggerLoadgin_Col"></loading>
+    <tvshow-modal ref="tvshowModal"></tvshow-modal>
 
 </template>
 
@@ -26,15 +34,14 @@
     import axios from "axios";
     import {ref} from "vue";
     import config from "../config.json";
-    import {inject} from "vue";
     import modal from "../components/modal.vue";
     import Loading from "./loading.vue";
+    import TvshowModal from "./tvshowModal.vue";
 
-
+    var tvshowModal = ref();
     const array = ref([]);
     const message = ref();
-    var createModal = ref();
-    var collectionDialog = ref(false);
+    var collectionModal = ref();
     var triggerLoadgin_Col = ref();
     var collectionDialogMessage = ref({
         title:undefined,
@@ -54,7 +61,6 @@
         .catch(function (error){
             triggerLoadgin_Col.value = false;
             if(error.response);
-            createModel()
         });
     }
 
@@ -74,17 +80,20 @@
                 triggerLoadgin_Col.value = false;
                 if(error.response){
                     console.log(error.response.data);
-                    createModal.value("Error","",error.response.data.message);
+                    collectionModal.value.createDialog("Error","",error.response.data.message);
                 }else if(error.request){
-                    createModal.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                    collectionModal.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.request);
                 }else if(error != undefined){
-                    createModalAS.value("Error","unknown error","",false);
+                    collectionModal.value.createDialog("Error","unknown error","",false);
                     console.log("unknown error");
                 }
             });
         }
     }
 
+    function createShowCard(){
+        tvshowModal.value.create();
+    }
     getAllTVShows();
 </script>

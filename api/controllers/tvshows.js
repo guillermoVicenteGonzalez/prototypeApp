@@ -1,7 +1,5 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const TVShow = require("../models/tvshow");
-//var TVShow = mongoose.model("TVShow");
-
 
 //GET
 
@@ -70,7 +68,7 @@ exports.findByName = async function(req, res){
  */
 exports.addTVShow = async function(req, res){
   //primero compruebo que la request tenga al menos estos campos
-  if(req.body.summary != undefined && req.body.title != undefined){
+  if(req.body.summary != undefined && req.body.title != undefined && req.body.summary !== '' && req.body.title !== ''){
     let tvshow = new TVShow({
       title: req.body.title,
       year: req.body.year,
@@ -80,14 +78,23 @@ exports.addTVShow = async function(req, res){
       genre: req.body.genre,
       summary: req.body.summary,
     });
-  
-    let result = await tvshow.save().catch(err => {return undefined});
-    if(result){
-      res.status(201).json({success:true,result});
-      console.log("succes registering tvshow")
+    //ahora compruebo que no esta repetido
+
+    let otherTvshow = TVShow.findOne({title:req.params.title})
+    if(otherTvshow){
+      console.log("show alredy registered");
+      res.status(400).json({success:false,message:"there's alredy a show with the same title"})
     }else{
-      console.log("eror registering tvshow in database")
-      res.status(400).json({success:false, message:"error registering in database"});
+      console.log("fields are filled");
+      let result = await tvshow.save().catch(err => {return undefined});
+      if(result){
+        res.status(201).json({success:true,result});
+        console.log("success registering tvshow")
+      }else{
+        console.log(result);
+        console.log("error registering tvshow in database")
+        res.status(400).json({success:false, message:"error registering in database"});
+      }
     }
   }else{
     console.log("unable to register tvshow due to empty request fields");
@@ -95,6 +102,7 @@ exports.addTVShow = async function(req, res){
     console.log(req.body.title, req.body.summary);
     res.status(400).json({success:false, message:"the request lacked vital fields"});
   }
+  
 };
 
 //PUT:id

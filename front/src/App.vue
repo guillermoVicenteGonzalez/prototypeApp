@@ -6,7 +6,8 @@
       color="primary">
       
       </v-app-bar-nav-icon>
-      <v-app-bar-title>App Title</v-app-bar-title>
+      <v-app-bar-title
+      class="text-primary">App Title</v-app-bar-title>
       <v-btn
       @click="this.$router.push('/login')"
       variant="outlined"
@@ -32,7 +33,7 @@
     <v-btn
       variant="outlined"
       v-if="userLogged"
-      @click="signOut"
+      @click="triggerVerify = true"
     >sign out</v-btn>
 
   
@@ -43,15 +44,22 @@
         userLogged = atr;
         this.$router.push('/');
       }"
- ></router-view>
+      ></router-view>
+      
+      
       <modal
       @create="(atr) => createModalApp = atr"></modal>
 
       <drawerMenu v-model="drawer"></drawerMenu>
 
+      <verify
+      v-model="triggerVerify"
+      @cancelSignoutEvent="cancelSignOut"
+      @acceptSignOutEvent="signOut"></verify>
+
     </v-main>
-    <v-footer app>
-      footer
+    <v-footer app class="justify-center">
+      <MyFooter></MyFooter>
     </v-footer>
   </v-app>
 </template>
@@ -68,29 +76,23 @@
   import Login from "./components/login.vue"
   import router from "../src/router/index.js"
   import drawerMenu from "./components/drawerMenu.vue"
+  import verify from "./components/verify.vue"
+  import MyFooter from "./components/myFooter.vue";
 
-
-
-
+  var triggerVerify = ref();
   var createModalApp = ref();
-  var activeComponent = ref("landing");
   var userLogged = ref(false);
   var drawer = ref(false);
   var group = ref()
 
-  /*
-  function switchComponent(component){
-    if(activeComponent.value == component){
-      activeComponent.value = 'landing';
-    }else{
-      activeComponent.value = component;
-      console.log(activeComponent);
-    }
-  }*/
+  function cancelSignOut(){
+    triggerVerify.value = false;
+  }  
 
   function signOut(){
+    triggerVerify.value = false;
     userLogged.value = false;
-    router.push('/');
-  }  
+  }
+
 
 </script>

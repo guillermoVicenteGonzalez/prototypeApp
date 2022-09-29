@@ -1,6 +1,6 @@
 <template>
-    <v-container class="text-center mx-20 px-16">
-        <v-card class="py-5">    
+    <v-container class="text-center mx-20 px-16 d-flex justify-center align-center">
+        <v-card class="py-3" width="500">    
             <v-form >
                <h1>Sign up</h1>
                <v-text-field 
@@ -21,12 +21,13 @@
 
                <v-btn class="ma-2"
                    @click="signUp"
+                   color="primary"
                >sign up</v-btn>
 
            </v-form>  
         </v-card>    
 
-        <modal @create="(atr) => createModalSignup = atr"></modal>
+        <modal ref="createModalSignup"></modal>
         <loading v-model="triggerLoading_signup"></loading>
    </v-container>
 
@@ -64,7 +65,7 @@
             console.log(response.data.success);
             if(response.data.success == true){
                 emit('userRegister');
-                createModalSignup.value("Succes","Signup was successfull","",true);
+                createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                 console.log("estoy aqui");
             }
         })
@@ -73,16 +74,16 @@
             if(error.response){
                 console.log(error.response.data)
                 if(error.response.data){
-                    createModalSignup.value("Error","",error.response.data.message,false);                    
+                    createModalSignup.value.createDialog("Error","",error.response.data.message,false);                    
                 }else{
-                    createModalSignup.value("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
+                    createModalSignup.value.createDialog("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
                     console.log(error.response);
                 }
             }else if(error.request){
-                createModalSignup.value("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                createModalSignup.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
                 console.log(error.request);
             }else{
-                createModalSignup.value("Error","", "unknown error. Try again later");
+                createModalSignup.value.createDialog("Error","", "unknown error. Try again later");
                 console.log("unknown error");
             }
         });

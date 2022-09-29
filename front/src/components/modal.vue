@@ -4,6 +4,7 @@
     width="500"
     v-model="collectionDialog">
         <v-card
+        :class="dialogClass"
         :title="dialogMessage.title"
         :subtitle="dialogMessage.subtitle"
         :text="dialogMessage.text">
@@ -29,7 +30,9 @@
         isModalActive:Boolean
     });
     const emit = defineEmits(['create']);
-    emit('create',createModel);
+    //emit('create',createModel);
+    emit('create');
+    var dialogClass = ref();
     var dialogIcon = ref();
     var cardColor = ref();
     var btnColor = ref();
@@ -40,19 +43,25 @@
         text:undefined
     });
    
-
-    function createModel(nTitle, nSubtitle, nText,isSuccessful){        
+    
+    const createDialog = function (nTitle, nSubtitle, nText,isSuccessful){        
         collectionDialog.value = true;
         dialogMessage.value.title = nTitle;
         dialogMessage.value.subtitle = nSubtitle;
         dialogMessage.value.text = nText;
         if(isSuccessful){
+            dialogClass.value = "text-success";
             btnColor.value="success";
             dialogIcon.value = "mdi-check-circle";
         }else{
+            dialogClass.value="text-error";
             btnColor.value="error";
             dialogIcon.value="mdi-close-circle";
         }
     }
+
+    defineExpose({
+        createDialog
+    });
 
 </script>

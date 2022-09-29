@@ -1,8 +1,9 @@
 <template>
-     <v-container class="text-center mx-20 px-16">
-        <v-card 
-        class="py-5"
-        width="500">    
+     <v-container class="text-center mx-20 px-16 d-flex justify-center align-center"
+     >
+        <v-card
+        width="500"
+        class="py-3">    
             <v-form>
                 <h1>Login</h1>
                 <v-text-field 
@@ -98,7 +99,7 @@
                 createModallogin.value("Error","Request error","An error ocurred while trying to connect with the database. Please try agai later");
                 console.log(error.request);
             }else{
-                createModalLogin.value("Error","error desconocido", "unknown error. Try again later");
+                createModalLogin.value("Error","unknown error", "unknown error. Try again later");
                 console.log("unknown error");
             }
         });

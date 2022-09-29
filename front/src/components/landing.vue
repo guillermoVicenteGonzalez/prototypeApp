@@ -4,7 +4,7 @@
 
 
 <template>
-    <v-parallax src="">
+    <v-parallax>
         <div class="backgroundPattern">
             <h1 class="purple">Title</h1>
         </div>

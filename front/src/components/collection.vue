@@ -3,19 +3,26 @@
     @submit.prevent="searchTVShow">
         <v-text-field
         variant="outlined"
-        class="ma-10"
+        class="mx-20"
         label="search tvshow"
-        v-model="message"></v-text-field> 
+        v-model="message"
+        append-icon="mdi-magnify"
+        width="400">
+        </v-text-field> 
     </v-form>
 
-
-    <v-card
-    class="mx-10 my-5"
-    v-for="item of array"
-    :title="item.title"
-    :subtitle="item.year + ' , ' + item.country"
-    :text="item.summary">
-    </v-card>
+    <v-container class="d-flex flex-wrap mb-6 justify-center" fluid>
+        <v-card
+        class="mx-3 my-5"
+        v-for="item of array"
+        :title="item.title"
+        :subtitle="item.year + ' , ' + item.country"
+        :text="item.summary"
+        width="300"
+        height="150"
+        @click="test">
+        </v-card>
+    </v-container>
 
     <modal @create="(atr) => createModal = atr"></modal>
     <loading v-model="triggerLoadgin_Col"></loading>
@@ -84,6 +91,10 @@
                 }
             });
         }
+    }
+
+    function test(){
+        alert("hello");
     }
 
     getAllTVShows();

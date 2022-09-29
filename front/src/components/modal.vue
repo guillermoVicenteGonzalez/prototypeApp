@@ -4,6 +4,7 @@
     width="500"
     v-model="collectionDialog">
         <v-card
+        :class="dialogClass"
         :title="dialogMessage.title"
         :subtitle="dialogMessage.subtitle"
         :text="dialogMessage.text">
@@ -30,6 +31,7 @@
     });
     const emit = defineEmits(['create']);
     emit('create',createModel);
+    var dialogClass = ref();
     var dialogIcon = ref();
     var cardColor = ref();
     var btnColor = ref();
@@ -47,9 +49,11 @@
         dialogMessage.value.subtitle = nSubtitle;
         dialogMessage.value.text = nText;
         if(isSuccessful){
+            dialogClass.value = "text-success";
             btnColor.value="success";
             dialogIcon.value = "mdi-check-circle";
         }else{
+            dialogClass.value="text-error";
             btnColor.value="error";
             dialogIcon.value="mdi-close-circle";
         }

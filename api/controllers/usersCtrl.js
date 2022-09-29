@@ -19,7 +19,7 @@ const saltRounds = 10
  */
 exports.userLogin = async function(req, res){
     //primero verifico que la request esta bien hecha.
-    if(req.body.login == " " || req.body.password == " "){
+    if(req.body.login === '' || req.body.password === '' || req.body.login == undefined || req.body.password == undefined ){
         res.status(400).json({success:false, message:"some of the request's fields where empty"})
     }else{
         let myUser = await User.findOne({login:req.body.login});
@@ -57,29 +57,30 @@ exports.userLogin = async function(req, res){
 exports.userRegister = async function(req, res){
     console.log(req.body);
 
-    if(req.body.login == undefined || req.body.password == undefined){
-        res.status(400).json({success:false, message:"some of the request's fields where empty"})
-    }
-
-    let userExists = await User.findOne({login:req.body.login});
-    if(userExists){
-        console.log("user is alredy registered");
-        res.status(403).json({success:false, message:"user alredy registered"});
+    if(req.body.login == undefined || req.body.password == undefined || req.body.login === '' || req.body.password === ''){
+        res.status(400).json({success:false, message:"you have to fill all the required fields"});
+        console.log("missing fields");
     }else{
-        let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
-        let nUser = new User({
-            login: req.body.login,
-            password: encriptedPasswd
-        });
-        let result = await nUser.save().catch(err => {return undefined});
-        if(result){
-            res.status(201).json({success:true, result});
-            console.log("exito" + result);
+        let userExists = await User.findOne({login:req.body.login});
+        if(userExists){
+            console.log("user is alredy registered");
+            res.status(403).json({success:false, message:"user alredy registered"});
         }else{
-            console.log("error " + result);
-            res.status(400).json({success:false, result});
+            let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
+            let nUser = new User({
+                login: req.body.login,
+                password: encriptedPasswd
+            });
+            let result = await nUser.save().catch(err => {return undefined});
+            if(result){
+                res.status(201).json({success:true, result});
+                console.log("exito" + result);
+            }else{
+                console.log("error " + result);
+                res.status(400).json({success:false, result});
+            }
+            console.log(nUser);
         }
-        console.log(nUser);
     }
 }
 

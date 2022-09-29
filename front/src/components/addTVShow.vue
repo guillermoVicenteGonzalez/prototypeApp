@@ -1,6 +1,8 @@
 <template>
-    <v-container class="text-center">
-        <v-card>
+    <v-container class="text-center d-flex justify-center">
+        <v-card
+            class=""
+            width="700">
             <h1 class="text-center">Add tvshow</h1>
             <v-form>
                 <v-text-field
@@ -15,14 +17,16 @@
                 class="mx-10 my-2"
                 label="year"
                 v-model="tvYear"
-                color="primary"></v-text-field>
+                color="primary"
+                type="number"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
                 class="mx-10 my-2"
                 label="seasons"
                 v-model="tvSeasons"
-                color="primary"></v-text-field>
+                color="primary"
+                type="number"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
@@ -46,7 +50,7 @@
 
         <modal @create="(atr) => createModalAS = atr"></modal>
         <loading
-        v-model="riggerLoading_AS"></loading>
+        v-model="triggerLoading_AS"></loading>
     </v-container>
 </template>
 
@@ -70,7 +74,6 @@
     async function registerTVShow(){
         triggerLoading_AS.value=true;
         let promise = await axios.post(config.host + config.api + config.registerTVShow,{
-        //let promise = await axios.post("http://localhost:3000/api/tvshows",{
             title:tvTitle.value,
             year:tvYear.value,
             seasons:tvSeasons.value,
@@ -86,7 +89,7 @@
         })
         .catch(function(error){
             triggerLoading_AS.value=false;
-            if(error.response.message){
+            if(error.response.data){
                 createModalAS.value("Error","",error.response.data.message,false);
             }else if(error.request){
                 createModalAS.value("Error","Request error","An error ocurred while trying to connect to the database",false);

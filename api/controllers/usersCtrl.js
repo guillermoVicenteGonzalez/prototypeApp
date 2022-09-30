@@ -11,7 +11,7 @@ const saltRounds = 10
 
 /**
  * This function allow the user to login in the system by providing his username and password and returns a jwt
- * @route POST /api/usuarios/login
+ * @route POST /api/users/login
  * @group Usuario - User operations
  * @param {User.model} body.body.required - the user's to be logged on data 
  * @returns {json} 201 - returns a jwt for furhter  authentication
@@ -32,7 +32,7 @@ exports.userLogin = async function(req, res){
                     data: myUser.login,
                     exp: Math.floor(Date.now()/1000) + (60 * 60)
                 },"secret");
-                console.log("correct password. Succesfull login");
+                console.log("correct token. Succesfull login");
                 res.status(201).json({success: true, token})
             }else{
                 //la contraseña es distinta
@@ -48,7 +48,7 @@ exports.userLogin = async function(req, res){
 
 /**
  * This function allows a user to register in the system by providing a username and a password
- * @route POST /api/usuarios
+ * @route POST /api/users
  * @group Usuario - User operations
  * @param {User.model} body.body.required -the user's to be registered data
  * @returns {User.model} 201 - returns registered user's data in json format
@@ -88,14 +88,15 @@ exports.userRegister = async function(req, res){
 /**
  * This function allows a logged user to consult his data. He needs to pass a valid jwt through authorization header
  * The Jwt can be aquired through login: GET /api/tvshows
- * @route GET /api/usuarios/:id
+ * @route GET /api/users/:login
  * @group Usuario - User operations
  * @security JWT
  * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
  * @returns {Error} 400 - either the id or the jwt are not valid
  */
 exports.getUserData = async function(req, res){
-    let user = await User.findById(req.params.id).catch(err => {return undefined});
+    //let user = await User.findById(req.params.id).catch(err => {return undefined});
+    let user = await User.findOne({login:req.params.login}).catch(err =>{return undefined});
     let authorizationHeader = req.headers.authorization;
     if(user && authorizationHeader){
         let token = authorizationHeader.split(' ');

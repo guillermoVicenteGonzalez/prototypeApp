@@ -6,3 +6,21 @@
     opacity: 1;
     background: linear-gradient(135deg, #6428ae55 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(225deg, #6428ae 25%, transparent 25%) -40px 0/ 80px 80px, linear-gradient(315deg, #6428ae55 25%, transparent 25%) 0px 0/ 80px 80px, linear-gradient(45deg, #6d22c9 25%, #6bdf6e 25%) 0px 0/ 80px 80px;
   }
+
+  .mainTitle{
+    box-shadow: 0px 0px 15px black;
+    padding:2px;
+    padding-inline: 60px;
+    background-color:#df6b6b;
+    /*background-color: #df3434;*/
+    font-size: 70px;
+    border-radius: 30px;
+
+  }
+
+  .titleContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }

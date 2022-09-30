@@ -17,10 +17,9 @@
         v-for="item of array"
         :title="item.title"
         :subtitle="item.year + ' , ' + item.country"
-        :text="item.summary"
         width="300"
         height="150"
-        @click="createShowCard">
+        @click="tvshowModal.create(item.title, item.year, item.country, item.summary, item.poster)">
         </v-card>
     </v-container>
 

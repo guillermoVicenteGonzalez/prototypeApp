@@ -12,7 +12,7 @@
 const mongoose = require("mongoose");
 const tvshowSchema = new mongoose.Schema(
 	{
-		title: 		{ type: String },
+		title: 		{ type: String, unique:true},
 		year: 		{ type: Number },
 		country: 	{ type: String },
 		poster:  	{ type: String },

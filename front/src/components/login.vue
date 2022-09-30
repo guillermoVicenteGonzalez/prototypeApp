@@ -89,6 +89,7 @@
                 localStorage.token = token;
                 localStorage.username = userLogin.value;
                 emit('userLogs',true);
+                //emit('userLogs');
             }
         })
         .catch(function(error){

@@ -1,10 +1,10 @@
 <template>
     <v-btn
     icon
-    color="purple"
+    color="#df6b6b"
     @click="goToGithub">
         <v-icon
-        color="black">mdi-github</v-icon>
+        color="white">mdi-github</v-icon>
     </v-btn>
 
 

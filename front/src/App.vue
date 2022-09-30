@@ -40,17 +40,15 @@
     </v-app-bar>
     <v-main app class="text-center">
       <router-view
-      @userLogs="(atr) => {
-        userLogged = atr;
-        this.$router.push('/');
-      }"
+      @userLogs="signIn"
       ></router-view>
       
       
       <modal
       @create="(atr) => createModalApp = atr"></modal>
 
-      <drawerMenu v-model="drawer"></drawerMenu>
+      <drawerMenu v-model="drawer"
+      :disabledFeatures="!userLogged"></drawerMenu>
 
       <verify
       v-model="triggerVerify"
@@ -91,11 +89,19 @@
     triggerVerify.value = false;
   }  
 
+  function signIn(){
+    userLogged.value = true;
+    //this.$router.push('/');
+    router.push('/');
+    console.log("llego aqui");
+  }
+
   function signOut(){
     triggerVerify.value = false;
     localStorage.token=undefined;
     localStorage.username=undefined;
     userLogged.value = false;
+    router.push('/');
   }
 
   async function verifyLogged(){
@@ -121,6 +127,9 @@
     }
   }
 
+  defineExpose({
+    userLogged
+  })
   verifyLogged();
 
 </script>

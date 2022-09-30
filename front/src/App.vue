@@ -78,6 +78,8 @@
   import drawerMenu from "./components/drawerMenu.vue"
   import verify from "./components/verify.vue"
   import MyFooter from "./components/myFooter.vue";
+  import axios from "axios";
+  import config from "../src/config.json"
 
   var triggerVerify = ref();
   var createModalApp = ref();
@@ -91,8 +93,34 @@
 
   function signOut(){
     triggerVerify.value = false;
+    localStorage.token=undefined;
+    localStorage.username=undefined;
     userLogged.value = false;
   }
 
+  async function verifyLogged(){
+    if(localStorage.token !== undefined && localStorage.username !== undefined){
+      let promise = await axios
+        .get(config.host + config.api + config.getUserData + localStorage.username,
+        {
+          headers:{
+            'Authorization':'Bearer '+ localStorage.token
+          }
+        })
+        .then(async function (response){
+          userLogged.value = true;
+          console.log("succesfull login");
+        })
+        .catch(function(error){
+          console.log(error);
+        });
+
+    }else{
+      userLogged.value = false;
+      console.log("user is not logged");
+    }
+  }
+
+  verifyLogged();
 
 </script>

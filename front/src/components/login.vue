@@ -86,6 +86,8 @@
                 //await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
+                localStorage.token = token;
+                localStorage.username = userLogin.value;
                 emit('userLogs',true);
             }
         })

@@ -5,6 +5,7 @@ import login from '../components/login.vue'
 import signup from "../components/SignUp.vue"
 import addTVShow from "../components/addTVShow.vue";
 import collection from "../components/collection.vue";
+import PathNotFound from "../components/PathNotFound.vue";
 
 
 const router = createRouter({
@@ -14,7 +15,8 @@ const router = createRouter({
     {path:'/login',name:'login',component:login},
     {path:'/signup',name:'signup',component:signup},
     {path:'/addshow', name:'addshow',component:addTVShow},
-    {path:'/showCollection',name:'showCollection',component:collection}
+    {path:'/showCollection',name:'showCollection',component:collection},
+    { path: '/:pathMatch(.*)*', component: PathNotFound }
   ]
 })
 

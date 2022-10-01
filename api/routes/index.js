@@ -28,7 +28,7 @@ router.route("/users")
 router.route("/users/login")
   .post(usersCtrl.userLogin)
 
-router.route("/users/:id")
+router.route("/users/:login")
   .get(usersCtrl.getUserData);
 
 

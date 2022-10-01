@@ -41,6 +41,15 @@
                 label="summary"
                 v-model="tvSummary"
                 color="primary"></v-text-field>
+
+                
+                <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="poster route"
+                v-model="tvPoster"
+                color="primary"></v-text-field>
+
                 <v-btn
                 class="mb-5"
                 @click="registerTVShow">register</v-btn>
@@ -62,6 +71,7 @@
     import Loading from "./loading.vue";
 
     //no me deja hacerlo con un objeto
+    var tvPoster = ref();
     var createModalAS = ref();
     var tvTitle = ref();
     var tvYear = ref();
@@ -78,7 +88,8 @@
             year:tvYear.value,
             seasons:tvSeasons.value,
             summary:tvSummary.value,
-            country: tvCountry.value
+            country: tvCountry.value,
+            poster:tvPoster.value
         })
         .then(function (response){
             console.log("exito");

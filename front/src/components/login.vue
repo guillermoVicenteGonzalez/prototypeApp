@@ -79,14 +79,16 @@
         })
         .then( async function(response){
             triggerLoading.value=false;
-            console.log(response.data);
             if(response.data.success == true){
                 //console.log(errorModalVar.value.createModel);
                 errorModalVar.value.createDialog("Success","","",true);
                 //await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
                 token=response.data.token;
+                localStorage.token = token;
+                localStorage.username = userLogin.value;
                 emit('userLogs',true);
+                //emit('userLogs');
             }
         })
         .catch(function(error){

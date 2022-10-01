@@ -78,12 +78,12 @@ exports.addTVShow = async function(req, res){
       genre: req.body.genre,
       summary: req.body.summary,
     });
-    //ahora compruebo que no esta repetido
 
-    let otherTvshow = TVShow.findOne({title:req.params.title})
-    if(otherTvshow){
+    //ahora compruebo que no esta repetido
+    let otherTVShow = await TVShow.findOne({ title: tvshow.title }).catch(err => {return undefined});
+    if(otherTVShow){
       console.log("show alredy registered");
-      res.status(400).json({success:false,message:"there's alredy a show with the same title"})
+      res.status(400).json({success:false,message:"error registering tvshow: There alredy exists a tvshow with that name"});
     }else{
       console.log("fields are filled");
       let result = await tvshow.save().catch(err => {return undefined});

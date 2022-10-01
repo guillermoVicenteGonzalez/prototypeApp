@@ -1,21 +1,228 @@
 <template>
     <v-dialog
-    v-model="triggerTVShowModal">
-        <v-card>
-            <v-card-title>This will be a card with the full show info.</v-card-title>
+    class="text-justify"
+    width="500"
+    v-model="triggerTVShowModal"
+    :persistent="updateActive">
+        <v-card
+        class="text-center"
+        v-if="!updateActive"
+        :title="currentShow.title"
+        :subtitle="currentShow.year + ' ' + currentShow.country">
+            <v-img
+            lazy-src="https://picsum.photos/id/11/10/6"
+            :src=currentShow.poster>
+            </v-img>
+
+            <v-card-text>{{currentShow.summary}}</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions class="d-flex justify-center">
+                <v-btn
+                color="primary"
+                @click="triggerUpdate">update</v-btn>
+
+                <v-btn
+                color="error"
+                @click="triggerVerifyUTVS.createVerify('Delete',currentShow.title,'are you sure you want to delete ' + currentShow.title)">delete</v-btn>
+            </v-card-actions>
+        </v-card>
+
+        <v-card
+        class="text-center"
+        v-if="updateActive">
+            <v-card-title>Update tvshow</v-card-title>
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="title"
+                color="primary"
+                :placeholder="currentShow.title"
+                v-model="updatedShow.title"
+            ></v-text-field>
+
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="year"
+                color="primary"
+                type="number"
+                :placeholder="currentShow.year"
+                v-model="updatedShow.year"
+            ></v-text-field>
+
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="country"
+                color="primary"
+                :placeholder="currentShow.country"
+                v-model="updatedShow.country"
+            ></v-text-field>
+
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="seasons"
+                color="primary"
+                :placeholder="currentShow.seasons"
+                v-model="updatedShow.seasons"
+            ></v-text-field>
+
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="summary"
+                color="primary"
+                :placeholder="currentShow.summary"
+                v-model="updatedShow.summary"
+            ></v-text-field>
+
+            <v-text-field
+                variant="outlined"
+                class="mx-10 my-2"
+                label="poster"
+                color="primary"
+                :placeholder="currentShow.poster"
+                v-model="updatedShow.poster"
+            ></v-text-field>
+        
+            <v-divider></v-divider>
+            <v-card-actions class="justify-center">
+                <v-btn
+                color="success"
+                @click="confirmUpdate">confirm</v-btn>
+
+                <v-btn
+                color="error"
+                @click="cancelUpdate">cancel</v-btn>
+            </v-card-actions>
         </v-card>
     </v-dialog>
+
+    <loading
+    v-model="triggerLoading"></loading>
+
+    <modal ref="errorModal"></modal>
+
+    <verify ref="triggerVerifyUTVS"
+    @accept-verify="deleteTVShow"
+    @cancel-verify="cancelDelete"></verify>
+
 </template>
-
 <script setup>
+    import axios from "axios"
     import {ref} from "vue";
+    import config from "../config.json"
+    import loading from"../components/loading.vue"
+    import Modal from "./modal.vue";
+    import Verify from "./verify.vue";
 
+    const emit = defineEmits(['refresh']);
+
+    var errorModal = ref();
+    var triggerVerifyUTVS = ref();
+    var triggerLoading = ref();
+    var currentShow = ref({
+        title:undefined,
+        year:undefined,
+        country:undefined,
+        seasons:undefined,
+        summary:undefined,
+        poster:undefined,
+        id:undefined
+    });
+
+    var updatedShow = ref({
+        title:undefined,
+        year:undefined,
+        country:undefined,
+        seasons:undefined,
+        summary:undefined,
+        poster:undefined,
+        id:undefined
+    })
+
+    var updateActive =ref(false);
     var triggerTVShowModal = ref(false);
 
-    const create = function(){
+
+    const create = function(item){
         triggerTVShowModal.value = true;
+        currentShow.value.title = item.title;
+        currentShow.value.year = item.year;
+        currentShow.value.country = item.country;
+        currentShow.value.summary = item.summary;
+        currentShow.value.poster = item.poster;
+        currentShow.value.id = item._id;
     }
 
+    function triggerUpdate(){
+        updateActive.value=true;
+    }
+
+    async function confirmUpdate(){
+        let array = {
+            title:undefined,
+            year:undefined,
+            country:undefined,
+            seasons:undefined,
+            summary:undefined,
+            poster:undefined,
+            id:undefined
+        }
+
+        for(const i in array){
+            currentShow
+            if(updatedShow.value[i] == undefined){
+                array[i] = currentShow.value[i];
+            }else{
+                array[i] = updatedShow.value[i];
+            }
+        }
+        triggerLoading.value=true;
+        let promise = await axios
+        .put(config.host + config.api + config.updateTVShow + array.id, array)
+        .then( ()=>{
+            emit('refresh');
+            for(const i in updatedShow.value){
+                updatedShow.value[i] = undefined;
+                console.log(updatedShow.value[i]);
+            }
+            triggerLoading.value=false;
+            triggerTVShowModal.value=false;
+        })
+        .catch(function(error){
+            errorModal.createDialog("Error updating tvshow","There was an error while trying to update the tvshow",error.response.data.message,false);
+            emit('refresh');
+            triggerTVShowModal.value = false;
+        })
+        //aqui falta verificacion
+
+        //updateActive.value=false;
+    }
+
+    async function deleteTVShow(){
+        let deletePromise = await axios.delete(config.host + config.api + config.deleteTVShow + currentShow.value.id)
+        .then(function (message){
+            console.log(message);
+            emit('refresh');
+            triggerTVShowModal.value=false;
+        })
+        .catch(function (error){
+            errorModal.create("Error","Error deleting tvshow",error.response.data.message);
+            triggerTVShowModal.value=false;
+        });
+        triggerVerifyUTVS.value.deleteVerify();
+    }
+
+    function cancelDelete(){
+        triggerVerifyUTVS.value.deleteVerify();
+    }
+
+    function cancelUpdate(){
+
+        updateActive.value = false;
+    }
     defineExpose({create});
 
 </script>

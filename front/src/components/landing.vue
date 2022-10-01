@@ -6,7 +6,11 @@
 <template>
     <v-parallax>
         <div class="backgroundPattern">
-            <h1 class="purple">Title</h1>
+        <v-container 
+        color="#df6b6b"
+        class="titleContainer">
+            <h1 class="mainTitle font-weight-large">Application</h1>
+        </v-container>
         </div>
     </v-parallax>
 </template>

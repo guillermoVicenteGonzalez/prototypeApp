@@ -17,16 +17,16 @@
         v-for="item of array"
         :title="item.title"
         :subtitle="item.year + ' , ' + item.country"
-        :text="item.summary"
         width="300"
         height="150"
-        @click="createShowCard">
+        @click="tvshowModal.create(item,item._id)">
         </v-card>
     </v-container>
 
     <modal ref="collectionModal"></modal>
     <loading v-model="triggerLoadgin_Col"></loading>
-    <tvshow-modal ref="tvshowModal"></tvshow-modal>
+    <tvshow-modal ref="tvshowModal"
+    @refresh="getAllTVShows"></tvshow-modal>
 
 </template>
 
@@ -57,6 +57,7 @@
             triggerLoadgin_Col.value = false;
             array.value = [];
             array.value = result.data.tvshows;
+            console.log(array.value[1]);
         })
         .catch(function (error){
             triggerLoadgin_Col.value = false;
@@ -75,6 +76,7 @@
                 array.value = [];
                 array.value.push(response.data.tvshow);
                 triggerLoadgin_Col.value = false;
+                console.log(response.data.tvshow);
             })
             .catch(function(error){
                 triggerLoadgin_Col.value = false;

@@ -33,29 +33,28 @@
     <v-btn
       variant="outlined"
       v-if="userLogged"
-      @click="triggerVerify = true"
+      @click="triggerVerify.
+      createVerify('Log out','confirm your logout','Are you sure you want to log yourself out?')"
     >sign out</v-btn>
 
   
     </v-app-bar>
     <v-main app class="text-center">
       <router-view
-      @userLogs="(atr) => {
-        userLogged = atr;
-        this.$router.push('/');
-      }"
+      @userLogs="signIn"
       ></router-view>
       
       
       <modal
       @create="(atr) => createModalApp = atr"></modal>
 
-      <drawerMenu v-model="drawer"></drawerMenu>
+      <drawerMenu v-model="drawer"
+      :disabledFeatures="!userLogged"></drawerMenu>
 
       <verify
-      v-model="triggerVerify"
-      @cancelSignoutEvent="cancelSignOut"
-      @acceptSignOutEvent="signOut"></verify>
+      ref="triggerVerify"
+      @cancelVerify="cancelSignOut"
+      @acceptVerify="signOut"></verify>
 
     </v-main>
     <v-footer app class="justify-center">
@@ -78,6 +77,8 @@
   import drawerMenu from "./components/drawerMenu.vue"
   import verify from "./components/verify.vue"
   import MyFooter from "./components/myFooter.vue";
+  import axios from "axios";
+  import config from "../src/config.json"
 
   var triggerVerify = ref();
   var createModalApp = ref();
@@ -86,13 +87,49 @@
   var group = ref()
 
   function cancelSignOut(){
-    triggerVerify.value = false;
+    triggerVerify.value.deleteVerify();
   }  
 
-  function signOut(){
-    triggerVerify.value = false;
-    userLogged.value = false;
+  function signIn(){
+    userLogged.value = true;
+    //this.$router.push('/');
+    router.push('/');
   }
 
+  function signOut(){
+    triggerVerify.value.deleteVerify();
+    localStorage.token=undefined;
+    localStorage.username=undefined;
+    userLogged.value = false;
+    router.push('/');
+  }
+
+  async function verifyLogged(){
+    if(localStorage.token !== undefined && localStorage.username !== undefined){
+      let promise = await axios
+        .get(config.host + config.api + config.getUserData + localStorage.username,
+        {
+          headers:{
+            'Authorization':'Bearer '+ localStorage.token
+          }
+        })
+        .then(async function (response){
+          userLogged.value = true;
+          console.log("succesfull login");
+        })
+        .catch(function(error){
+          console.log(error);
+        });
+
+    }else{
+      userLogged.value = false;
+      console.log("user is not logged");
+    }
+  }
+
+  defineExpose({
+    userLogged
+  })
+  verifyLogged();
 
 </script>

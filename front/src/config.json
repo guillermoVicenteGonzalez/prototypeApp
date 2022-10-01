@@ -5,5 +5,8 @@
     "loginUser":"/users/login",
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
-    "findTVShow":"/tvshows/title"
+    "findTVShow":"/tvshows/title",
+    "getUserData":"/users/",
+    "updateTVShow":"/tvshows/",
+    "deleteTVShow":"/tvshows/"
 }

@@ -4,20 +4,20 @@
         width="500"
         persistent
         v-model="triggerVerify">
-            <v-card class="text-center">
-                <v-card-title>Verify</v-card-title>
-                <v-card-subtitle>Confirm your logout</v-card-subtitle>
-                <v-card-text>Are you sure you want to log out</v-card-text>
+            <v-card class="text-center"
+            :title="verifyTextParams.title"
+            :subtitle="verifyTextParams.subtitle"
+            :text="verifyTextParams.text">
                 <v-divider></v-divider>
                 <v-card-actions
                 class="d-flex justify-center">
                     <v-btn
                     color="success"
-                    @click="emit('acceptSignOutEvent')">confirm</v-btn>
+                    @click="emit('acceptVerify')">confirm</v-btn>
 
                     <v-btn
                     color="error"
-                    @click="closeVerify">cancel</v-btn>
+                    @click="emit('cancelVerify')">cancel</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -28,14 +28,24 @@
     import {ref} from "vue"
 
     var triggerVerify = ref();
+    var verifyTextParams = ref({
+        title:undefined,
+        subtitle:undefined,
+        text:undefined
+    })
 
-    const emit = defineEmits(['cancelSignoutEvent','acceptSignOutEvent']);
-    function closeVerify(){
-        //alert("estoy aqui");
-        //triggerVerify.value=false;
-        emit('cancelSignoutEvent');
+    const emit = defineEmits(['cancelVerify','acceptVerify']);
+
+    function createVerify(title, subtitle, text){
+        triggerVerify.value = true;
+        verifyTextParams.value.title =  title;
+        verifyTextParams.value.subtitle = subtitle;
+        verifyTextParams.value.text = text;
     }
 
+    function deleteVerify(){
+        triggerVerify.value = false;
+    }
 
-
+    defineExpose({createVerify, deleteVerify});
 </script>

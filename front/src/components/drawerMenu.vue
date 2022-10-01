@@ -18,7 +18,8 @@
               depressed
               @click="this.$router.push('/showCollection')"
               prepend-icon="mdi-magnify"
-              color>tvshows</v-btn>
+              color
+              :disabled="disabledFeatures">tvshows</v-btn>
             </v-list-item>
 
             <v-list-item>
@@ -26,7 +27,8 @@
               block
               depressed
               @click="this.$router.push('/addshow')"
-              prepend-icon="mdi-plus-box">Add tvshow</v-btn>
+              prepend-icon="mdi-plus-box"
+              :disabled="disabledFeatures">Add tvshow</v-btn>
             </v-list-item>
 
 
@@ -34,7 +36,8 @@
               <v-btn
               block
               depressed
-              prepend-icon="mdi-delete">delete show</v-btn>
+              prepend-icon="mdi-delete"
+              :disabled="disabledFeatures">delete show</v-btn>
             </v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -42,4 +45,9 @@
 
 <script setup>
       import router from "../router/index.js"
+
+      const props = defineProps({
+        disabledFeatures:Boolean
+      })
+
 </script>

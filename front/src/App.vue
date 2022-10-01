@@ -33,7 +33,8 @@
     <v-btn
       variant="outlined"
       v-if="userLogged"
-      @click="triggerVerify = true"
+      @click="triggerVerify.
+      createVerify('Log out','confirm your logout','Are you sure you want to log yourself out?')"
     >sign out</v-btn>
 
   
@@ -51,9 +52,9 @@
       :disabledFeatures="!userLogged"></drawerMenu>
 
       <verify
-      v-model="triggerVerify"
-      @cancelSignoutEvent="cancelSignOut"
-      @acceptSignOutEvent="signOut"></verify>
+      ref="triggerVerify"
+      @cancelVerify="cancelSignOut"
+      @acceptVerify="signOut"></verify>
 
     </v-main>
     <v-footer app class="justify-center">
@@ -86,18 +87,17 @@
   var group = ref()
 
   function cancelSignOut(){
-    triggerVerify.value = false;
+    triggerVerify.value.deleteVerify();
   }  
 
   function signIn(){
     userLogged.value = true;
     //this.$router.push('/');
     router.push('/');
-    console.log("llego aqui");
   }
 
   function signOut(){
-    triggerVerify.value = false;
+    triggerVerify.value.deleteVerify();
     localStorage.token=undefined;
     localStorage.username=undefined;
     userLogged.value = false;

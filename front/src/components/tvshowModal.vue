@@ -18,7 +18,12 @@
             <v-divider></v-divider>
             <v-card-actions class="d-flex justify-center">
                 <v-btn
+                color="primary"
                 @click="triggerUpdate">update</v-btn>
+
+                <v-btn
+                color="error"
+                @click="triggerVerifyUTVS.createVerify('Delete',currentShow.title,'are you sure you want to delete ' + currentShow.title)">delete</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -94,14 +99,29 @@
         </v-card>
     </v-dialog>
 
+    <loading
+    v-model="triggerLoading"></loading>
+
+    <modal ref="errorModal"></modal>
+
+    <verify ref="triggerVerifyUTVS"
+    @accept-verify="deleteTVShow"
+    @cancel-verify="cancelDelete"></verify>
+
 </template>
 <script setup>
     import axios from "axios"
     import {ref} from "vue";
     import config from "../config.json"
+    import loading from"../components/loading.vue"
+    import Modal from "./modal.vue";
+    import Verify from "./verify.vue";
 
     const emit = defineEmits(['refresh']);
 
+    var errorModal = ref();
+    var triggerVerifyUTVS = ref();
+    var triggerLoading = ref();
     var currentShow = ref({
         title:undefined,
         year:undefined,
@@ -159,24 +179,44 @@
                 array[i] = updatedShow.value[i];
             }
         }
-        console.log(array.id);
+        triggerLoading.value=true;
         let promise = await axios
         .put(config.host + config.api + config.updateTVShow + array.id, array)
         .then( ()=>{
             emit('refresh');
-            triggerTVShowModal.value=false;
             for(const i in updatedShow.value){
                 updatedShow.value[i] = undefined;
                 console.log(updatedShow.value[i]);
             }
+            triggerLoading.value=false;
+            triggerTVShowModal.value=false;
+        })
+        .catch(function(error){
+            errorModal.createDialog("Error updating tvshow","There was an error while trying to update the tvshow",error.response.data.message,false);
+            emit('refresh');
+            triggerTVShowModal.value = false;
         })
         //aqui falta verificacion
 
         //updateActive.value=false;
     }
 
-    function deleteTVShow(){
+    async function deleteTVShow(){
+        let deletePromise = await axios.delete(config.host + config.api + config.deleteTVShow + currentShow.value.id)
+        .then(function (message){
+            console.log(message);
+            emit('refresh');
+            triggerTVShowModal.value=false;
+        })
+        .catch(function (error){
+            errorModal.create("Error","Error deleting tvshow",error.response.data.message);
+            triggerTVShowModal.value=false;
+        });
+        triggerVerifyUTVS.value.deleteVerify();
+    }
 
+    function cancelDelete(){
+        triggerVerifyUTVS.value.deleteVerify();
     }
 
     function cancelUpdate(){

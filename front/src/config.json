@@ -7,5 +7,6 @@
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",
     "getUserData":"/users/",
-    "updateTVShow":"/tvshows/"
+    "updateTVShow":"/tvshows/",
+    "deleteTVShow":"/tvshows/"
 }

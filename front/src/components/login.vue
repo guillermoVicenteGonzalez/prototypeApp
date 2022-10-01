@@ -79,7 +79,6 @@
         })
         .then( async function(response){
             triggerLoading.value=false;
-            console.log(response.data);
             if(response.data.success == true){
                 //console.log(errorModalVar.value.createModel);
                 errorModalVar.value.createDialog("Success","","",true);

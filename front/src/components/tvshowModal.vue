@@ -5,17 +5,18 @@
     v-model="triggerTVShowModal"
     :persistent="updateActive">
         <v-card
+        class="text-center"
         v-if="!updateActive"
-        :title="currentShowTitle"
-        :subtitle="currentShowYear + ' ' + currentShowCountry">
+        :title="currentShow.title"
+        :subtitle="currentShow.year + ' ' + currentShow.country">
             <v-img
             lazy-src="https://picsum.photos/id/11/10/6"
-            :src=currentShowPoster>
+            :src=currentShow.poster>
             </v-img>
 
-            <v-card-text>{{currentShowSummary + '\n' + currentShowSummary}}</v-card-text>
+            <v-card-text>{{currentShow.summary}}</v-card-text>
             <v-divider></v-divider>
-            <v-card-actions>
+            <v-card-actions class="d-flex justify-center">
                 <v-btn
                 @click="triggerUpdate">update</v-btn>
             </v-card-actions>
@@ -30,7 +31,8 @@
                 class="mx-10 my-2"
                 label="title"
                 color="primary"
-                :value="currentShowTitle"
+                :placeholder="currentShow.title"
+                v-model="updatedShow.title"
             ></v-text-field>
 
             <v-text-field
@@ -39,7 +41,8 @@
                 label="year"
                 color="primary"
                 type="number"
-                :value="currentShowYear"
+                :placeholder="currentShow.year"
+                v-model="updatedShow.year"
             ></v-text-field>
 
             <v-text-field
@@ -47,7 +50,8 @@
                 class="mx-10 my-2"
                 label="country"
                 color="primary"
-                :value="currentShowCountry"
+                :placeholder="currentShow.country"
+                v-model="updatedShow.country"
             ></v-text-field>
 
             <v-text-field
@@ -55,7 +59,8 @@
                 class="mx-10 my-2"
                 label="seasons"
                 color="primary"
-                :value="currentShowSeasons"
+                :placeholder="currentShow.seasons"
+                v-model="updatedShow.seasons"
             ></v-text-field>
 
             <v-text-field
@@ -63,7 +68,8 @@
                 class="mx-10 my-2"
                 label="summary"
                 color="primary"
-                :value="currentShowSummary"
+                :placeholder="currentShow.summary"
+                v-model="updatedShow.summary"
             ></v-text-field>
 
             <v-text-field
@@ -71,13 +77,15 @@
                 class="mx-10 my-2"
                 label="poster"
                 color="primary"
-                :value="currentShowPoster"
+                :placeholder="currentShow.poster"
+                v-model="updatedShow.poster"
             ></v-text-field>
         
             <v-divider></v-divider>
             <v-card-actions class="justify-center">
                 <v-btn
-                color="success">confirm</v-btn>
+                color="success"
+                @click="confirmUpdate">confirm</v-btn>
 
                 <v-btn
                 color="error"
@@ -88,34 +96,91 @@
 
 </template>
 <script setup>
+    import axios from "axios"
     import {ref} from "vue";
+    import config from "../config.json"
+
+    const emit = defineEmits(['refresh']);
+
+    var currentShow = ref({
+        title:undefined,
+        year:undefined,
+        country:undefined,
+        seasons:undefined,
+        summary:undefined,
+        poster:undefined,
+        id:undefined
+    });
+
+    var updatedShow = ref({
+        title:undefined,
+        year:undefined,
+        country:undefined,
+        seasons:undefined,
+        summary:undefined,
+        poster:undefined,
+        id:undefined
+    })
 
     var updateActive =ref(false);
     var triggerTVShowModal = ref(false);
-    var currentShowTitle = ref();
-    var currentShowSummary = ref();
-    var currentShowCountry = ref();
-    var currentShowYear = ref();
-    var currentShowPoster = ref();
 
-    const create = function(title, year, country, summary, poster){
+
+    const create = function(item){
         triggerTVShowModal.value = true;
-        currentShowTitle.value = title;
-        currentShowYear.value = year;
-        currentShowCountry.value = country;
-        currentShowSummary.value = summary;
-        currentShowPoster.value = poster;
+        currentShow.value.title = item.title;
+        currentShow.value.year = item.year;
+        currentShow.value.country = item.country;
+        currentShow.value.summary = item.summary;
+        currentShow.value.poster = item.poster;
+        currentShow.value.id = item._id;
     }
 
     function triggerUpdate(){
         updateActive.value=true;
     }
 
-    function confirmUpdate(){
+    async function confirmUpdate(){
+        let array = {
+            title:undefined,
+            year:undefined,
+            country:undefined,
+            seasons:undefined,
+            summary:undefined,
+            poster:undefined,
+            id:undefined
+        }
+
+        for(const i in array){
+            currentShow
+            if(updatedShow.value[i] == undefined){
+                array[i] = currentShow.value[i];
+            }else{
+                array[i] = updatedShow.value[i];
+            }
+        }
+        console.log(array.id);
+        let promise = await axios
+        .put(config.host + config.api + config.updateTVShow + array.id, array)
+        .then( ()=>{
+            emit('refresh');
+            triggerTVShowModal.value=false;
+            for(const i in updatedShow.value){
+                updatedShow.value[i] = undefined;
+                console.log(updatedShow.value[i]);
+            }
+        })
+        //aqui falta verificacion
+
+        //updateActive.value=false;
+    }
+
+    function deleteTVShow(){
 
     }
 
     function cancelUpdate(){
+
         updateActive.value = false;
     }
     defineExpose({create});

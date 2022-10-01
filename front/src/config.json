@@ -6,5 +6,6 @@
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",
-    "getUserData":"/users/"
+    "getUserData":"/users/",
+    "updateTVShow":"/tvshows/"
 }

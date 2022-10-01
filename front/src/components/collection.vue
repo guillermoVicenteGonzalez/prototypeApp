@@ -19,13 +19,14 @@
         :subtitle="item.year + ' , ' + item.country"
         width="300"
         height="150"
-        @click="tvshowModal.create(item.title, item.year, item.country, item.summary, item.poster)">
+        @click="tvshowModal.create(item,item._id)">
         </v-card>
     </v-container>
 
     <modal ref="collectionModal"></modal>
     <loading v-model="triggerLoadgin_Col"></loading>
-    <tvshow-modal ref="tvshowModal"></tvshow-modal>
+    <tvshow-modal ref="tvshowModal"
+    @refresh="getAllTVShows"></tvshow-modal>
 
 </template>
 
@@ -56,6 +57,7 @@
             triggerLoadgin_Col.value = false;
             array.value = [];
             array.value = result.data.tvshows;
+            console.log(array.value[1]);
         })
         .catch(function (error){
             triggerLoadgin_Col.value = false;
@@ -74,6 +76,7 @@
                 array.value = [];
                 array.value.push(response.data.tvshow);
                 triggerLoadgin_Col.value = false;
+                console.log(response.data.tvshow);
             })
             .catch(function(error){
                 triggerLoadgin_Col.value = false;

@@ -56,6 +56,8 @@
       @cancelVerify="cancelSignOut"
       @acceptVerify="signOut"></verify>
 
+      <modal
+      ref="appErrorModal"></modal>
     </v-main>
     <v-footer app class="justify-center">
       <MyFooter></MyFooter>
@@ -80,6 +82,7 @@
   import axios from "axios";
   import config from "../src/config.json"
 
+  var appErrorModal= ref();
   var triggerVerify = ref();
   var createModalApp = ref();
   var userLogged = ref(false);
@@ -119,6 +122,10 @@
         })
         .catch(function(error){
           console.log(error);
+          userLogged.value=false;
+          localStorage.token = undefined;
+          localStorage.username = undefined;
+          appErrorModal.value.createDialog("Error","Invalid session", "your session token is not valid or has expired",false);
         });
 
     }else{

@@ -101,13 +101,19 @@ exports.getUserData = async function(req, res){
     if(user && authorizationHeader){
         let token = authorizationHeader.split(' ');
         console.log(token[1]);
-        let decoded = jwt.verify(token[1], 'secret');
-        if(decoded){
-            res.status(200).json({succes:true, user}); 
-        }else{
-            res.status(400).json({successs:false,message:"invalid token"});
-        }
 
+        try{
+            var decoded = jwt.verify(token[1], 'secret');
+            if(decoded){
+                res.status(200).json({succes:true, user}); 
+            }else{
+                res.status(400).json({successs:false,message:"invalid token"});
+            }
+    
+        }catch(err){
+            res.status(400).json({successs:false,message:"invalid token"});
+        };
+        
     }else{
         console.log("error");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});

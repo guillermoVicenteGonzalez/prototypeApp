@@ -31,7 +31,7 @@
         @click="tvshowModal.create(item,item._id)">
             <v-img
                 cover="true"
-                class="myImage"
+
                 lazy-src="https://picsum.photos/id/11/10/6"
                 :src=item.poster>
             </v-img>

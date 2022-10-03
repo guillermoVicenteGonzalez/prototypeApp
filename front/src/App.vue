@@ -29,7 +29,10 @@
     color="primary"
     class="mx-2">
       <v-img v-if="photo"
-      :src="photo"></v-img>
+        :src="photo"></v-img>
+      
+      <v-icon
+      v-if="!photo">mdi-account-circle</v-icon>
     </v-avatar>
     <v-btn
       variant="outlined"
@@ -43,8 +46,8 @@
     <v-main app class="text-center">
       <router-view
       @userLogs="signIn"
+      @userRegister="this.$router.push('/')"
       ></router-view>
-      
       
       <modal
       @create="(atr) => createModalApp = atr"></modal>

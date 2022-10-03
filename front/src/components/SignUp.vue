@@ -19,6 +19,14 @@
                @click:append="signUp"
                ></v-text-field>
 
+               <v-text-field 
+               class="mx-10"
+               variant="outlined"
+               label="photo"
+               v-model="signupPhoto"
+               @click:append="signUp"
+               ></v-text-field>
+
                <v-btn class="ma-2"
                    @click="signUp"
                    color="primary"
@@ -46,6 +54,7 @@
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
+    var signupPhoto = ref();
     var triggerLoading_signup = ref();
     var signupDialog = ref(false);
     var signupDialogMessage = ref({
@@ -58,7 +67,8 @@
         triggerLoading_signup.value=true;
         let result = await axios.post(config.host + config.api + config.registerUser,{
             login: signupUsername.value,
-            password: signupPasswd.value
+            password: signupPasswd.value,
+            photo: signupPhoto.value
         })
         .then( function(response){
             triggerLoading_signup.value=false;

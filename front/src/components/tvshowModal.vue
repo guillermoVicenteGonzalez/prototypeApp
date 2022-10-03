@@ -10,6 +10,7 @@
         :title="currentShow.title"
         :subtitle="currentShow.year + ' ' + currentShow.country">
             <v-img
+            cover="true"
             lazy-src="https://picsum.photos/id/11/10/6"
             :src=currentShow.poster>
             </v-img>

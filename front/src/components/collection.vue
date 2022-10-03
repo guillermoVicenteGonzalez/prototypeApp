@@ -1,3 +1,12 @@
+<style>
+    .myImage{
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        overflow: hidden;
+    }
+</style>
+
 <template>
     <v-form
     @submit.prevent="searchTVShow">
@@ -18,8 +27,14 @@
         :title="item.title"
         :subtitle="item.year + ' , ' + item.country"
         width="300"
-        height="150"
+        height="200"
         @click="tvshowModal.create(item,item._id)">
+            <v-img
+                cover="true"
+                class="myImage"
+                lazy-src="https://picsum.photos/id/11/10/6"
+                :src=item.poster>
+            </v-img>
         </v-card>
     </v-container>
 

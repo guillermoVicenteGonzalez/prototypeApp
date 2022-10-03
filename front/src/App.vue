@@ -28,7 +28,8 @@
     size="56"
     color="primary"
     class="mx-2">
-      
+      <v-img v-if="photo"
+      :src="photo"></v-img>
     </v-avatar>
     <v-btn
       variant="outlined"
@@ -82,6 +83,7 @@
   import axios from "axios";
   import config from "../src/config.json"
 
+  var photo = ref();
   var appErrorModal= ref();
   var triggerVerify = ref();
   var createModalApp = ref();
@@ -95,6 +97,7 @@
 
   function signIn(){
     userLogged.value = true;
+    verifyLogged();
     //this.$router.push('/');
     router.push('/');
   }
@@ -103,12 +106,15 @@
     triggerVerify.value.deleteVerify();
     localStorage.token=undefined;
     localStorage.username=undefined;
+    localStorage.photo=undefined;
     userLogged.value = false;
     router.push('/');
   }
 
   async function verifyLogged(){
-    if(localStorage.token !== undefined && localStorage.username !== undefined){
+    console.log(localStorage);
+
+    if(localStorage.token != 'undefined' || localStorage.username != 'undefined'){
       let promise = await axios
         .get(config.host + config.api + config.getUserData + localStorage.username,
         {
@@ -118,7 +124,8 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          console.log("succesfull login");
+          console.log(response.data.user.photo);
+          photo.value = response.data.user.photo;
         })
         .catch(function(error){
           console.log(error);
@@ -129,10 +136,13 @@
         });
 
     }else{
+      localStorage.token=undefined;
+      localStorage.username=undefined;
       userLogged.value = false;
-      console.log("user is not logged");
     }
   }
+
+
 
   defineExpose({
     userLogged

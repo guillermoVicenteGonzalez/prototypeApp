@@ -24,6 +24,7 @@ exports.userLogin = async function(req, res){
     }else{
         let myUser = await User.findOne({login:req.body.login});
         if(myUser){
+            console.log(myUser);
             //el usuario existe, compruebo su contraseña
             let comparePasswd = await bcrypt.compare(req.body.password, myUser.password).catch(err => {return undefined});
             if(comparePasswd){
@@ -69,7 +70,8 @@ exports.userRegister = async function(req, res){
             let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
             let nUser = new User({
                 login: req.body.login,
-                password: encriptedPasswd
+                password: encriptedPasswd,
+                photo: req.body.photo
             });
             let result = await nUser.save().catch(err => {return undefined});
             if(result){
@@ -87,7 +89,6 @@ exports.userRegister = async function(req, res){
 
 /**
  * This function allows a logged user to consult his data. He needs to pass a valid jwt through authorization header
- * The Jwt can be aquired through login: GET /api/tvshows
  * @route GET /api/users/:login
  * @group Usuario - User operations
  * @security JWT

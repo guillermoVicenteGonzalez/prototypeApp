@@ -23,6 +23,7 @@
     color="primary"
     >sign up</v-btn>
 
+
     <v-avatar
     v-if="userLogged"
     size="56"
@@ -33,7 +34,11 @@
       
       <v-icon
       v-if="!photo">mdi-account-circle</v-icon>
+      <v-menu
+      v-model="triggerProfileMenu"></v-menu>
+
     </v-avatar>
+
     <v-btn
       variant="outlined"
       v-if="userLogged"
@@ -86,6 +91,7 @@
   import axios from "axios";
   import config from "../src/config.json"
 
+  var triggerProfileMenu = ref()
   var photo = ref();
   var appErrorModal= ref();
   var triggerVerify = ref();
@@ -115,7 +121,6 @@
   }
 
   async function verifyLogged(){
-    console.log(localStorage);
 
     if(localStorage.token != 'undefined' || localStorage.username != 'undefined'){
       let promise = await axios
@@ -127,8 +132,10 @@
         })
         .then(async function (response){
           userLogged.value = true;
+          console.log(response.data);
           console.log(response.data.user.photo);
-          photo.value = response.data.user.photo;
+          localStorage.photo = response.data.user.photo
+          photo.value = localStorage.photo;
         })
         .catch(function(error){
           console.log(error);

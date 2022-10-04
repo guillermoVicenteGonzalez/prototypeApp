@@ -28,12 +28,14 @@
                 color="primary"
                 type="number"></v-text-field>
 
-                <v-text-field
-                variant="outlined"
+                <v-select
                 class="mx-10 my-2"
-                label="country"
-                v-model="tvCountry"
-                color="primary"></v-text-field>
+                variant="outlined"
+                label="Country"
+                :items="items"
+                v-model="tvCountry">
+                    
+                </v-select>
 
                 <v-text-field
                 variant="outlined"
@@ -70,7 +72,8 @@
     import Modal from "./modal.vue";
     import Loading from "./loading.vue";
 
-    //no me deja hacerlo con un objeto
+    
+    var items = ref(['ES','UK','USA']);
     var tvPoster = ref();
     var createModalAS = ref();
     var tvTitle = ref();

@@ -24,6 +24,7 @@ exports.userLogin = async function(req, res){
     }else{
         let myUser = await User.findOne({login:req.body.login});
         if(myUser){
+            console.log(myUser);
             //el usuario existe, compruebo su contraseña
             let comparePasswd = await bcrypt.compare(req.body.password, myUser.password).catch(err => {return undefined});
             if(comparePasswd){
@@ -69,7 +70,8 @@ exports.userRegister = async function(req, res){
             let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
             let nUser = new User({
                 login: req.body.login,
-                password: encriptedPasswd
+                password: encriptedPasswd,
+                photo: req.body.photo
             });
             let result = await nUser.save().catch(err => {return undefined});
             if(result){
@@ -87,7 +89,6 @@ exports.userRegister = async function(req, res){
 
 /**
  * This function allows a logged user to consult his data. He needs to pass a valid jwt through authorization header
- * The Jwt can be aquired through login: GET /api/tvshows
  * @route GET /api/users/:login
  * @group Usuario - User operations
  * @security JWT
@@ -101,13 +102,19 @@ exports.getUserData = async function(req, res){
     if(user && authorizationHeader){
         let token = authorizationHeader.split(' ');
         console.log(token[1]);
-        let decoded = jwt.verify(token[1], 'secret');
-        if(decoded){
-            res.status(200).json({succes:true, user}); 
-        }else{
-            res.status(400).json({successs:false,message:"invalid token"});
-        }
 
+        try{
+            var decoded = jwt.verify(token[1], 'secret');
+            if(decoded){
+                res.status(200).json({succes:true, user}); 
+            }else{
+                res.status(400).json({successs:false,message:"invalid token"});
+            }
+    
+        }catch(err){
+            res.status(400).json({successs:false,message:"invalid token"});
+        };
+        
     }else{
         console.log("error");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});

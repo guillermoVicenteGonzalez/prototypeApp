@@ -23,13 +23,22 @@
     color="primary"
     >sign up</v-btn>
 
+
     <v-avatar
     v-if="userLogged"
     size="56"
     color="primary"
     class="mx-2">
+      <v-img v-if="photo"
+        :src="photo"></v-img>
       
+      <v-icon
+      v-if="!photo">mdi-account-circle</v-icon>
+      <v-menu
+      v-model="triggerProfileMenu"></v-menu>
+
     </v-avatar>
+
     <v-btn
       variant="outlined"
       v-if="userLogged"
@@ -42,8 +51,8 @@
     <v-main app class="text-center">
       <router-view
       @userLogs="signIn"
+      @userRegister="this.$router.push('/')"
       ></router-view>
-      
       
       <modal
       @create="(atr) => createModalApp = atr"></modal>
@@ -56,6 +65,8 @@
       @cancelVerify="cancelSignOut"
       @acceptVerify="signOut"></verify>
 
+      <modal
+      ref="appErrorModal"></modal>
     </v-main>
     <v-footer app class="justify-center">
       <MyFooter></MyFooter>
@@ -80,6 +91,9 @@
   import axios from "axios";
   import config from "../src/config.json"
 
+  var triggerProfileMenu = ref()
+  var photo = ref();
+  var appErrorModal= ref();
   var triggerVerify = ref();
   var createModalApp = ref();
   var userLogged = ref(false);
@@ -92,6 +106,7 @@
 
   function signIn(){
     userLogged.value = true;
+    verifyLogged();
     //this.$router.push('/');
     router.push('/');
   }
@@ -100,12 +115,14 @@
     triggerVerify.value.deleteVerify();
     localStorage.token=undefined;
     localStorage.username=undefined;
+    localStorage.photo=undefined;
     userLogged.value = false;
     router.push('/');
   }
 
   async function verifyLogged(){
-    if(localStorage.token !== undefined && localStorage.username !== undefined){
+
+    if(localStorage.token != 'undefined' || localStorage.username != 'undefined'){
       let promise = await axios
         .get(config.host + config.api + config.getUserData + localStorage.username,
         {
@@ -115,17 +132,27 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          console.log("succesfull login");
+          console.log(response.data);
+          console.log(response.data.user.photo);
+          localStorage.photo = response.data.user.photo
+          photo.value = localStorage.photo;
         })
         .catch(function(error){
           console.log(error);
+          userLogged.value=false;
+          localStorage.token = undefined;
+          localStorage.username = undefined;
+          appErrorModal.value.createDialog("Error","Invalid session", "your session token is not valid or has expired",false);
         });
 
     }else{
+      localStorage.token=undefined;
+      localStorage.username=undefined;
       userLogged.value = false;
-      console.log("user is not logged");
     }
   }
+
+
 
   defineExpose({
     userLogged

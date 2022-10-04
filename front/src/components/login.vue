@@ -84,8 +84,7 @@
                 errorModalVar.value.createDialog("Success","","",true);
                 //await createModalLogin.value("Success","Successful login","",true);
                 userLogged.value = true;
-                token=response.data.token;
-                localStorage.token = token;
+                localStorage.token = response.data.token;
                 localStorage.username = userLogin.value;
                 emit('userLogs',true);
                 //emit('userLogs');

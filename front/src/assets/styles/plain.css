@@ -1,3 +1,4 @@
+
 .backgroundPattern{
     padding: 0;
     margin: 0;
@@ -24,3 +25,13 @@
     justify-content: center;
     height: 100%;
   }
+
+  .background{
+    /*
+    background-image: url('../assets/img/background.jpg');*/
+    background-image: "https://img5.goodfon.com/original/1920x1200/c/af/sssssss-aaaaaaaaaaa-ddddddddd-fffffffff-rrrrrrr.jpg";
+
+  }
+  /*
+  src="https://img5.goodfon.com/original/1920x1200/c/af/sssssss-aaaaaaaaaaa-ddddddddd-fffffffff-rrrrrrr.jpg"
+  */

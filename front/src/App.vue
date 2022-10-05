@@ -168,6 +168,8 @@
     switch(index){
       case 0:
         //profile
+        console.log("vete a profile");
+        router.push('/userProfile');
         break;
 
       case 1:

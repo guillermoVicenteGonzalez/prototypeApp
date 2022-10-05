@@ -14,10 +14,19 @@
                class="mx-10"
                variant="outlined"
                label="password"
-               v-model="signupPasswd"
+               v-model="signupConfirmPasswd"
                type="password"
                @click:append="signUp"
                ></v-text-field>
+
+               <v-text-field 
+               class="mx-10"
+               variant="outlined"
+               label="confirm password"
+               v-model="signupPasswd"
+               type="password"
+               ></v-text-field>
+
 
                <v-text-field 
                class="mx-10"
@@ -54,6 +63,7 @@
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
+    var signupConfirmPasswd = ref();
     var signupPhoto = ref();
     var triggerLoading_signup = ref();
     var signupDialog = ref(false);
@@ -63,40 +73,47 @@
         text:undefined
     })
 
+
     async function signUp(){
-        triggerLoading_signup.value=true;
-        let result = await axios.post(config.host + config.api + config.registerUser,{
-            login: signupUsername.value,
-            password: signupPasswd.value,
-            photo: signupPhoto.value
-        })
-        .then( function(response){
-            triggerLoading_signup.value=false;
-            console.log(response.data.success);
-            if(response.data.success == true){
-                emit('userRegister');
-                createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
-                console.log("estoy aqui");
-            }
-        })
-        .catch(function(error){
-            triggerLoading_signup.value=false;
-            if(error.response){
-                console.log(error.response.data)
-                if(error.response.data){
-                    createModalSignup.value.createDialog("Error","",error.response.data.message,false);                    
-                }else{
-                    createModalSignup.value.createDialog("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
-                    console.log(error.response);
+        console.log(signupConfirmPasswd.value);
+        console.log(signupPasswd.value);
+        if(signupPasswd.value !== signupConfirmPasswd.value){
+            createModalSignup.value.createDialog("Error","The two passwords are not equal","",false);
+        }else{
+            triggerLoading_signup.value=true;
+            let result = await axios.post(config.host + config.api + config.registerUser,{
+                login: signupUsername.value,
+                password: signupPasswd.value,
+                photo: signupPhoto.value
+            })
+            .then( function(response){
+                triggerLoading_signup.value=false;
+                console.log(response.data.success);
+                if(response.data.success == true){
+                    emit('userRegister');
+                    createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
+                    console.log("estoy aqui");
                 }
-            }else if(error.request){
-                createModalSignup.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
-                console.log(error.request);
-            }else{
-                createModalSignup.value.createDialog("Error","", "unknown error. Try again later");
-                console.log("unknown error");
-            }
-        });
+            })
+            .catch(function(error){
+                triggerLoading_signup.value=false;
+                if(error.response){
+                    console.log(error.response.data)
+                    if(error.response.data){
+                        createModalSignup.value.createDialog("Error","",error.response.data.message,false);                    
+                    }else{
+                        createModalSignup.value.createDialog("Error","request error","An error ocurred while trying to connect with the database. Please try again later");
+                        console.log(error.response);
+                    }
+                }else if(error.request){
+                    createModalSignup.value.createDialog("Error","Request error","An error ocurred while trying to connect with the database. Please try again later");
+                    console.log(error.request);
+                }else{
+                    createModalSignup.value.createDialog("Error","", "unknown error. Try again later");
+                    console.log("unknown error");
+                }
+            });
+        }
     }
 
 </script>

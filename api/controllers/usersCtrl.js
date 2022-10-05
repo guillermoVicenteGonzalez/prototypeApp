@@ -120,3 +120,44 @@ exports.getUserData = async function(req, res){
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
 }
+
+/**
+ * This function allows a logged user to consult his data. He needs to pass a valid jwt through authorization header
+ * @route PUT /api/users/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
+ * @returns {Error} 400 - either the id or the jwt are not valid
+ */
+exports.updateUserData = async function(req,res){
+    //jwt verification
+    let authorizationHeader = req.headers.authorization;
+    if(authorizationHeader){
+        let token = authorizationHeader.split(' ');
+        try{
+            var decoded = jwt.verify(token[1],'secret');
+            if(req.body.login ==undefined || req.body.password){
+                let updatedUser = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+                if(updatedUser){
+                    updatedUser.login = req.body.login;
+                    updatedUser.password = req.body.password;
+                    updatedUser.photo = req.body.photo;
+        
+                    let result = await updatedUser.save().catch(err => {return undefined});
+                    if(result){
+                        res.status(200).json({success:true,updatedUser});
+                    }else{
+                        res.status(400).json({success:false,message:"error updating user data"})
+                    }
+                }else{
+                    res.status(404).json({success:false, message:"could not find requested user"})
+                }
+            }else{
+                res.status(400).json({success:false, message:"the request lacked vital fields"});
+            }
+        }catch{
+            res.status(400).json({success:"false",message:"invalid token"});
+            return undefined;
+        }
+    }
+}

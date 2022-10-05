@@ -18,18 +18,19 @@ router.route('/tvshows/:id')
   .delete(TVShowCtrl.deleteTVShow);
 
 router.route("/tvshows/title/:title")
-  .get(TVShowCtrl.findByName)
+  .get(TVShowCtrl.findByName);
 
 //rutas de usuarios
 router.route("/users")
-  .post(usersCtrl.userRegister)
+  .post(usersCtrl.userRegister);
   //.get(usuariosCtrl.userLogin);
 
 router.route("/users/login")
-  .post(usersCtrl.userLogin)
+  .post(usersCtrl.userLogin);
 
 router.route("/users/:login")
-  .get(usersCtrl.getUserData);
+  .get(usersCtrl.getUserData)
+  .put(usersCtrl.updateUserData);
 
 
 

@@ -15,8 +15,9 @@
                variant="outlined"
                label="password"
                v-model="signupConfirmPasswd"
-               type="password"
-               @click:append="signUp"
+               :type="showPasswd ? 'text' : 'password'"
+               @click:append="showPasswd = !showPasswd"
+               :append-icon="showPasswd ? 'mdi-eye' : 'mdi-eye-off'"
                ></v-text-field>
 
                <v-text-field 
@@ -24,17 +25,27 @@
                variant="outlined"
                label="confirm password"
                v-model="signupPasswd"
-               type="password"
+               :append-icon="showPasswd2 ? 'mdi-eye' : 'mdi-eye-off'"
+               :type="showPasswd2 ? 'text' : 'password'"
+               @click:append="showPasswd2 = !showPasswd2"
                ></v-text-field>
-
 
                <v-text-field 
                class="mx-10"
                variant="outlined"
-               label="photo"
-               v-model="signupPhoto"
-               @click:append="signUp"
+               label="email"
+               v-model="signUpMail"
+               :rules="[rules.required, rules.email]"
                ></v-text-field>
+
+                <v-file-input   
+                accept="image/*"
+                label="File input"
+                filled
+                prepend-icon="mdi-camera"
+                v-model="userPhoto"
+                ref="otherPhoto"
+                ></v-file-input>
 
                <v-btn class="ma-2"
                    @click="signUp"
@@ -59,12 +70,16 @@
     import Loading from "./loading.vue";
 
 
+
     const emit = defineEmits(['userRegister']);
+    var showPasswd = ref(false);
+    var showPasswd2 = ref(false);
+    var signUpMail = ref();
     var createModalSignup = ref();
     var signupUsername = ref();
     var signupPasswd = ref();
     var signupConfirmPasswd = ref();
-    var signupPhoto = ref();
+    var userPhoto = ref();
     var triggerLoading_signup = ref();
     var signupDialog = ref(false);
     var signupDialogMessage = ref({
@@ -75,24 +90,27 @@
 
 
     async function signUp(){
+        //console.log(userPhoto.value[0]);
         console.log(signupConfirmPasswd.value);
         console.log(signupPasswd.value);
         if(signupPasswd.value !== signupConfirmPasswd.value){
             createModalSignup.value.createDialog("Error","The two passwords are not equal","",false);
         }else{
             triggerLoading_signup.value=true;
+
             let result = await axios.post(config.host + config.api + config.registerUser,{
                 login: signupUsername.value,
                 password: signupPasswd.value,
-                photo: signupPhoto.value
+                //photo: userPhoto.value[0]
+                mail:signUpMail.value
             })
             .then( function(response){
                 triggerLoading_signup.value=false;
                 console.log(response.data.success);
                 if(response.data.success == true){
-                    emit('userRegister');
                     createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                     console.log("estoy aqui");
+                    emit('userRegister');
                 }
             })
             .catch(function(error){
@@ -117,3 +135,22 @@
     }
 
 </script>
+
+<script>
+    export default {
+      data () {
+        return {
+          title: 'Preliminary report',
+          email: '',
+          rules: {
+            required: value => !!value || 'Required.',
+            counter: value => value.length <= 20 || 'Max 20 characters',
+            email: value => {
+              const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              return pattern.test(value) || 'Invalid e-mail.'
+            },
+          },
+        }
+      },
+    }
+  </script>

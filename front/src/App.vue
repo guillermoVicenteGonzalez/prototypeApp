@@ -86,7 +86,7 @@
 <script setup>
 
   import login from "./components/login.vue";
-  import {ref} from "vue"
+  import {ref, provide} from "vue"
   import Collection from "./components/collection.vue";
   import Landing from "./components/landing.vue";
   import SignUp from "./components/SignUp.vue";
@@ -101,6 +101,7 @@
   import config from "../src/config.json"
   import MenuTest from "./components/menuTest.vue"
 
+  provide('router',router);
   var triggerMenu = ref(true);
   var triggerProfileMenu = ref()
   var photo = ref();

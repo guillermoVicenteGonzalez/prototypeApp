@@ -16,16 +16,22 @@
 
 <template>
         <div class="allAxisCenteredContainer text-left">
+
             <v-card 
             width="500"
-            class="pt-3">
+            class="pt-3 text-center">
                 <div class="centeredDiv">
-                    <v-avatar
+                    <v-btn
+                    icon
                     size="56"
-                    color="primary"></v-avatar>
+                    color="primary"
+                    @click="triggerFileInputModal.createFileInputModal()">
+
+                    </v-btn>
                 </div>
                 <v-card-title>Profile</v-card-title>
-                <v-card-text>{{'username: ' + userData.username}}</v-card-text>
+                <v-card-text class="py-1">{{'username: ' + userData.username}}</v-card-text>
+                <v-card-text class="py-1">{{'mail: ' + userData.userMail}}</v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions class="justify-center">
                     <v-btn
@@ -34,9 +40,11 @@
                 </v-card-actions>
             </v-card>
         </div>
-
         <updateUserModal
         ref="updateUserModalRef"></updateUserModal>
+
+        <FileInputModal
+        ref="triggerFileInputModal"></FileInputModal>
 </template>
 
 
@@ -45,17 +53,20 @@
     import axios from "axios";
     import config from "../config.json";
     import updateUserModal from "../components/updateUserModal.vue"
+    import FileInputModal from "./fileInputModal.vue";
 
-    
+    const formData = new FormData();
+    var triggerFileInputModal = ref();
     var updateUserModalRef = ref();
     var userData = ref({
         username:undefined,
         userPhoto:undefined,
-
+        userMail:undefined
     });
 
     function test(){
-        updateUserModalRef.value.createUpdateUserModal();
+        //updateUserModalRef.value.createUpdateUserModal();
+        alert()
     }
 
     async function loadUserData(){
@@ -71,7 +82,8 @@
             .then(function(response){
                 userData.value.username = response.data.user.login;
                 userData.value.userPhoto = response.data.user.photo;
-                console.log(userData.value.username);
+                userData.value.userMail = response.data.user.mail;
+                console.log(userData.value.userMail);
             })
             .catch(function(error){
                 console.log("error");

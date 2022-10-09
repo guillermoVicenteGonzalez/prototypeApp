@@ -44,7 +44,6 @@
                 filled
                 prepend-icon="mdi-camera"
                 v-model="userPhoto"
-                ref="otherPhoto"
                 ></v-file-input>
 
                <v-btn class="ma-2"
@@ -70,8 +69,9 @@
     import Loading from "./loading.vue";
 
 
-
+    const formData = new FormData();
     const emit = defineEmits(['userRegister']);
+    var userPhoto = ref();
     var showPasswd = ref(false);
     var showPasswd2 = ref(false);
     var signUpMail = ref();
@@ -107,6 +107,7 @@
             .then( function(response){
                 triggerLoading_signup.value=false;
                 console.log(response.data.success);
+                uploadFile(); //temporary
                 if(response.data.success == true){
                     createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                     console.log("estoy aqui");
@@ -131,6 +132,24 @@
                     console.log("unknown error");
                 }
             });
+        }
+    }
+
+    async function uploadFile(){
+        if(userPhoto.value != undefined){
+            //aqui podria meter el nombre del usuario temporalmente
+            formData.append("name",userPhoto.value[0].name);
+            formData.append("profileImage",userPhoto.value[0]);
+            console.log(userPhoto.value[0]);
+            let promise = await axios.post(config.host + config.api + config.uploadPicture,formData,{
+            //axios.post("http://localhost:3000/api/upload",formData,{
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }
+            })
+        }else{
+            console.log("error");
+            console.log(userPhoto.value);
         }
     }
 

@@ -5,6 +5,7 @@
     width="500"
     outlined>
         <v-card>
+
             <v-file-input   
             accept="image/*"
             label="File input"
@@ -14,9 +15,10 @@
             ref="otherPhoto"
             ></v-file-input>
 
-            <v-btn @click="test">click</v-btn>
+            <v-btn @click="uploadFile">click</v-btn>
 
             <v-img
+            lazy-src=""
             :src="myPhoto"></v-img>
         </v-card>
     </v-dialog>
@@ -24,6 +26,8 @@
 
 <script setup>
     import {ref} from "vue";
+    import axios from "axios";
+    import config from "../config.json";
 
     const formData = new FormData();
     var myPhoto = ref();
@@ -34,8 +38,18 @@
         trigger.value = true;
     }
 
-    function test(){
-        formData.append("userPhoto",myPhoto.value[0]);    
+    function uploadFile(){
+        if(myPhoto.value != undefined){
+            formData.append("name",myPhoto.value[0].name);
+            formData.append("profileImage",myPhoto.value[0]);
+            console.log(myPhoto.value[0]);
+            axios.post(config.host + config.api + config.uploadPicture,formData,{
+            //axios.post("http://localhost:3000/api/upload",formData,{
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }
+            })
+        }
     }
 
     defineExpose({

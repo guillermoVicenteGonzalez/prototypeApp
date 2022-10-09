@@ -30,8 +30,7 @@
         height="200"
         @click="tvshowModal.create(item,item._id)">
             <v-img
-                cover="true"
-
+                cover
                 lazy-src="http://www.tea-tron.com/antorodriguez/blog/wp-content/uploads/2016/04/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png"
                 :src=item.poster>
             </v-img>
@@ -72,7 +71,7 @@
             triggerLoadgin_Col.value = false;
             array.value = [];
             array.value = result.data.tvshows;
-            console.log(array.value[1]);
+
         })
         .catch(function (error){
             triggerLoadgin_Col.value = false;

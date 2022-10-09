@@ -3,10 +3,13 @@
     "api":"/api",
     "registerUser":"/users",
     "loginUser":"/users/login",
+    "updateUser":"/users/login/",
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",
     "getUserData":"/users/",
     "updateTVShow":"/tvshows/",
-    "deleteTVShow":"/tvshows/"
+    "deleteTVShow":"/tvshows/",
+    "uploadPicture":"/upload",
+    "getPicture":"/upload/"
 }

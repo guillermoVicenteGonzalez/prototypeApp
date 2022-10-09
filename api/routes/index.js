@@ -2,6 +2,7 @@ const{ Router } = require("express");
 //const {getAllShows} = require ("../controllers/tvshows");
 const TVShowCtrl = require("../controllers/tvshows");
 const usersCtrl = require("../controllers/usersCtrl");
+const imageCtrl = require("../controllers/imageCtrl");
 
 const router = Router();
 //entiendo que asi se importan todos, pero no como se asignan a los verbos
@@ -31,6 +32,12 @@ router.route("/users/login")
 router.route("/users/:login")
   .get(usersCtrl.getUserData)
   .put(usersCtrl.updateUserData);
+
+router.route("/upload")
+  .post(imageCtrl.uploadImage)
+
+router.route("/upload/:id")
+  .get(imageCtrl.getUploadedImage)
 
 
 

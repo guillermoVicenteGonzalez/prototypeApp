@@ -6,10 +6,15 @@ const express         = require("express"),
     bodyParser      = require("body-parser"),
     methodOverride  = require("method-override"),
     mongoose        = require('mongoose'),
-    cors            = require("cors");
+    cors            = require("cors"),
+    //this are for image storage
+    multer          = require("multer"),
+    fs              = require("fs"),
+    path            = require("path");
     config          = require("./config.json");
 
-
+//delete
+const imageModel = require("./models/image.js");
 const puerto = config.port;
 const mongoUrl = config.mongoUrl;
 
@@ -62,13 +67,18 @@ mongoose.connect(mongoUrl, function(err, res) {
   console.log('Connected to Database');
 });
 
-
-app.use(bodyParser.urlencoded({ extended: false }));
+//initially this was set to false
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.set("view engine", "ejs");
+
+
 
 app.use(cors());
 app.use("/api", router);
+
+
 // Start server
 app.listen(puerto, function() {
   console.log("Node server running on http://localhost:" + puerto);

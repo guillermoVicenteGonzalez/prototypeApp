@@ -101,6 +101,7 @@
   import config from "../src/config.json"
   import MenuTest from "./components/menuTest.vue"
 
+
   provide('router',router);
   var triggerMenu = ref(true);
   var triggerProfileMenu = ref()

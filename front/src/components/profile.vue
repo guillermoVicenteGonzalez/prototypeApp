@@ -35,16 +35,18 @@
                 <v-divider></v-divider>
                 <v-card-actions class="justify-center">
                     <v-btn
-                    @click="test">Update</v-btn>
+                    @click="updateUserModalRef.createUpdateUserModal(userData)">Update</v-btn>
                     <v-btn>Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </div>
         <updateUserModal
-        ref="updateUserModalRef"></updateUserModal>
+        ref="updateUserModalRef"
+        @updatedUserEvent="loadUserData()"></updateUserModal>
 
         <FileInputModal
         ref="triggerFileInputModal"></FileInputModal>
+
 </template>
 
 
@@ -56,8 +58,9 @@
     import FileInputModal from "./fileInputModal.vue";
 
     const formData = new FormData();
-    var triggerFileInputModal = ref();
     var updateUserModalRef = ref();
+    var profilePic = ref();
+    var triggerFileInputModal = ref();
     var userData = ref({
         username:undefined,
         userPhoto:undefined,
@@ -93,5 +96,21 @@
         }
     }
 
+
+    async function getProfilePic(){
+        //i still don't know how to decode the buffer
+        let tempId = "6342fd9ef53d19167d5b58fe";
+        let buffer64
+        let promise = await axios.get(config.host + config.api + config.getPicture + tempId)
+        .then(function(response){
+            console.log(response.data.photo.image.data);
+            buffer64 = Buffer.from(response.data.photo.image.data,'binary').toString('base64');
+            profilePic.value = buffer64;
+            console.log(profilePic.value);
+        })
+        .catch(function(error){
+            console.log(error);
+        })
+    }
     loadUserData();
 </script>

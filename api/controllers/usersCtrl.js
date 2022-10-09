@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user");
+const multer = require("multer");
+//const userModel = require("../models/user");
 
 //variables y constantes
 const saltRounds = 10 
@@ -71,7 +72,8 @@ exports.userRegister = async function(req, res){
             let nUser = new User({
                 login: req.body.login,
                 password: encriptedPasswd,
-                photo: req.body.photo
+                photo: req.body.photo,
+                mail:req.body.mail
             });
             let result = await nUser.save().catch(err => {return undefined});
             if(result){
@@ -136,12 +138,13 @@ exports.updateUserData = async function(req,res){
         let token = authorizationHeader.split(' ');
         try{
             var decoded = jwt.verify(token[1],'secret');
-            if(req.body.login ==undefined || req.body.password){
+            if(req.body.login != undefined){
                 let updatedUser = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
                 if(updatedUser){
                     updatedUser.login = req.body.login;
-                    updatedUser.password = req.body.password;
+                    //updatedUser.password = req.body.password;
                     updatedUser.photo = req.body.photo;
+                    updatedUser.mail = req.body.mail
         
                     let result = await updatedUser.save().catch(err => {return undefined});
                     if(result){
@@ -159,5 +162,9 @@ exports.updateUserData = async function(req,res){
             res.status(400).json({success:"false",message:"invalid token"});
             return undefined;
         }
+    }else{
+        res.status(400).json({success:false,message:"Error: no authorization header"})
     }
 }
+
+

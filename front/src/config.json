@@ -4,6 +4,7 @@
     "registerUser":"/users",
     "loginUser":"/users/login",
     "updateUser":"/users/",
+    "deleteUser":"/users/",
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",

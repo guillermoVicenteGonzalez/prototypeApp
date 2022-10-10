@@ -204,20 +204,32 @@ exports.updateUserData = async function(req,res){
     }
 }
 
+
+/**
+ * Deletes the requested user 
+ * @route DELETE /api/users/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
+ * @returns {Error} 400 - either the id or the jwt are not valid
+ */
 exports.deleteUser = async function(req,res){
-    let user = await User.findOne({login:req.body.login})
-    .then(async function(){
-        let result = await user.remove()
-        .then(function(){
-            res.status(200).json({success:true,message:user});
-        })
-        .catch(function(err){
-            res.status(400).json({success:false, message:err});
-        })
-    })
-    .catch(function(err){
-        res.status(400).json({success:false,message:err});
-    })
+    let authorizationHeader = req.headers.authorization;
+
+    var user =  await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+    if(user){
+        let result = await user.remove().catch(err=>{return undefined});
+        if(result){
+            console.log(user);
+            res.status(200).json({success:true,user});
+        }else{
+            res.status(400).json({success:false,message:"error deleting user"})
+        }
+    }else{
+        res.status(400).json({success:false,message:"Error: requested user not found"});
+        console.log("error");
+    }
+
 }
 
 

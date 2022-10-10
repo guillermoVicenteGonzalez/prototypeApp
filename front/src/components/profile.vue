@@ -36,10 +36,16 @@
                 <v-card-actions class="justify-center">
                     <v-btn
                     @click="updateUserModalRef.createUpdateUserModal(userData)">Update</v-btn>
-                    <v-btn>Delete</v-btn>
+
+                    <v-btn
+                    @click="deleteUser">Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </div>
+
+        <Modal
+        ref="dialogModal"></Modal>
+
         <updateUserModal
         ref="updateUserModalRef"
         @updatedUserEvent="loadUserData()"></updateUserModal>
@@ -56,9 +62,11 @@
     import config from "../config.json";
     import updateUserModal from "../components/updateUserModal.vue"
     import FileInputModal from "./fileInputModal.vue";
+    import Modal from "./modal.vue";
 
     const formData = new FormData();
     var updateUserModalRef = ref();
+    var dialogModal = ref();
     var profilePic = ref();
     var triggerFileInputModal = ref();
     var userData = ref({
@@ -113,5 +121,23 @@
             console.log(error);
         })
     }
+
+    async function deleteUser(){
+        let deletedUser = await axios.delete(config.host + config.api + config.deleteUser + userData.value.username)
+        .then(function(response){
+            if(response.data.success == true){
+                //redirect
+                dialogModal.value.createDialog("Success","user successfully deleted","",true);
+            }else{
+                dialogModal.value.createDialog("Error","",response.data.message,false);
+            }
+            //redirect
+        })
+        .catch(function(err){
+            dialogModal.value.createDialog("Error","Error deleting user","",false);
+            console.log("error");
+        })
+    }
+
     loadUserData();
 </script>

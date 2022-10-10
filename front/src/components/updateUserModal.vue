@@ -98,9 +98,7 @@
         })
         .catch(function(error){
             console.log(error);
-            console.log(updatedUser.value.username);
             triggerLoading_profile.value = false;
-            //modal error
             errorModalProfile.value.createDialog("Error","An error ocurred while updating the user",error.response,false);
         })
     }
@@ -113,9 +111,6 @@
         trigger.value = false;
     }
 
-    async function userDelete(){
-        
-    }
 
     defineExpose({createUpdateUserModal});
 

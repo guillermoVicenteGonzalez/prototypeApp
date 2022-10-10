@@ -31,7 +31,8 @@ router.route("/users/login")
 
 router.route("/users/:login")
   .get(usersCtrl.getUserData)
-  .put(usersCtrl.updateUserData);
+  .put(usersCtrl.updateUserData)
+  .delete(usersCtrl.deleteUser);
 
 router.route("/upload")
   .post(imageCtrl.uploadImage)

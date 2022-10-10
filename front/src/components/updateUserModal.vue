@@ -53,7 +53,7 @@
     import config from "../config.json"
     import Modal from "./modal.vue";
 
-    const emit = defineEmits(['updatedUserEvent']);
+    const emit = defineEmits(['updatedUserEvent','refreshSignup']);
     var triggerLoading_profile = ref();
     var errorModalProfile = ref();
     var currentUser;
@@ -73,11 +73,10 @@
         }
     }
 
-    //error handling
+
     async function updateUser(){
-        //triggerLoading_profile.value = true;
+        triggerLoading_profile.value = true;
         let promise = await axios
-        //.put("http://localhost:3000/api/users/pepito",{
         .put(config.host + config.api + config.updateUser + currentUser.username,{
 
             login:updatedUser.value.username,
@@ -92,14 +91,14 @@
             triggerLoading_profile.value = false;
             //modal + response
             errorModalProfile.value.createDialog("Success","the user was updated successfully","",true);
-            localStorage.username = currentUser.username;
+            localStorage.username = updatedUser.value.username;
             emit('updatedUserEvent'); //if username is changed something fails
             trigger.value = false;
         })
         .catch(function(error){
-            console.log(error);
+            console.log(error.response.data);
             triggerLoading_profile.value = false;
-            errorModalProfile.value.createDialog("Error","An error ocurred while updating the user",error.response,false);
+            errorModalProfile.value.createDialog("Error","An error ocurred while updating the user",error.response.data.message,false);
         })
     }
 

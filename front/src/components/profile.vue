@@ -16,31 +16,38 @@
 
 <template>
         <div class="allAxisCenteredContainer text-left">
+            <v-container class="text-center mx-20 px-16 d-flex justify-center align-center">
+                <v-card 
+                width="500"
+                class="pt-3 text-center ">
+                    <div class="centeredDiv">
+                        <v-btn
+                        icon
+                        size="56"
+                        color="primary"
+                        @click="triggerFileInputModal.createFileInputModal()">
 
-            <v-card 
-            width="500"
-            class="pt-3 text-center">
-                <div class="centeredDiv">
-                    <v-btn
-                    icon
-                    size="56"
-                    color="primary"
-                    @click="triggerFileInputModal.createFileInputModal()">
+                        </v-btn>
+                    </div>
+                    <v-card-title>Profile</v-card-title>
+                    <v-card-text class="py-1">{{'username: ' + userData.username}}</v-card-text>
+                    <v-card-text class="py-1">{{'mail: ' + userData.userMail}}</v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions class="justify-center">
+                        <v-btn
+                        color="primary"
+                        @click="updateUserModalRef.createUpdateUserModal(userData)">Update</v-btn>
 
-                    </v-btn>
-                </div>
-                <v-card-title>Profile</v-card-title>
-                <v-card-text class="py-1">{{'username: ' + userData.username}}</v-card-text>
-                <v-card-text class="py-1">{{'mail: ' + userData.userMail}}</v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions class="justify-center">
-                    <v-btn
-                    @click="updateUserModalRef.createUpdateUserModal(userData)">Update</v-btn>
+                        <v-btn
+                        color="primary"
+                        @click="passwdModal.createPasswdModal()">Change password</v-btn>
 
-                    <v-btn
-                    @click="deleteUser">Delete</v-btn>
-                </v-card-actions>
-            </v-card>
+                        <v-btn
+                        color="error"
+                        @click="deleteUser">Delete</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-container>
         </div>
 
         <Modal
@@ -49,6 +56,9 @@
         <updateUserModal
         ref="updateUserModalRef"
         @updatedUserEvent="loadUserData()"></updateUserModal>
+
+        <ChangePasswordModal
+        ref="passwdModal"></ChangePasswordModal>
 
         <FileInputModal
         ref="triggerFileInputModal"></FileInputModal>
@@ -63,9 +73,11 @@
     import updateUserModal from "../components/updateUserModal.vue"
     import FileInputModal from "./fileInputModal.vue";
     import Modal from "./modal.vue";
+    import ChangePasswordModal from "../components/changePasswordModal.vue"
 
     const formData = new FormData();
     var updateUserModalRef = ref();
+    var passwdModal = ref();
     var dialogModal = ref();
     var profilePic = ref();
     var triggerFileInputModal = ref();

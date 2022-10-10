@@ -156,6 +156,7 @@
           localStorage.token = undefined;
           localStorage.username = undefined;
           appErrorModal.value.createDialog("Error","Invalid session", "your session token is not valid or has expired",false);
+          router.push('/');
         });
 
     }else{

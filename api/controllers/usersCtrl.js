@@ -132,42 +132,6 @@ exports.getUserData = async function(req, res){
  * @returns {Error} 400 - either the id or the jwt are not valid
  */
 
-/*
-exports.updateUserData = async function(req,res){
-    //jwt verification
-    let authorizationHeader = req.headers.authorization;
-    if(authorizationHeader){
-        let token = authorizationHeader.split(' ');
-        try{
-            var decoded = await jwt.verify(token[1],'secret');
-            if(req.body.login != undefined){
-                let updatedUser = await User.findOne({login:req.params.login})
-                .then(async function(){
-                    updatedUser.login = req.body.login;
-                    //updatedUser.password = req.body.password;
-                    updatedUser.photo = req.body.photo;
-                    updatedUser.mail = req.body.mail
-        
-                    let result = await updatedUser.save().catch(err => {return undefined});
-                    if(result){
-                        res.status(200).json({success:true,updatedUser});
-                    }else{
-                        res.status(400).json({success:false,message:"error updating user data"})
-                    }
-                })
-            }else{
-                res.status(400).json({success:false, message:"the request lacked vital fields"});
-            }
-        }catch{
-            res.status(400).json({success:"false",message:"invalid token"});
-            return undefined;
-        }
-    }else{
-        res.status(400).json({success:false,message:"Error: no authorization header"})
-    }
-}*/
-
-
 exports.updateUserData = async function(req,res){
     let updatedUser = await User.findOne({login:req.params.login}).catch(err =>{return undefined});
     let authorizationHeader = req.headers.authorization;
@@ -188,7 +152,7 @@ exports.updateUserData = async function(req,res){
                     console.log("user updated");
                 })
                 .catch(function(err){
-                    res.status(400).json({success:false,message:err});
+                    res.status(400).json({success:false,message:"other user with that login alredy exists"});
                 })
             }else{
                 res.status(400).json({successs:false,message:"invalid token"});

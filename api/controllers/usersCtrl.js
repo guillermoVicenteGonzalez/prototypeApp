@@ -171,7 +171,7 @@ exports.updateUserData = async function(req,res){
 exports.updateUserData = async function(req,res){
     let updatedUser = await User.findOne({login:req.params.login}).catch(err =>{return undefined});
     let authorizationHeader = req.headers.authorization;
-    if(user && authorizationHeader){
+    if(updatedUser && authorizationHeader){
         let token = authorizationHeader.split(' ');
         console.log(token[1]);
 
@@ -179,7 +179,17 @@ exports.updateUserData = async function(req,res){
             var decoded = jwt.verify(token[1], 'secret');
             if(decoded){
                 //actualizo el usuario
-                res.status(200).json({succes:true, user}); 
+                updatedUser.login = req.body.login;
+                updatedUser.photo = req.body.photo;
+                updatedUser.mail = req.body.mail;
+                let result = await updatedUser.save()
+                .then(function(){
+                    res.status(200).json({succes:true, updatedUser}); 
+                    console.log("user updated");
+                })
+                .catch(function(err){
+                    res.status(400).json({success:false,message:err});
+                })
             }else{
                 res.status(400).json({successs:false,message:"invalid token"});
             }
@@ -192,6 +202,22 @@ exports.updateUserData = async function(req,res){
         console.log("error");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
+}
+
+exports.deleteUser = async function(req,res){
+    let user = await User.findOne({login:req.body.login})
+    .then(async function(){
+        let result = await user.remove()
+        .then(function(){
+            res.status(200).json({success:true,message:user});
+        })
+        .catch(function(err){
+            res.status(400).json({success:false, message:err});
+        })
+    })
+    .catch(function(err){
+        res.status(400).json({success:false,message:err});
+    })
 }
 
 

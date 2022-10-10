@@ -86,10 +86,11 @@
                 userData.value.username = response.data.user.login;
                 userData.value.userPhoto = response.data.user.photo;
                 userData.value.userMail = response.data.user.mail;
-                console.log(userData.value.userMail);
+                console.log(response.data.user);
             })
             .catch(function(error){
-                console.log("error");
+                //create modal
+                console.log(error);
             })
         }else{
             console.log("not all data");

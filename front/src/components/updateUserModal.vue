@@ -20,7 +20,7 @@
             class="mx-10 my-2"
             label="mail"
             color="primary"
-            v-model="updatedUser.mail"
+            v-model="updatedUser.userMail"
             clearable
             :rules="[rules.required, rules.email]"
             ></v-text-field>
@@ -69,20 +69,19 @@
         trigger.value = true;
         currentUser = user;
         for(const i in currentUser){
-            //console.log(i);
             updatedUser.value[i] = currentUser[i];
-
         }
-        //alert("funciona??'");
     }
 
     //error handling
     async function updateUser(){
         //triggerLoading_profile.value = true;
         let promise = await axios
-        .put("http://localhost:3000/api/users/guillermo",{
+        //.put("http://localhost:3000/api/users/pepito",{
+        .put(config.host + config.api + config.updateUser + currentUser.username,{
+
             login:updatedUser.value.username,
-            mail:updatedUser.value.mail,            
+            mail:updatedUser.value.userMail,            
         },{
             headers:{
                 'Authorization':'Bearer '+ localStorage.token
@@ -92,16 +91,17 @@
         .then(function (response){
             triggerLoading_profile.value = false;
             //modal + response
-            //errorModalProfile.value.createDialog("Success","the user was updated successfully","",true);
-            emit('updatedUserEvent');
+            errorModalProfile.value.createDialog("Success","the user was updated successfully","",true);
+            localStorage.username = currentUser.username;
+            emit('updatedUserEvent'); //if username is changed something fails
             trigger.value = false;
         })
         .catch(function(error){
             console.log(error);
             console.log(updatedUser.value.username);
-            //triggerLoading_profile.value = false;
+            triggerLoading_profile.value = false;
             //modal error
-            //errorModalProfile.value.createDialog("Error","An error ocurred while updating the user",error.response,false);
+            errorModalProfile.value.createDialog("Error","An error ocurred while updating the user",error.response,false);
         })
     }
 
@@ -111,6 +111,10 @@
         }
 
         trigger.value = false;
+    }
+
+    async function userDelete(){
+        
     }
 
     defineExpose({createUpdateUserModal});

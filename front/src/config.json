@@ -3,7 +3,7 @@
     "api":"/api",
     "registerUser":"/users",
     "loginUser":"/users/login",
-    "updateUser":"/users/login/",
+    "updateUser":"/users/",
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",

@@ -159,7 +159,6 @@
     export default {
       data () {
         return {
-          title: 'Preliminary report',
           email: '',
           rules: {
             required: value => !!value || 'Required.',

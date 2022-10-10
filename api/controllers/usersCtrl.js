@@ -131,16 +131,18 @@ exports.getUserData = async function(req, res){
  * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
  * @returns {Error} 400 - either the id or the jwt are not valid
  */
+
+/*
 exports.updateUserData = async function(req,res){
     //jwt verification
     let authorizationHeader = req.headers.authorization;
     if(authorizationHeader){
         let token = authorizationHeader.split(' ');
         try{
-            var decoded = jwt.verify(token[1],'secret');
+            var decoded = await jwt.verify(token[1],'secret');
             if(req.body.login != undefined){
-                let updatedUser = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
-                if(updatedUser){
+                let updatedUser = await User.findOne({login:req.params.login})
+                .then(async function(){
                     updatedUser.login = req.body.login;
                     //updatedUser.password = req.body.password;
                     updatedUser.photo = req.body.photo;
@@ -152,9 +154,7 @@ exports.updateUserData = async function(req,res){
                     }else{
                         res.status(400).json({success:false,message:"error updating user data"})
                     }
-                }else{
-                    res.status(404).json({success:false, message:"could not find requested user"})
-                }
+                })
             }else{
                 res.status(400).json({success:false, message:"the request lacked vital fields"});
             }
@@ -164,6 +164,33 @@ exports.updateUserData = async function(req,res){
         }
     }else{
         res.status(400).json({success:false,message:"Error: no authorization header"})
+    }
+}*/
+
+
+exports.updateUserData = async function(req,res){
+    let updatedUser = await User.findOne({login:req.params.login}).catch(err =>{return undefined});
+    let authorizationHeader = req.headers.authorization;
+    if(user && authorizationHeader){
+        let token = authorizationHeader.split(' ');
+        console.log(token[1]);
+
+        try{
+            var decoded = jwt.verify(token[1], 'secret');
+            if(decoded){
+                //actualizo el usuario
+                res.status(200).json({succes:true, user}); 
+            }else{
+                res.status(400).json({successs:false,message:"invalid token"});
+            }
+    
+        }catch(err){
+            res.status(400).json({successs:false,message:"invalid token"});
+        };
+        
+    }else{
+        console.log("error");
+        res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
 }
 

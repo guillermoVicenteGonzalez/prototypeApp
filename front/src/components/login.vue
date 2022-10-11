@@ -86,6 +86,7 @@
                 userLogged.value = true;
                 localStorage.token = response.data.token;
                 localStorage.username = userLogin.value;
+                userLogin.value = userPasswd.value = undefined;
                 emit('userLogs',true);
                 //emit('userLogs');
             }

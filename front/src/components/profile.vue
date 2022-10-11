@@ -117,7 +117,6 @@
         }
     }
 
-
     async function getProfilePic(){
         //i still don't know how to decode the buffer
         let tempId = "6342fd9ef53d19167d5b58fe";

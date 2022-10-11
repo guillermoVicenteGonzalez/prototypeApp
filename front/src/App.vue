@@ -145,7 +145,6 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          console.log(response.data);
           console.log(response.data.user.photo);
           localStorage.photo = response.data.user.photo
           photo.value = localStorage.photo;

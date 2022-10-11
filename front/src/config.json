@@ -5,6 +5,7 @@
     "loginUser":"/users/login",
     "updateUser":"/users/",
     "deleteUser":"/users/",
+    "updatePassword":"/users/password/",
     "registerTVShow":"/tvshows", 
     "getAllTVShows":"/tvshows",
     "findTVShow":"/tvshows/title",

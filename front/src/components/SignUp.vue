@@ -111,6 +111,8 @@
                 if(response.data.success == true){
                     createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                     console.log("estoy aqui");
+                    photo.value = undefined;
+                    signupPasswd.value = signupConfirmPasswd.value = signUpMail.value = signupUsername.value = undefined;
                     emit('userRegister');
                 }
             })

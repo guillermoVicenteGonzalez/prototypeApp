@@ -118,7 +118,7 @@ exports.getUserData = async function(req, res){
         };
         
     }else{
-        console.log("error");
+        console.log("erroron get user data");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
 }
@@ -163,7 +163,7 @@ exports.updateUserData = async function(req,res){
         };
         
     }else{
-        console.log("error");
+        console.log("error updateUserData");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
 }
@@ -191,9 +191,47 @@ exports.deleteUser = async function(req,res){
         }
     }else{
         res.status(400).json({success:false,message:"Error: requested user not found"});
-        console.log("error");
+        console.log("error delete user");
     }
 
+}
+
+
+/**
+ * Updates the password of the selected user
+ * @route PUT /api/users/password/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns a success message
+ * @returns {Error} 400 - jwt is not valid or there was an error in the process
+ */
+
+exports.updatePassword = async function(req,res){
+    let authorizationHeader = req.headers.authorization;
+
+    var user = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+    console.log("currentUser:\n" + user);
+    if(user){
+        let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
+        if(encriptedPasswd){
+            user.password = encriptedPasswd;
+            console.log("encripted correctly");
+            let result = await user.save().catch(err=> {return undefined});
+            if(result){
+                console.log("Updated user\n" + user);
+                console.log(user);
+                res.status(200).json({success:true, message:"The user's password was updated successfully"});
+            }else{
+                console.log("error updating user");
+                res.status(400).json({success:false, message:"There was an error while updating the user"});
+            }
+        }else{
+            console.log("error encrypting");
+        }
+    }else{
+        console.log("user not found");
+        res.status(400).json({success:true,message:"There was no user to be updated"});
+    }
 }
 
 

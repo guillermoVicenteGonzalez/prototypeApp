@@ -34,6 +34,9 @@ router.route("/users/:login")
   .put(usersCtrl.updateUserData)
   .delete(usersCtrl.deleteUser);
 
+router.route("/users/password/:login")
+  .put(usersCtrl.updatePassword)
+
 router.route("/upload")
   .post(imageCtrl.uploadImage)
 

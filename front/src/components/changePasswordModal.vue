@@ -34,13 +34,23 @@
                @click:append="showRepeatPasswd = !showRepeatPasswd"
                :append-icon="showRepeatPasswd ? 'mdi-eye' : 'mdi-eye-off'"
                ></v-text-field>
-           
+               <v-divider></v-divider>
+               <v-card-actions class="justify-center">
+                    <v-btn
+                    color="success"
+                    @click="updatePassword()">Accept</v-btn>
+
+                    <v-btn
+                    color="error">Cancel</v-btn>
+                </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script setup>
     import {ref} from "vue";
+    import axios from "axios";
+    import config from "../config.json"
 
     var triggerPasswdModal = ref();
     var showPasswd = ref();
@@ -55,9 +65,35 @@
         triggerPasswdModal.value = true;
     }
 
-    function updatePassword(){
-        //llamada a sign in con la password normal
-        //crear llamada update password
+    async function updatePassword(){
+        let user;
+        //primero comprueba que las contraseñas sean iguales
+        if(newPasswd.value != confirmNewPasswd.value){
+            //create modal
+        }else{
+            //llamada a sign in con la password normal
+            let tokenPromise = await axios.post(config.host + config.api + config.loginUser,{
+                login:localStorage.username,
+                password:currentPasswd.value
+            })
+            .then(async function(response){
+                localStorage.token = response.data.token;
+                console.log("hasta aqui funciona");
+                let promise = axios.put(config.host + config.api + config.updatePassword + localStorage.username,{
+                    password:newPasswd.value
+                })
+                .then(function(response){
+                    console.log(response.data);
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+
+            })
+            .catch(function(err){
+                console.log("error, user not found???");
+            })
+        }
     }
 
     defineExpose({

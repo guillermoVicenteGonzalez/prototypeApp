@@ -41,9 +41,16 @@
                     @click="updatePassword()">Accept</v-btn>
 
                     <v-btn
-                    color="error">Cancel</v-btn>
+                    color="error"
+                    @click="triggerPasswdModal = false">Cancel</v-btn>
                 </v-card-actions>
         </v-card>
+
+        <loading
+        v-model="triggerLoadingCPM"></loading>
+
+        <Modal
+        ref="errorModalCPM"></Modal>
     </v-dialog>
 </template>
 
@@ -51,8 +58,12 @@
     import {ref} from "vue";
     import axios from "axios";
     import config from "../config.json"
-import { emit } from "process";
+    import Verify from "../components/verify.vue"
+    import Loading from "./loading.vue";
+    import Modal from "./modal.vue";
 
+    var errorModalCPM = ref();
+    var triggerLoadingCPM = ref();
     var triggerPasswdModal = ref();
     var showPasswd = ref();
     var showRepeatPasswd = ref();
@@ -70,36 +81,42 @@ import { emit } from "process";
 
     async function updatePassword(){
         let user;
+        triggerLoadingCPM.value = true;
         //primero comprueba que las contraseñas sean iguales
         if(newPasswd.value != confirmNewPasswd.value){
-            //create modal
+            triggerLoadingCPM.value = false;
+            errorModalCPM.value.createDialog("Error","Error while trying to sign","The passwords are not equal",false);
         }else{
             //llamada a sign in con la password normal
             let tokenPromise = await axios.post(config.host + config.api + config.loginUser,{
                 login:localStorage.username,
                 password:currentPasswd.value
-            },{
-                headers:{
-                    'Authorization':'Bearer '+ localStorage.token
-                },
             })
             .then(async function(response){
                 localStorage.token = response.data.token;
-                console.log("hasta aqui funciona");
                 let promise = axios.put(config.host + config.api + config.updatePassword + localStorage.username,{
-                    password:newPasswd.value
+                    password:newPasswd.value,     
+                },{
+                    headers:{
+                        'Authorization':'Bearer '+ localStorage.token
+                    }
                 })
                 .then(function(response){
+                    triggerLoadingCPM.value = false;
                     currentPasswd.value = newPasswd.value = confirmNewPasswd.value = undefined;
-                    emit('passwordChanged');
-                    //push to profile
+                    triggerPasswdModal.value = false;
                 })
                 .catch(function(err){
+                    triggerLoadingCPM.value = false;
+                    errorModalCPM.value.createDialog("Error","There was an error ",err.response.data.message)
+                    //create modal
                     console.log(err);
                 })
 
             })
             .catch(function(err){
+                triggerLoadingCPM.value = false;
+                errorModalCPM.value.createDialog("Error","Error while trying to sign",err.response.data.message,false);
                 console.log("error, user not found???");
             })
         }

@@ -40,7 +40,7 @@
     <modal
     ref="errorModalProfile"></modal>
 
-    <verify></verify>
+
 
     <loading v-model="triggerLoading_profile"></loading>
 </template>
@@ -54,6 +54,7 @@
     import Modal from "./modal.vue";
 
     const emit = defineEmits(['updatedUserEvent','refreshSignup']);
+
     var triggerLoading_profile = ref();
     var errorModalProfile = ref();
     var currentUser;

@@ -179,21 +179,25 @@ exports.updateUserData = async function(req,res){
  */
 exports.deleteUser = async function(req,res){
     let authorizationHeader = req.headers.authorization;
-
-    var user =  await User.findOne({login:req.params.login}).catch(err=>{return undefined});
-    if(user){
-        let result = await user.remove().catch(err=>{return undefined});
-        if(result){
-            console.log(user);
-            res.status(200).json({success:true,user});
+    let token = authorizationHeader.split(' ');
+    var decoded = await jwt.verify(token[1], 'secret');
+    if(decoded){
+        var user =  await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+        if(user){
+            let result = await user.remove().catch(err=>{return undefined});
+            if(result){
+                res.status(200).json({success:true,user});
+            }else{
+                res.status(400).json({success:false,message:"error deleting user"})
+            }
         }else{
-            res.status(400).json({success:false,message:"error deleting user"})
+            res.status(400).json({success:false,message:"Error: requested user not found"});
+            console.log("error delete user");
         }
     }else{
-        res.status(400).json({success:false,message:"Error: requested user not found"});
-        console.log("error delete user");
+        console.log("invalid token");
+        res.status(400).json({success:true,message:"Invalid token"});
     }
-
 }
 
 
@@ -208,29 +212,35 @@ exports.deleteUser = async function(req,res){
 
 exports.updatePassword = async function(req,res){
     let authorizationHeader = req.headers.authorization;
-
-    var user = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
-    console.log("currentUser:\n" + user);
-    if(user){
-        let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
-        if(encriptedPasswd){
-            user.password = encriptedPasswd;
-            console.log("encripted correctly");
-            let result = await user.save().catch(err=> {return undefined});
-            if(result){
-                console.log("Updated user\n" + user);
-                console.log(user);
-                res.status(200).json({success:true, message:"The user's password was updated successfully"});
+    let token = authorizationHeader.split(' ');
+    var decoded = await jwt.verify(token[1], 'secret');
+    if(decoded){
+        var user = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+        console.log("currentUser:\n" + user);
+        if(user){
+            let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
+            if(encriptedPasswd){
+                user.password = encriptedPasswd;
+                console.log("encripted correctly");
+                let result = await user.save().catch(err=> {return undefined});
+                if(result){
+                    console.log("Updated user\n" + user);
+                    console.log(user);
+                    res.status(200).json({success:true, message:"The user's password was updated successfully"});
+                }else{
+                    console.log("error updating user");
+                    res.status(400).json({success:false, message:"There was an error while updating the user"});
+                }
             }else{
-                console.log("error updating user");
-                res.status(400).json({success:false, message:"There was an error while updating the user"});
+                console.log("error encrypting");
             }
         }else{
-            console.log("error encrypting");
+            console.log("user not found");
+            res.status(400).json({success:true,message:"There was no user to be updated"});
         }
     }else{
-        console.log("user not found");
-        res.status(400).json({success:true,message:"There was no user to be updated"});
+        console.log("invalid token");
+        res.status(400).json({success:true,message:"Invalid token"});
     }
 }
 

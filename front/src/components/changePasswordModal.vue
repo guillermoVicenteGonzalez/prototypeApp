@@ -51,6 +51,7 @@
     import {ref} from "vue";
     import axios from "axios";
     import config from "../config.json"
+import { emit } from "process";
 
     var triggerPasswdModal = ref();
     var showPasswd = ref();
@@ -60,6 +61,8 @@
     var currentPasswd = ref();
     var newPasswd = ref();
     var confirmNewPasswd = ref();
+
+    defineEmits(['passwordChanged']);
 
     function createPasswdModal(){
         triggerPasswdModal.value = true;
@@ -75,6 +78,10 @@
             let tokenPromise = await axios.post(config.host + config.api + config.loginUser,{
                 login:localStorage.username,
                 password:currentPasswd.value
+            },{
+                headers:{
+                    'Authorization':'Bearer '+ localStorage.token
+                },
             })
             .then(async function(response){
                 localStorage.token = response.data.token;
@@ -83,7 +90,9 @@
                     password:newPasswd.value
                 })
                 .then(function(response){
-                    console.log(response.data);
+                    currentPasswd.value = newPasswd.value = confirmNewPasswd.value = undefined;
+                    emit('passwordChanged');
+                    //push to profile
                 })
                 .catch(function(err){
                     console.log(err);

@@ -12,6 +12,6 @@
     "getUserData":"/users/",
     "updateTVShow":"/tvshows/",
     "deleteTVShow":"/tvshows/",
-    "uploadPicture":"/upload",
-    "getPicture":"/upload/"
+    "uploadPicture":"/images",
+    "getPicture":"/images/"
 }

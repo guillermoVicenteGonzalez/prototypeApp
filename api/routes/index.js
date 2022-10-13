@@ -37,10 +37,10 @@ router.route("/users/:login")
 router.route("/users/password/:login")
   .put(usersCtrl.updatePassword)
 
-router.route("/upload")
+router.route("/images")
   .post(imageCtrl.uploadImage)
 
-router.route("/upload/:id")
+router.route("/images/:id")
   .get(imageCtrl.getUploadedImage)
 
 

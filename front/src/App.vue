@@ -48,12 +48,10 @@
       </v-list>
     </v-menu>
 
-
-
-
-
   </v-app-bar>
 
+  <v-img
+  :src="photo"></v-img>
   <v-main app class="text-center">
     <router-view
     @userLogs="signIn"
@@ -145,9 +143,10 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          console.log(response.data.user.photo);
-          localStorage.photo = response.data.user.photo
+          localStorage.photoId = response.data.user.photo
           photo.value = localStorage.photo;
+          console.log("localstorage photo: " + localStorage.photoId);
+          getUserPhoto();
         })
         .catch(function(error){
           console.log(error);
@@ -184,6 +183,21 @@
         triggerVerify.value.createVerify('Log out','confirm your logout','Are you sure you want to log yourself out?');
         break;
 
+    }
+  }
+
+  async function getUserPhoto(){
+    if(localStorage.photoId){
+      let promise = await axios.get(config.host + config.api + config.getPicture + localStorage.photoId)
+      .then(function(response){
+        photo.value = response.data;
+        console.log(photo.value)
+      })
+      .catch(function(err){
+        console.log(err);
+      })
+    }else{
+      console.log("no photo defined");
     }
   }
 

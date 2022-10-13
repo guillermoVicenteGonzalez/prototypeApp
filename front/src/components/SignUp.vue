@@ -72,6 +72,7 @@
     const formData = new FormData();
     const emit = defineEmits(['userRegister']);
     var userPhoto = ref();
+    var userPhotoId;
     var showPasswd = ref(false);
     var showPasswd2 = ref(false);
     var signUpMail = ref();
@@ -93,30 +94,34 @@
         //console.log(userPhoto.value[0]);
         console.log(signupConfirmPasswd.value);
         console.log(signupPasswd.value);
+        let photoId;
         if(signupPasswd.value !== signupConfirmPasswd.value){
             createModalSignup.value.createDialog("Error","The two passwords are not equal","",false);
         }else{
             triggerLoading_signup.value=true;
-
+            photoId = await uploadFile();
+            console.log("userid: " + photoId);
             let result = await axios.post(config.host + config.api + config.registerUser,{
                 login: signupUsername.value,
                 password: signupPasswd.value,
-                //photo: userPhoto.value[0]
+                photo: photoId,
                 mail:signUpMail.value
             })
             .then( function(response){
+                console.log(response);
                 triggerLoading_signup.value=false;
                 console.log(response.data.success);
-                uploadFile(); //temporary
+                //uploadFile(); //temporary
                 if(response.data.success == true){
                     createModalSignup.value.createDialog("Succes","Signup was successfull","",true);
                     console.log("estoy aqui");
-                    photo.value = undefined;
+                    //photo.value = undefined;
                     signupPasswd.value = signupConfirmPasswd.value = signUpMail.value = signupUsername.value = undefined;
                     emit('userRegister');
                 }
             })
             .catch(function(error){
+                console.log(error);
                 triggerLoading_signup.value=false;
                 if(error.response){
                     console.log(error.response.data)
@@ -138,20 +143,28 @@
     }
 
     async function uploadFile(){
+        let imgID;
         if(userPhoto.value != undefined){
             //aqui podria meter el nombre del usuario temporalmente
             formData.append("name",userPhoto.value[0].name);
             formData.append("profileImage",userPhoto.value[0]);
             console.log(userPhoto.value[0]);
             let promise = await axios.post(config.host + config.api + config.uploadPicture,formData,{
-            //axios.post("http://localhost:3000/api/upload",formData,{
                 headers:{
                     "Content-Type":"multipart/form-data"
                 }
             })
+            .then(function(response){
+                imgID = response.data.id;
+                //console.log("image id: " + imgID);
+                formData.delete("name");
+                formData.delete("profileImage");
+            })
+            return imgID;
         }else{
             console.log("error");
             console.log(userPhoto.value);
+            return undefined;
         }
     }
 

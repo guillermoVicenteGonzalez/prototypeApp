@@ -18,7 +18,7 @@
                 label="year"
                 v-model="tvYear"
                 color="primary"
-                type="number"></v-text-field>
+                type="date"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
@@ -66,11 +66,12 @@
 </template>
 
 <script setup>
-    import {ref} from "vue";
+    import {ref, inject} from "vue";
     import axios from "axios";
     import config from "../config.json";
     import Modal from "./modal.vue";
     import Loading from "./loading.vue";
+
 
     
     var items = ref(['ES','UK','USA']);
@@ -83,6 +84,7 @@
     var tvGenre = ref();
     var tvSummary = ref();
     var triggerLoading_AS = ref();
+    const router = inject('router');
 
     async function registerTVShow(){
         triggerLoading_AS.value=true;
@@ -100,6 +102,7 @@
             triggerLoading_AS.value=false;
             createModalAS.value.createDialog("Success","succesfully added tvshow: " + tvTitle.value,"",true);
             tvTitle.value = tvYear.value = tvCountry.value = tvSeasons.value = tvSummary.value = undefined;
+            router.push('showCollection');
         })
         .catch(function(error){
             triggerLoading_AS.value=false;

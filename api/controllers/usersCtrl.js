@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user");
+const multer = require("multer");
+//const userModel = require("../models/user");
 
 //variables y constantes
 const saltRounds = 10 
@@ -71,7 +72,8 @@ exports.userRegister = async function(req, res){
             let nUser = new User({
                 login: req.body.login,
                 password: encriptedPasswd,
-                photo: req.body.photo
+                photo: req.body.photo,
+                mail:req.body.mail
             });
             let result = await nUser.save().catch(err => {return undefined});
             if(result){
@@ -116,7 +118,130 @@ exports.getUserData = async function(req, res){
         };
         
     }else{
-        console.log("error");
+        console.log("erroron get user data");
         res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
     }
 }
+
+/**
+ * This function allows a logged user to consult his data. He needs to pass a valid jwt through authorization header
+ * @route PUT /api/users/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
+ * @returns {Error} 400 - either the id or the jwt are not valid
+ */
+
+exports.updateUserData = async function(req,res){
+    let updatedUser = await User.findOne({login:req.params.login}).catch(err =>{return undefined});
+    let authorizationHeader = req.headers.authorization;
+    if(updatedUser && authorizationHeader){
+        let token = authorizationHeader.split(' ');
+        console.log(token[1]);
+
+        try{
+            var decoded = jwt.verify(token[1], 'secret');
+            if(decoded){
+                //actualizo el usuario
+                updatedUser.login = req.body.login;
+                updatedUser.photo = req.body.photo;
+                updatedUser.mail = req.body.mail;
+                let result = await updatedUser.save()
+                .then(function(){
+                    res.status(200).json({succes:true, updatedUser}); 
+                    console.log("user updated");
+                })
+                .catch(function(err){
+                    res.status(400).json({success:false,message:"other user with that login alredy exists"});
+                })
+            }else{
+                res.status(400).json({successs:false,message:"invalid token"});
+            }
+    
+        }catch(err){
+            res.status(400).json({successs:false,message:"invalid token"});
+        };
+        
+    }else{
+        console.log("error updateUserData");
+        res.status(400).json({success:false, message:"either user id or jwt format is invalid"});
+    }
+}
+
+
+/**
+ * Deletes the requested user 
+ * @route DELETE /api/users/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns the data corresponding to the user with the :id in JSON format
+ * @returns {Error} 400 - either the id or the jwt are not valid
+ */
+exports.deleteUser = async function(req,res){
+    let authorizationHeader = req.headers.authorization;
+    let token = authorizationHeader.split(' ');
+    var decoded = await jwt.verify(token[1], 'secret');
+    if(decoded){
+        var user =  await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+        if(user){
+            let result = await user.remove().catch(err=>{return undefined});
+            if(result){
+                res.status(200).json({success:true,user});
+            }else{
+                res.status(400).json({success:false,message:"error deleting user"})
+            }
+        }else{
+            res.status(400).json({success:false,message:"Error: requested user not found"});
+            console.log("error delete user");
+        }
+    }else{
+        console.log("invalid token");
+        res.status(400).json({success:true,message:"Invalid token"});
+    }
+}
+
+
+/**
+ * Updates the password of the selected user
+ * @route PUT /api/users/password/:login
+ * @group Usuario - User operations
+ * @security JWT
+ * @returns {json} 200 - returns a success message
+ * @returns {Error} 400 - jwt is not valid or there was an error in the process
+ */
+
+exports.updatePassword = async function(req,res){
+    let authorizationHeader = req.headers.authorization;
+    let token = authorizationHeader.split(' ');
+    var decoded = await jwt.verify(token[1], 'secret');
+    if(decoded){
+        var user = await User.findOne({login:req.params.login}).catch(err=>{return undefined});
+        console.log("currentUser:\n" + user);
+        if(user){
+            let encriptedPasswd = await bcrypt.hash(req.body.password, saltRounds).catch(err => {return undefined});
+            if(encriptedPasswd){
+                user.password = encriptedPasswd;
+                console.log("encripted correctly");
+                let result = await user.save().catch(err=> {return undefined});
+                if(result){
+                    console.log("Updated user\n" + user);
+                    console.log(user);
+                    res.status(200).json({success:true, message:"The user's password was updated successfully"});
+                }else{
+                    console.log("error updating user");
+                    res.status(400).json({success:false, message:"There was an error while updating the user"});
+                }
+            }else{
+                console.log("error encrypting");
+            }
+        }else{
+            console.log("user not found");
+            res.status(400).json({success:true,message:"There was no user to be updated"});
+        }
+    }else{
+        console.log("invalid token");
+        res.status(400).json({success:true,message:"Invalid token"});
+    }
+}
+
+

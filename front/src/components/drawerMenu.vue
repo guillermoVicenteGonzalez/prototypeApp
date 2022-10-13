@@ -30,15 +30,6 @@
               prepend-icon="mdi-plus-box"
               :disabled="disabledFeatures">Add tvshow</v-btn>
             </v-list-item>
-
-
-            <v-list-item>
-              <v-btn
-              block
-              depressed
-              prepend-icon="mdi-delete"
-              :disabled="disabledFeatures">delete show</v-btn>
-            </v-list-item>
         </v-list>
       </v-navigation-drawer>
 </template>

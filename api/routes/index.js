@@ -2,6 +2,7 @@ const{ Router } = require("express");
 //const {getAllShows} = require ("../controllers/tvshows");
 const TVShowCtrl = require("../controllers/tvshows");
 const usersCtrl = require("../controllers/usersCtrl");
+const imageCtrl = require("../controllers/imageCtrl");
 
 const router = Router();
 //entiendo que asi se importan todos, pero no como se asignan a los verbos
@@ -18,18 +19,29 @@ router.route('/tvshows/:id')
   .delete(TVShowCtrl.deleteTVShow);
 
 router.route("/tvshows/title/:title")
-  .get(TVShowCtrl.findByName)
+  .get(TVShowCtrl.findByName);
 
 //rutas de usuarios
 router.route("/users")
-  .post(usersCtrl.userRegister)
+  .post(usersCtrl.userRegister);
   //.get(usuariosCtrl.userLogin);
 
 router.route("/users/login")
-  .post(usersCtrl.userLogin)
+  .post(usersCtrl.userLogin);
 
 router.route("/users/:login")
-  .get(usersCtrl.getUserData);
+  .get(usersCtrl.getUserData)
+  .put(usersCtrl.updateUserData)
+  .delete(usersCtrl.deleteUser);
+
+router.route("/users/password/:login")
+  .put(usersCtrl.updatePassword)
+
+router.route("/images")
+  .post(imageCtrl.uploadImage)
+
+router.route("/images/:id")
+  .get(imageCtrl.getUploadedImage)
 
 
 

@@ -3,6 +3,7 @@
  * @property {string} login.required - user login name
  * @property {string} password.required - user password
  * @property {string} photo -user photo
+ * @property {string} mail
  */
 
 
@@ -11,7 +12,8 @@ const userSchema = new mongoose.Schema(
     {
         login: {type:String, unique:true},
         password:{type:String},
-        photo:{type:String}
+        photo:{type:String},
+        mail:{type:String, unique:true}
     }
 )
 

@@ -1,2 +1,7 @@
 #untracked
-    node_modules
+node_modules/
+/api/node_modules/
+/front/node_modules/
+/api/uploads/
+*.jpg
+*.png

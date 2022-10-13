@@ -27,10 +27,8 @@
   }
 
   .background{
-    /*
-    background-image: url('../assets/img/background.jpg');*/
-    background-image: "https://img5.goodfon.com/original/1920x1200/c/af/sssssss-aaaaaaaaaaa-ddddddddd-fffffffff-rrrrrrr.jpg";
-
+    background:url(../img/background.jpg) no-repeat center center fixed;
+    height: 100%;
   }
   /*
   src="https://img5.goodfon.com/original/1920x1200/c/af/sssssss-aaaaaaaaaaa-ddddddddd-fffffffff-rrrrrrr.jpg"

@@ -23,51 +23,58 @@
     color="primary"
     >sign up</v-btn>
 
+    <v-menu>
+      <template v-slot:activator="{props}">
+        <v-avatar
+        v-if="userLogged"
+        size="56"
+        color="primary"
+        class="mx-2"
+        v-bind="props">
+          <v-img 
+          v-if="photo"
+          :src="photo"
+          v-bind="props"></v-img>
+        </v-avatar>
+      </template>
+      <v-list>
+        <v-list-item
+        v-for="(item, i) in profileMenuItems"
+        :key="i"
+        :value="i"
+        @click="profileMenuAction(i)">
+          <v-list-item-title>{{item}}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
-    <v-avatar
-    v-if="userLogged"
-    size="56"
-    color="primary"
-    class="mx-2">
-      <v-img v-if="photo"
-        :src="photo"></v-img>
-      
-      <v-icon
-      v-if="!photo">mdi-account-circle</v-icon>
-      <v-menu
-      v-model="triggerProfileMenu"></v-menu>
+  </v-app-bar>
 
-    </v-avatar>
+  <v-img
+  :src="photo"></v-img>
+  <v-main app class="text-center">
+    <router-view
+    @userLogs="signIn"
+    @userRegister="this.$router.push('/')"
+    ></router-view>
+    
+    <modal
+    @create="(atr) => createModalApp = atr"></modal>
 
-    <v-btn
-      variant="outlined"
-      v-if="userLogged"
-      @click="triggerVerify.
-      createVerify('Log out','confirm your logout','Are you sure you want to log yourself out?')"
-    >sign out</v-btn>
+    <drawerMenu v-model="drawer"
+    :disabledFeatures="!userLogged"></drawerMenu>
 
+
+
+    <verify
+    ref="triggerVerify"
+    @cancelVerify="cancelSignOut"
+    @acceptVerify="signOut"></verify>
+
+    <modal
+    ref="appErrorModal"></modal>
+  </v-main>
   
-    </v-app-bar>
-    <v-main app class="text-center">
-      <router-view
-      @userLogs="signIn"
-      @userRegister="this.$router.push('/')"
-      ></router-view>
-      
-      <modal
-      @create="(atr) => createModalApp = atr"></modal>
-
-      <drawerMenu v-model="drawer"
-      :disabledFeatures="!userLogged"></drawerMenu>
-
-      <verify
-      ref="triggerVerify"
-      @cancelVerify="cancelSignOut"
-      @acceptVerify="signOut"></verify>
-
-      <modal
-      ref="appErrorModal"></modal>
-    </v-main>
     <v-footer app class="justify-center">
       <MyFooter></MyFooter>
     </v-footer>
@@ -77,7 +84,7 @@
 <script setup>
 
   import login from "./components/login.vue";
-  import {ref} from "vue"
+  import {ref, provide} from "vue"
   import Collection from "./components/collection.vue";
   import Landing from "./components/landing.vue";
   import SignUp from "./components/SignUp.vue";
@@ -90,7 +97,11 @@
   import MyFooter from "./components/myFooter.vue";
   import axios from "axios";
   import config from "../src/config.json"
+  import MenuTest from "./components/menuTest.vue"
 
+
+  provide('router',router);
+  var triggerMenu = ref(true);
   var triggerProfileMenu = ref()
   var photo = ref();
   var appErrorModal= ref();
@@ -99,7 +110,7 @@
   var userLogged = ref(false);
   var drawer = ref(false);
   var group = ref()
-
+  var profileMenuItems = ref(['Profile','Shows','SignOut'])
   function cancelSignOut(){
     triggerVerify.value.deleteVerify();
   }  
@@ -132,10 +143,10 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          console.log(response.data);
-          console.log(response.data.user.photo);
-          localStorage.photo = response.data.user.photo
+          localStorage.photoId = response.data.user.photo
           photo.value = localStorage.photo;
+          console.log("localstorage photo: " + localStorage.photoId);
+          getUserPhoto();
         })
         .catch(function(error){
           console.log(error);
@@ -143,12 +154,50 @@
           localStorage.token = undefined;
           localStorage.username = undefined;
           appErrorModal.value.createDialog("Error","Invalid session", "your session token is not valid or has expired",false);
+          router.push('/');
         });
 
     }else{
       localStorage.token=undefined;
       localStorage.username=undefined;
       userLogged.value = false;
+    }
+  }
+
+  function profileMenuAction(index){
+    //console.log(profileMenuItems.value[index]);
+    switch(index){
+      case 0:
+        //profile
+        console.log("vete a profile");
+        router.push('/userProfile');
+        break;
+
+      case 1:
+        //shows
+        break;
+      
+      case 2:
+        //signout
+        //crea un modal que invoca a signOut
+        triggerVerify.value.createVerify('Log out','confirm your logout','Are you sure you want to log yourself out?');
+        break;
+
+    }
+  }
+
+  async function getUserPhoto(){
+    if(localStorage.photoId){
+      let promise = await axios.get(config.host + config.api + config.getPicture + localStorage.photoId)
+      .then(function(response){
+        photo.value = response.data;
+        console.log(photo.value)
+      })
+      .catch(function(err){
+        console.log(err);
+      })
+    }else{
+      console.log("no photo defined");
     }
   }
 

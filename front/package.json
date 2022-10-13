@@ -10,10 +10,12 @@
   "dependencies": {
     "@mdi/font": "5.9.55",
     "axios": "^0.27.2",
+    "Buffer": "^0.0.0",
     "roboto-fontface": "*",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5",
     "vuetify": "npm:@vuetify/nightly@next",
+    "vuetify-country-region-select": "^0.1.7",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {

@@ -50,9 +50,8 @@ exports.getUploadedImage = async function(req,res){
     let temp = "/uploads/function now() { [native code] }";
     let filename = "temp.png"
     let photo = await imageModel.findById(req.params.id).catch(err => {return undefined});
-    console.log(photo.name);
-
     if(photo){
+        console.log(photo);
         let path = temp + photo.name;
         fs.writeFile(filename,path,'base64',()=>{
             //let full_path = path.resolve("./") + "/" + filename;

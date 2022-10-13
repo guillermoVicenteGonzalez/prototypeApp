@@ -50,8 +50,6 @@
 
   </v-app-bar>
 
-  <v-img
-  :src="photo"></v-img>
   <v-main app class="text-center">
     <router-view
     @userLogs="signIn"

@@ -36,6 +36,7 @@
                label="email"
                v-model="signUpMail"
                :rules="[rules.required, rules.email]"
+               ref="mailFieldRef"
                ></v-text-field>
 
                 <v-file-input   
@@ -69,6 +70,8 @@
     import Loading from "./loading.vue";
 
 
+
+    var mailFieldRef = ref();
     const formData = new FormData();
     const emit = defineEmits(['userRegister']);
     var userPhoto = ref();
@@ -91,9 +94,8 @@
 
 
     async function signUp(){
+        //borrar
         //console.log(userPhoto.value[0]);
-        console.log(signupConfirmPasswd.value);
-        console.log(signupPasswd.value);
         let photoId;
         if(signupPasswd.value !== signupConfirmPasswd.value){
             createModalSignup.value.createDialog("Error","The two passwords are not equal","",false);
@@ -121,6 +123,7 @@
                 }
             })
             .catch(function(error){
+                signupPasswd.value = signupConfirmPasswd.value = signUpMail.value = signupUsername.value = undefined;
                 console.log(error);
                 triggerLoading_signup.value=false;
                 if(error.response){
@@ -138,7 +141,7 @@
                     createModalSignup.value.createDialog("Error","", "unknown error. Try again later");
                     console.log("unknown error");
                 }
-            });
+            });      
         }
     }
 

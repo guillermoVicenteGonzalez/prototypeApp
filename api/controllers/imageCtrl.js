@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const imageModel = require("../models/image")
 const multer = require("multer");
 const fs = require("fs");
-const path = require('path');
+const path = require('node:path');
 
+/*
 var storage = multer.diskStorage({
     /*
     destination: (req, file, cb) => {
@@ -12,12 +13,16 @@ var storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now())
     }
-    */
+    
    destination:'uploads',
    filename:(req,file,cb) =>{
     cb(null,Date.now + file.originalname);
    },
 });
+*/
+
+var storage = multer.memoryStorage()
+
 var upload = multer({ storage: storage }).single("profileImage");
 
 exports.uploadImage = async function(req,res){
@@ -26,10 +31,11 @@ exports.uploadImage = async function(req,res){
             //console.log(err);
             res.status(400).json({success:false, message:err});
         }else{
+            //console.log("Entra, ", req.file)
             const newImage = new imageModel({
                 name: req.body.name,
                 image:{
-                    data:req.file.filename,
+                    data:req.file.buffer.toString('base64'),
                     contentType:'image/png'
                 }
             })
@@ -47,20 +53,21 @@ exports.uploadImage = async function(req,res){
 }
 
 exports.getUploadedImage = async function(req,res){
-    let temp = "/uploads/function now() { [native code] }";
-    let filename = "temp.png"
     let photo = await imageModel.findById(req.params.id).catch(err => {return undefined});
     if(photo){
-        console.log(photo);
-        let path = temp + photo.name;
-        fs.writeFile(filename,path,'base64',()=>{
-            //let full_path = path.resolve("./") + "/" + filename;
-            res.status(200).sendFile("/" + filename,{root: '.'});
+        let filename = photo.name || "temp.png"
+        let path1 = photo.image.data;
+
+        fs.writeFile(filename,path1,'base64',()=>{
+            let full_path = path.resolve("./") + "/" + filename;
+            res.status(200).sendFile(full_path);
+            //fs.unlinkSync(filename);
         })
         //res.json({success:true,photo});
         //this is temporary
         //res.sendFile("/uploads/function now() { [native code] }" + photo.name,{root: '.'});
     }else{
+        console.log("error");
         res.status(400).json({success:false, message:"error"});
     }
 }

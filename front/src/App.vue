@@ -51,6 +51,10 @@
   </v-app-bar>
 
   <v-main app class="text-center">
+
+  <v-container>
+
+  </v-container>
     <router-view
     @userLogs="signIn"
     @userRegister="this.$router.push('/')"

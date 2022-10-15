@@ -41,7 +41,7 @@ exports.uploadImage = async function(req,res){
             })
             newImage.save()
             .then(function(response){
-                console.log("acierto");
+                console.log("uploaded image successfully");
                 res.status(200).json({success:true, id:newImage._id});
                 console.log(newImage._id);
             })
@@ -59,15 +59,12 @@ exports.getUploadedImage = async function(req,res){
         let path1 = photo.image.data;
 
         fs.writeFile(filename,path1,'base64',()=>{
-            let full_path = path.resolve("./") + "/" + filename;
-            res.status(200).sendFile(full_path);
-            //fs.unlinkSync(filename);
+            var full_path = path.resolve("./") + "/" + filename;
+            res.status(200).sendFile(full_path)
+            //fs.unlinkSync(full_path);
         })
-        //res.json({success:true,photo});
-        //this is temporary
-        //res.sendFile("/uploads/function now() { [native code] }" + photo.name,{root: '.'});
     }else{
-        console.log("error");
+        console.log("error getting image. Could not find id");
         res.status(400).json({success:false, message:"error"});
     }
 }

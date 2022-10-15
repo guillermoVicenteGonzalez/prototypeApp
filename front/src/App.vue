@@ -27,13 +27,13 @@
       <template v-slot:activator="{props}">
         <v-avatar
         v-if="userLogged"
-        size="56"
+        size="54"
         color="primary"
         class="mx-2"
         v-bind="props">
           <v-img 
-          v-if="photo"
-          :src="photo"
+          cover
+          :src="full_photo_url"
           v-bind="props"></v-img>
         </v-avatar>
       </template>
@@ -52,9 +52,7 @@
 
   <v-main app class="text-center">
 
-  <v-container>
 
-  </v-container>
     <router-view
     @userLogs="signIn"
     @userRegister="this.$router.push('/')"
@@ -103,9 +101,8 @@
 
 
   provide('router',router);
-  var triggerMenu = ref(true);
-  var triggerProfileMenu = ref()
-  var photo = ref();
+  var full_photo_url = ref();
+  var getImgUrl = "http://localhost:3000/api/images/";
   var appErrorModal= ref();
   var triggerVerify = ref();
   var createModalApp = ref();
@@ -145,10 +142,9 @@
         })
         .then(async function (response){
           userLogged.value = true;
-          localStorage.photoId = response.data.user.photo
-          photo.value = localStorage.photo;
-          console.log("localstorage photo: " + localStorage.photoId);
-          getUserPhoto();
+          localStorage.photoId = response.data.user.photo;
+          full_photo_url.value = getImgUrl + response.data.user.photo;
+          console.log(response.data);
         })
         .catch(function(error){
           console.log(error);
@@ -193,7 +189,7 @@
       let promise = await axios.get(config.host + config.api + config.getPicture + localStorage.photoId)
       .then(function(response){
         photo.value = response.data;
-        console.log(photo.value)
+        //console.log(photo.value)
       })
       .catch(function(err){
         console.log(err);

@@ -3,9 +3,9 @@
 </style>
 
 
-<template>
+<template class="background">
     <div class="background">
-        <v-container 
+        <v-container
         color="#df6b6b"
         class="titleContainer">
             <h1 class="mainTitle font-weight-large">Application</h1>

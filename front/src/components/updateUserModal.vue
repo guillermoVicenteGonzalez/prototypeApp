@@ -79,9 +79,9 @@
         triggerLoading_profile.value = true;
         let promise = await axios
         .put(config.host + config.api + config.updateUser + currentUser.username,{
-
             login:updatedUser.value.username,
-            mail:updatedUser.value.userMail,            
+            mail:updatedUser.value.userMail,
+            photo:currentUser.photo            
         },{
             headers:{
                 'Authorization':'Bearer '+ localStorage.token

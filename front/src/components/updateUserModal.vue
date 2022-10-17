@@ -67,21 +67,25 @@
     });
 
     function createUpdateUserModal(user){
+        console.log(user);
         trigger.value = true;
         currentUser = user;
+        console.log(currentUser);
         for(const i in currentUser){
             updatedUser.value[i] = currentUser[i];
+            console.log(i + ": " + updatedUser.value[i])
         }
     }
 
 
     async function updateUser(){
         triggerLoading_profile.value = true;
+        console.log(currentUser.photo);
         let promise = await axios
         .put(config.host + config.api + config.updateUser + currentUser.username,{
-
             login:updatedUser.value.username,
-            mail:updatedUser.value.userMail,            
+            mail:updatedUser.value.userMail,
+            photo:currentUser.userPhoto            
         },{
             headers:{
                 'Authorization':'Bearer '+ localStorage.token

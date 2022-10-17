@@ -21,13 +21,19 @@
                 width="500"
                 class="pt-3 text-center ">
                     <div class="centeredDiv">
-                        <v-btn
-                        icon
-                        size="56"
-                        color="primary"
-                        @click="triggerFileInputModal.createFileInputModal()">
 
-                        </v-btn>
+                    <v-btn
+                    size="56"
+                    icon
+                    @click="triggerFileInputModal.createFileInputModal(userData)">
+                        <v-avatar
+                        size="56">
+                            <v-img
+                            :src="full_photo_urlProfile"
+                            cover>
+                            </v-img>
+                        </v-avatar>
+                    </v-btn>
                     </div>
                     <v-card-title>Profile</v-card-title>
                     <v-card-text class="py-1">{{'username: ' + userData.username}}</v-card-text>
@@ -61,7 +67,8 @@
         ref="passwdModal"></ChangePasswordModal>
 
         <FileInputModal
-        ref="triggerFileInputModal"></FileInputModal>
+        ref="triggerFileInputModal"
+        @profilePictureUpdated="loadUserData()"></FileInputModal>
 
 </template>
 
@@ -76,6 +83,7 @@
     import ChangePasswordModal from "../components/changePasswordModal.vue"
 
     const formData = new FormData();
+    var full_photo_urlProfile = ref("http://localhost:3000/api/images/634d11cbc13e3b9b04dbbe7b");
     var updateUserModalRef = ref();
     var passwdModal = ref();
     var dialogModal = ref();
@@ -86,6 +94,8 @@
         userPhoto:undefined,
         userMail:undefined
     });
+
+    const emit = defineEmits('reloadUserPhoto')
 
     function test(){
         //updateUserModalRef.value.createUpdateUserModal();
@@ -104,9 +114,9 @@
             })
             .then(function(response){
                 userData.value.username = response.data.user.login;
-                userData.value.userPhoto = response.data.user.photo;
+                userData.value.userPhoto = localStorage.photoId = response.data.user.photo;
                 userData.value.userMail = response.data.user.mail;
-                console.log(response.data.user);
+                emit('reloadUserPhoto');
             })
             .catch(function(error){
                 //create modal
@@ -114,23 +124,8 @@
             })
         }else{
             console.log("not all data");
+            //probably emit to unlog and send to home
         }
-    }
-
-    async function getProfilePic(){
-        //i still don't know how to decode the buffer
-        let tempId = "6342fd9ef53d19167d5b58fe";
-        let buffer64
-        let promise = await axios.get(config.host + config.api + config.getPicture + tempId)
-        .then(function(response){
-            console.log(response.data.photo.image.data);
-            buffer64 = Buffer.from(response.data.photo.image.data,'binary').toString('base64');
-            profilePic.value = buffer64;
-            console.log(profilePic.value);
-        })
-        .catch(function(error){
-            console.log(error);
-        })
     }
 
     async function deleteUser(){
@@ -146,7 +141,7 @@
         })
         .catch(function(err){
             dialogModal.value.createDialog("Error","Error deleting user","",false);
-            console.log("error");
+            console.log("error deleting user");
         })
     }
 

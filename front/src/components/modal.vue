@@ -13,7 +13,7 @@
         <v-divider></v-divider>
             <v-card-actions class="justify-center">
                 <v-btn
-                @click="collectionDialog = false"
+                @click="modalBtnClick"
                 :color="btnColor"
                 :append-icon="dialogIcon">
                 Close</v-btn>
@@ -29,9 +29,8 @@
     const props = defineProps({
         isModalActive:Boolean
     });
-    const emit = defineEmits(['create']);
+    const emit = defineEmits(['close']);
     //emit('create',createModel);
-    emit('create');
     var dialogClass = ref();
     var dialogIcon = ref();
     var cardColor = ref();
@@ -58,6 +57,11 @@
             btnColor.value="error";
             dialogIcon.value="mdi-close-circle";
         }
+    }
+
+    function modalBtnClick(){
+        collectionDialog.value = false
+        emit('close');
     }
 
     defineExpose({

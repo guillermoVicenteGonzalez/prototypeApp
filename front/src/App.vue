@@ -23,6 +23,11 @@
     color="primary"
     >sign up</v-btn>
 
+    <v-app-bar-title
+    v-if="userLogged" 
+    class="text-right"
+    >{{username}}</v-app-bar-title>
+
     <v-menu>
       <template v-slot:activator="{props}">
         <v-avatar
@@ -102,6 +107,7 @@
 
 
   provide('router',router);
+  var username = ref();
   var full_photo_url = ref();
   //var getImgUrl = "http://localhost:3000/api/images/";
   var getImgUrl = config.host + config.api + config.getPicture;
@@ -110,7 +116,6 @@
   var createModalApp = ref();
   var userLogged = ref(false);
   var drawer = ref(false);
-  var group = ref()
   var profileMenuItems = ref(['Profile','Shows','SignOut'])
   function cancelSignOut(){
     triggerVerify.value.deleteVerify();
@@ -143,9 +148,12 @@
           }
         })
         .then(async function (response){
+          console.log(response);
           userLogged.value = true;
+          localStorage.username = username.value = response.data.user.login;
           localStorage.photoId = response.data.user.photo;
           full_photo_url.value = getImgUrl + response.data.user.photo;
+          console.log(username.value);
         })
         .catch(function(error){
           console.log(error);

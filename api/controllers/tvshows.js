@@ -86,7 +86,9 @@ exports.addTVShow = async function(req, res){
       res.status(400).json({success:false,message:"error registering tvshow: There alredy exists a tvshow with that name"});
     }else{
       console.log("fields are filled");
+      console.log(tvshow);
       let result = await tvshow.save().catch(err => {return undefined});
+      console.log(result);
       if(result){
         res.status(201).json({success:true,result});
         console.log("success registering tvshow")

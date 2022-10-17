@@ -18,7 +18,8 @@
                 label="year"
                 v-model="tvYear"
                 color="primary"
-                type="date"></v-text-field>
+                type="year"
+                min="1900" max="2099" placeholder="YYYY" :value="tvYear"></v-text-field>
 
                 <v-text-field
                 variant="outlined"
@@ -33,8 +34,15 @@
                 variant="outlined"
                 label="Country"
                 :items="items"
-                v-model="tvCountry">
-                    
+                v-model="tvCountry"> 
+                </v-select>
+
+                <v-select
+                class="mx-10 my-2"
+                variant="outlined"
+                label="Genre"
+                :items="genres"
+                v-model="tvGenre"> 
                 </v-select>
 
                 <v-text-field
@@ -73,7 +81,7 @@
     import Loading from "./loading.vue";
 
 
-    
+    var genres = ref(['Drama', 'Fantasy', 'Sci-Fi', 'Thriller', 'Comedy']);
     var items = ref(['ES','UK','USA']);
     var tvPoster = ref();
     var createModalAS = ref();
@@ -94,7 +102,8 @@
             seasons:tvSeasons.value,
             summary:tvSummary.value,
             country: tvCountry.value,
-            poster:tvPoster.value
+            poster:tvPoster.value,
+            genre:tvGenre.value
         })
         .then(function (response){
             console.log("exito");

@@ -1,4 +1,5 @@
 #untracked
 node_modules/
-*.jpg
-*.png
+#!/front/src/assets/img/background.jpg
+api/*.jpg
+api/*.png

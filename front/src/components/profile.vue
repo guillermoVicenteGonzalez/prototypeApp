@@ -21,13 +21,19 @@
                 width="500"
                 class="pt-3 text-center ">
                     <div class="centeredDiv">
-                        <v-btn
-                        icon
-                        size="56"
-                        color="primary"
-                        @click="triggerFileInputModal.createFileInputModal(userData)">
 
-                        </v-btn>
+                    <v-btn
+                    size="56"
+                    icon
+                    @click="triggerFileInputModal.createFileInputModal(userData)">
+                        <v-avatar
+                        size="56">
+                            <v-img
+                            :src="full_photo_urlProfile"
+                            cover>
+                            </v-img>
+                        </v-avatar>
+                    </v-btn>
                     </div>
                     <v-card-title>Profile</v-card-title>
                     <v-card-text class="py-1">{{'username: ' + userData.username}}</v-card-text>
@@ -77,6 +83,7 @@
     import ChangePasswordModal from "../components/changePasswordModal.vue"
 
     const formData = new FormData();
+    var full_photo_urlProfile = ref("http://localhost:3000/api/images/634d11cbc13e3b9b04dbbe7b");
     var updateUserModalRef = ref();
     var passwdModal = ref();
     var dialogModal = ref();

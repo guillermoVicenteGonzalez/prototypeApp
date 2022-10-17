@@ -88,6 +88,8 @@
         userMail:undefined
     });
 
+    const emit = defineEmits('reloadUserPhoto')
+
     function test(){
         //updateUserModalRef.value.createUpdateUserModal();
         alert()
@@ -105,9 +107,9 @@
             })
             .then(function(response){
                 userData.value.username = response.data.user.login;
-                userData.value.userPhoto = response.data.user.photo;
+                userData.value.userPhoto = localStorage.photoId = response.data.user.photo;
                 userData.value.userMail = response.data.user.mail;
-                console.log(response.data.user);
+                emit('reloadUserPhoto');
             })
             .catch(function(error){
                 //create modal
@@ -117,21 +119,6 @@
             console.log("not all data");
             //probably emit to unlog and send to home
         }
-    }
-
-    async function getProfilePic(){
-        let tempId = "6342fd9ef53d19167d5b58fe";
-        let buffer64
-        let promise = await axios.get(config.host + config.api + config.getPicture + tempId)
-        .then(function(response){
-            console.log(response.data.photo.image.data);
-            buffer64 = Buffer.from(response.data.photo.image.data,'binary').toString('base64');
-            profilePic.value = buffer64;
-            console.log(profilePic.value);
-        })
-        .catch(function(error){
-            console.log(error);
-        })
     }
 
     async function deleteUser(){
@@ -147,7 +134,7 @@
         })
         .catch(function(err){
             dialogModal.value.createDialog("Error","Error deleting user","",false);
-            console.log("error");
+            console.log("error deleting user");
         })
     }
 

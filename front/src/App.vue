@@ -56,6 +56,7 @@
     <router-view
     @userLogs="signIn"
     @userRegister="this.$router.push('/')"
+    @reloadUserPhoto="reloadUserPhoto"
     ></router-view>
     
     <modal
@@ -102,7 +103,8 @@
 
   provide('router',router);
   var full_photo_url = ref();
-  var getImgUrl = "http://localhost:3000/api/images/";
+  //var getImgUrl = "http://localhost:3000/api/images/";
+  var getImgUrl = config.host + config.api + config.getPicture;
   var appErrorModal= ref();
   var triggerVerify = ref();
   var createModalApp = ref();
@@ -144,7 +146,6 @@
           userLogged.value = true;
           localStorage.photoId = response.data.user.photo;
           full_photo_url.value = getImgUrl + response.data.user.photo;
-          console.log(response.data);
         })
         .catch(function(error){
           console.log(error);
@@ -199,6 +200,9 @@
     }
   }
 
+  function reloadUserPhoto(){
+    full_photo_url.value = getImgUrl + localStorage.photoId;
+  }
 
 
   defineExpose({

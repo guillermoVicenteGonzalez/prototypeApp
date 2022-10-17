@@ -4,28 +4,12 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require('node:path');
 
-/*
-var storage = multer.diskStorage({
-    /*
-    destination: (req, file, cb) => {
-        cb(null, 'uploads')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now())
-    }
-    
-   destination:'uploads',
-   filename:(req,file,cb) =>{
-    cb(null,Date.now + file.originalname);
-   },
-});
-*/
-
 var storage = multer.memoryStorage()
 
 var upload = multer({ storage: storage }).single("profileImage");
 
 exports.uploadImage = async function(req,res){
+    //there should be a repeated image buffer control
     upload(req,res,(err)=>{
         if(err){
             //console.log(err);

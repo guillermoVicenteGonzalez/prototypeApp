@@ -12,15 +12,24 @@
             filled
             prepend-icon="mdi-camera"
             v-model="myPhoto"
-            ref="otherPhoto"
             ></v-file-input>
-
-            <v-btn @click="updateUserPhoto">click</v-btn>
+            <v-divider></v-divider>
+            <v-card-actions class="justify-center">
+                <v-btn
+                color="primary" 
+                @click="updateUserPhoto">update photo</v-btn>
+            </v-card-actions>
 
             <v-img
             lazy-src=""
             :src="myPhoto"></v-img>
         </v-card>
+
+        <loading v-model="triggerLoadingFIM"></loading>
+        
+        <modal
+        ref="errorModalFIM"
+        @close="trigger = false"></modal>
     </v-dialog>
 </template>
 
@@ -28,14 +37,18 @@
     import {ref} from "vue";
     import axios from "axios";
     import config from "../config.json";
+    import Loading from "./loading.vue";
+    import Modal from "./modal.vue";
 
     const formData = new FormData();
+    var errorModalFIM = ref();
+    var triggerLoadingFIM = ref(false);
     var myPhoto = ref();
     var trigger = ref();
     var currentUser;
     //var triggerFileModal = ref();
 
-    defineEmits(['profilePictureUpdated']);
+    const  emit = defineEmits(['profilePictureUpdated']);
 
     function createFileInputModal(user){
         trigger.value = true;
@@ -44,10 +57,8 @@
     }
 
     async function updateUserPhoto(){
-        //trigger loading
+        triggerLoadingFIM.value = true;
         let updatedImageId = await uploadFile();
-        console.log(currentUser.username + " " + currentUser.userMail);
-        console.log(updatedImageId);
         let promise = await axios
         .put(config.host + config.api + config.updateUser + currentUser.username,{
             login:currentUser.username,
@@ -60,11 +71,16 @@
             },
         })
         .then(function(response){
-            //trigger loading off
-            //create modal
+            triggerLoadingFIM.value = false;
+            errorModalFIM.value.createDialog("Success","user picture was updated succesfully","",true);
+            myPhoto.value = undefined;
             console.log("success updating image");
+            emit('profilePictureUpdated');
         })
         .catch(function(err){
+            triggerLoadingFIM.value = false;
+            errorModalFIM.value.createDialog("Error","There was an error while updating user picture",err,false);
+            //modal
             console.log(err);
         })
     }
@@ -72,7 +88,6 @@
         let imgID;
         if(myPhoto.value != undefined){
             const formData = new FormData();
-            //aqui podria meter el nombre del usuario temporalmente
             formData.append("name",myPhoto.value[0].name);
             formData.append("profileImage",myPhoto.value[0]);
             console.log(myPhoto.value[0]);
@@ -90,8 +105,8 @@
             })
             return imgID;
         }else{
+            errorModalFIM.value.createDialog("Error","no picture was selected","",true);
             console.log("error");
-            console.log(userPhoto.value);
             return undefined;
         }
     }

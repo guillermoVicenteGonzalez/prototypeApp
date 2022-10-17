@@ -146,13 +146,14 @@ exports.updateUserData = async function(req,res){
                 updatedUser.login = req.body.login;
                 updatedUser.photo = req.body.photo;
                 updatedUser.mail = req.body.mail;
+                console.log("\n" + updatedUser + "\n");
                 let result = await updatedUser.save()
                 .then(function(){
                     res.status(200).json({succes:true, updatedUser}); 
                     console.log("user updated");
                 })
                 .catch(function(err){
-                    res.status(400).json({success:false,message:"other user with that login alredy exists"});
+                    res.status(400).json({success:false,message:"error saving updatedUser to db"});
                 })
             }else{
                 res.status(400).json({successs:false,message:"invalid token"});

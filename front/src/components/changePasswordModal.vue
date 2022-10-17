@@ -42,7 +42,7 @@
 
                     <v-btn
                     color="error"
-                    @click="triggerPasswdModal = false">Cancel</v-btn>
+                    @click="cancelUpdatePasswd()">Cancel</v-btn>
                 </v-card-actions>
         </v-card>
 
@@ -79,6 +79,10 @@
         triggerPasswdModal.value = true;
     }
 
+    function cancelUpdatePasswd(){
+        currentPasswd.value = newPasswd.value = confirmNewPasswd.value = undefined;
+        triggerPasswdModal.value = false
+    }
     async function updatePassword(){
         let user;
         triggerLoadingCPM.value = true;
@@ -119,6 +123,7 @@
                 errorModalCPM.value.createDialog("Error","Error while trying to sign",err.response.data.message,false);
                 console.log("error, user not found???");
             })
+            currentPasswd.value = newPasswd.value = confirmNewPasswd.value = undefined;
         }
     }
 

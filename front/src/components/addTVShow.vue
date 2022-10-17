@@ -114,5 +114,6 @@
                 createModalAS.value.createDialog("Error","unknown error","",false);
             }
         })
+        tvTitle.value = tvPoster.value = tvCountry.value = tvSummary.value = tvYear.value = tvSeasons.value = tvPoster.value = undefined;
     }
 </script>

@@ -25,7 +25,7 @@
                         icon
                         size="56"
                         color="primary"
-                        @click="triggerFileInputModal.createFileInputModal()">
+                        @click="triggerFileInputModal.createFileInputModal(userData)">
 
                         </v-btn>
                     </div>
@@ -61,7 +61,8 @@
         ref="passwdModal"></ChangePasswordModal>
 
         <FileInputModal
-        ref="triggerFileInputModal"></FileInputModal>
+        ref="triggerFileInputModal"
+        @profilePictureUpdated="loadUserData()"></FileInputModal>
 
 </template>
 
@@ -114,11 +115,11 @@
             })
         }else{
             console.log("not all data");
+            //probably emit to unlog and send to home
         }
     }
 
     async function getProfilePic(){
-        //i still don't know how to decode the buffer
         let tempId = "6342fd9ef53d19167d5b58fe";
         let buffer64
         let promise = await axios.get(config.host + config.api + config.getPicture + tempId)

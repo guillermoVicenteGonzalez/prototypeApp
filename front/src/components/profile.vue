@@ -30,6 +30,7 @@
                         size="56"
                         color="primary">
                             <v-img
+                            lazy-src=""
                             :src="full_photo_urlProfile"
                             cover>
                             </v-img>

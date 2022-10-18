@@ -1,10 +1,11 @@
 <template>
     <v-dialog
     class="text-justify"
-    width="500"
+    width="700"
     v-model="triggerTVShowModal"
     :persistent="updateActive">
         <v-card
+
         class="text-center"
         v-if="!updateActive"
         :title="currentShow.title"
@@ -28,7 +29,7 @@
             </v-card-actions>
         </v-card>
 
-        <v-card
+        <v-card    
         class="text-center"
         v-if="updateActive">
             <v-card-title>Update tvshow</v-card-title>
@@ -49,6 +50,7 @@
                 type="number"
                 :placeholder="currentShow.year"
                 v-model="updatedShow.year"
+                min="1900" max="2099" placeholder="YYYY" :value="tvYear"
             ></v-text-field>
 
             <v-select
@@ -58,6 +60,13 @@
                 :items="items"
                 v-model="tvCountry"> 
             </v-select>
+
+            <country-select 
+                v-model="updatedShow.country" 
+                :country="updatedShow.country" 
+                topCountry="US" 
+                class="mx-10 my-2 customCountrySelector">
+            </country-select>
 
             <v-select
                 class="mx-10 my-2"

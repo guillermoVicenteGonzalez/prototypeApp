@@ -29,13 +29,14 @@
                 color="primary"
                 type="number"></v-text-field>
 
-                <v-select
-                class="mx-10 my-2"
-                variant="outlined"
-                label="Country"
-                :items="items"
-                v-model="tvCountry"> 
-                </v-select>
+                <country-select 
+                v-model="tvCountry" 
+                :country="tvCountry" 
+                topCountry="US" 
+                class="mx-10 my-2 customCountrySelector">
+                </country-select>
+
+
 
                 <v-select
                 class="mx-10 my-2"
@@ -125,4 +126,18 @@
         })
         tvTitle.value = tvPoster.value = tvCountry.value = tvSummary.value = tvYear.value = tvSeasons.value = tvPoster.value = undefined;
     }
+</script>
+
+<script>
+export default {
+  data() {
+    return {
+    };
+  },
+  methods: {
+     onSelect({name, iso2, dialCode}) {
+       console.log(name, iso2, dialCode);
+     },
+  },
+}
 </script>

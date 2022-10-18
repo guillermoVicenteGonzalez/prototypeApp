@@ -36,6 +36,15 @@
     margin: 0;
   }
 
+  .customCountrySelector{
+    color: #fff;
+    background-color: #222222;
+    padding: 15px;
+    display: block;
+    width: 90%;
+    border-color: red !important;
+}
+
   /*
   src="https://img5.goodfon.com/original/1920x1200/c/af/sssssss-aaaaaaaaaaa-ddddddddd-fffffffff-rrrrrrr.jpg"
   */

@@ -77,6 +77,7 @@
             triggerLoadgin_Col.value = false;
             if(error.response);
         });
+
     }
 
     async function searchTVShow(){
@@ -88,6 +89,7 @@
             let promise = axios.get(config.host + config.api + config.findTVShow + "/" + message.value)
             .then(function (response){
                 array.value = [];
+                console.log(response.data.tvshow);
                 array.value.push(response.data.tvshow);
                 triggerLoadgin_Col.value = false;
                 console.log(response.data.tvshow);
@@ -107,6 +109,7 @@
             });
         }
     }
+
 
     function createShowCard(){
         tvshowModal.value.create();

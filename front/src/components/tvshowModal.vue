@@ -73,7 +73,7 @@
                 variant="outlined"
                 label="Genre"
                 :items="genres"
-                v-model="tvGenre"> 
+                v-model="updatedShow.genre"> 
             </v-select>
 
             <v-text-field
@@ -148,6 +148,7 @@
         seasons:undefined,
         summary:undefined,
         poster:undefined,
+        genre:undefined,
         id:undefined
     });
 
@@ -158,6 +159,7 @@
         seasons:undefined,
         summary:undefined,
         poster:undefined,
+        genre:undefined,
         id:undefined
     })
 
@@ -166,6 +168,7 @@
 
 
     const create = function(item){
+        console.log(item.genre);
         triggerTVShowModal.value = true;
         currentShow.value.title = item.title;
         currentShow.value.year = item.year;
@@ -174,11 +177,13 @@
         currentShow.value.poster = item.poster;
         currentShow.value.id = item._id;
         currentShow.value.seasons = item.seasons;
+        currentShow.value.genre = item.genre;
 
         //if i use currentShow as model it messes up the card and overrides its fields
         //updatedShow.value.title = currentShow.value.title;
         for(const item in currentShow.value){
             updatedShow.value[item] = currentShow.value[item];
+            console.log(item + ": " + updatedShow.value[item]);
         }
 
         console.log(updatedShow.value);

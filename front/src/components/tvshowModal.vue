@@ -51,14 +51,21 @@
                 v-model="updatedShow.year"
             ></v-text-field>
 
-            <v-text-field
-                variant="outlined"
+            <v-select
                 class="mx-10 my-2"
-                label="country"
-                color="primary"
-                :placeholder="currentShow.country"
-                v-model="updatedShow.country"
-            ></v-text-field>
+                variant="outlined"
+                label="Country"
+                :items="items"
+                v-model="tvCountry"> 
+            </v-select>
+
+            <v-select
+                class="mx-10 my-2"
+                variant="outlined"
+                label="Genre"
+                :items="genres"
+                v-model="tvGenre"> 
+            </v-select>
 
             <v-text-field
                 variant="outlined"
@@ -120,6 +127,8 @@
 
     const emit = defineEmits(['refresh']);
 
+    var genres = ref(['Drama', 'Fantasy', 'Sci-Fi', 'Thriller', 'Comedy']);
+    var items = ref(['ES','UK','USA']);
     var errorModal = ref();
     var triggerVerifyUTVS = ref();
     var triggerLoading = ref();
@@ -199,7 +208,7 @@
             triggerTVShowModal.value=false;
         })
         .catch(function(error){
-            errorModal.createDialog("Error updating tvshow","There was an error while trying to update the tvshow",error.response.data.message,false);
+            errorModal.value.createDialog("Error updating tvshow","There was an error while trying to update the tvshow",error.response.data.message,false);
             emit('refresh');
             triggerTVShowModal.value = false;
         })
@@ -209,17 +218,20 @@
     }
 
     async function deleteTVShow(){
+        triggerVerifyUTVS.value.deleteVerify()
+        triggerLoading.value = true;
+        //deactivate confirm modal
         let deletePromise = await axios.delete(config.host + config.api + config.deleteTVShow + currentShow.value.id)
         .then(function (message){
-            console.log(message);
+            triggerLoading.value = false;
             emit('refresh');
             triggerTVShowModal.value=false;
         })
         .catch(function (error){
-            errorModal.create("Error","Error deleting tvshow",error.response.data.message);
+            triggerLoading.value = false;
+            errorModal.value.createDialog("Error","Error deleting tvshow","ther was an unknown error while trying to delete the tvshow",false);
             triggerTVShowModal.value=false;
         });
-        triggerVerifyUTVS.value.deleteVerify();
     }
 
     function cancelDelete(){

@@ -27,7 +27,8 @@
                     icon
                     @click="triggerFileInputModal.createFileInputModal(userData)">
                         <v-avatar
-                        size="56">
+                        size="56"
+                        color="primary">
                             <v-img
                             :src="full_photo_urlProfile"
                             cover>
@@ -83,7 +84,7 @@
     import ChangePasswordModal from "../components/changePasswordModal.vue"
 
     const formData = new FormData();
-    var full_photo_urlProfile = ref("http://localhost:3000/api/images/634d11cbc13e3b9b04dbbe7b");
+    var full_photo_urlProfile = ref(config.host + config.api + config.getPicture + localStorage.photoId);
     var updateUserModalRef = ref();
     var passwdModal = ref();
     var dialogModal = ref();

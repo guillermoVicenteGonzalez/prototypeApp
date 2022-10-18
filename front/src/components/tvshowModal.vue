@@ -173,12 +173,15 @@
         currentShow.value.summary = item.summary;
         currentShow.value.poster = item.poster;
         currentShow.value.id = item._id;
+        currentShow.value.seasons = item.seasons;
 
         //if i use currentShow as model it messes up the card and overrides its fields
         //updatedShow.value.title = currentShow.value.title;
         for(const item in currentShow.value){
             updatedShow.value[item] = currentShow.value[item];
         }
+
+        console.log(updatedShow.value);
     }
 
     function triggerUpdate(){

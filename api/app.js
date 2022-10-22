@@ -71,7 +71,7 @@ mongoose.connect(mongoUrl, function(err, res) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
-app.set("view engine", "ejs");
+
 
 
 
